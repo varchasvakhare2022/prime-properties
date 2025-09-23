@@ -1,33 +1,92 @@
-# Prime Properties - Full Stack Real Estate Platform
+# Prime Properties
 
-A complete full-stack web application for real estate management with modern UI and secure authentication.
+<div align="center">
 
-## 🏗️ Architecture
+![Prime Properties](https://img.shields.io/badge/Prime%20Properties-Real%20Estate%20Platform-blue?style=for-the-badge&logo=home)
 
-- **Frontend**: React 18 + Tailwind CSS + Aceternity UI + Framer Motion
-- **Backend**: Spring Boot 3.2 + Spring Security + JPA + PostgreSQL
-- **Authentication**: JWT-based with role-based access control
-- **Database**: PostgreSQL with auto-generated schema
-- **Styling**: Tailwind CSS with Aceternity UI components
+**A full-stack real estate platform with role-based access for Customers and Developers**
 
-## 🚀 Quick Start
+[![Java](https://img.shields.io/badge/Java-17+-orange?style=flat&logo=openjdk)](https://openjdk.java.net/)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2+-green?style=flat&logo=spring)](https://spring.io/projects/spring-boot)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-12+-blue?style=flat&logo=postgresql)](https://www.postgresql.org/)
+[![React](https://img.shields.io/badge/React-18+-blue?style=flat&logo=react)](https://reactjs.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-3.0+-blue?style=flat&logo=tailwindcss)](https://tailwindcss.com/)
+[![Aceternity UI](https://img.shields.io/badge/Aceternity%20UI-Modern%20Components-purple?style=flat)](https://aceternity.com/)
+[![Docker](https://img.shields.io/badge/Docker-Supported-blue?style=flat&logo=docker)](https://www.docker.com/)
+
+</div>
+
+## 📖 About
+
+Prime Properties is a modern, full-stack real estate platform that connects property developers with potential customers. Built with cutting-edge technologies, it provides a seamless experience for both property listing and browsing.
+
+### 🎯 Key Highlights
+
+- **Role-Based Access**: Separate dashboards for Customers and Developers
+- **Modern UI**: Beautiful interface with Aceternity UI components
+- **Secure Authentication**: JWT-based authentication with Spring Security
+- **Real-time Features**: Live property updates and search functionality
+- **Mobile Responsive**: Works perfectly on all devices
+
+## 🛠️ Tech Stack
+
+| Category | Technology | Purpose |
+|----------|------------|---------|
+| **Backend** | Java 17+ | Core application logic |
+| **Framework** | Spring Boot 3.2 | Rapid development framework |
+| **Database** | PostgreSQL | Data persistence |
+| **Frontend** | React 18 | User interface |
+| **Styling** | Tailwind CSS | Utility-first CSS |
+| **Components** | Aceternity UI | Modern UI components |
+| **Containerization** | Docker | Easy deployment |
+
+## ✨ Features
+
+### 👥 Customer Features
+- **Sign Up & Login**: Easy registration and authentication
+- **Property Browsing**: View all available properties
+- **Advanced Search**: Filter by location, price range, property type
+- **Property Details**: Detailed information with images and specifications
+- **Responsive Design**: Seamless experience across all devices
+
+### 🏗️ Developer Features
+- **Sign Up & Login**: Developer-specific registration
+- **Property Management**: Add, edit, and delete properties
+- **Status Updates**: Mark properties as sold
+- **Portfolio Dashboard**: Track all listed properties
+- **Analytics**: View property performance metrics
+
+### 🔐 Authentication & Security
+- **JWT Authentication**: Secure token-based authentication
+- **Role-Based Dashboards**: Customized experience for each user type
+- **Password Security**: BCrypt password hashing
+- **Protected Routes**: Secure API endpoints
+
+## 🚀 Installation
 
 ### Prerequisites
-- Node.js 18+ 
-- Java 17+
-- PostgreSQL 12+
-- Maven 3.6+
 
-### 1. Clone the Repository
+Make sure you have these installed on your system:
+
+- **Node.js 18+** - [Download](https://nodejs.org/)
+- **Java 17+** - [Download](https://openjdk.java.net/)
+- **PostgreSQL 12+** - [Download](https://www.postgresql.org/)
+- **Maven 3.6+** - [Download](https://maven.apache.org/)
+- **Git** - [Download](https://git-scm.com/)
+
+### Step-by-Step Setup
+
+#### 1️⃣ Clone the Repository
 ```bash
 git clone <repository-url>
 cd prime-properties
 ```
 
-### 2. Database Setup
+#### 2️⃣ Setup PostgreSQL Database
 ```bash
-# Start PostgreSQL
-sudo service postgresql start
+# Start PostgreSQL service
+sudo service postgresql start  # Linux/Mac
+net start postgresql-x64-13    # Windows
 
 # Create database
 createdb prime_properties
@@ -38,327 +97,234 @@ CREATE DATABASE prime_properties;
 \q
 ```
 
-### 3. Backend Setup
+#### 3️⃣ Run Backend
 ```bash
 cd backend
-
-# Update database credentials in application.properties if needed
-# Default values:
-# - Database: prime_properties
-# - Username: postgres  
-# - Password: password
-
-# Run the application
-./mvnw spring-boot:run
+mvn spring-boot:run
 ```
+Backend will start on `http://localhost:8080`
 
-The backend will start on `http://localhost:8080`
-
-### 4. Frontend Setup
+#### 4️⃣ Run Frontend
 ```bash
 cd frontend
-
-# Install dependencies
 npm install
-
-# Start development server
 npm start
 ```
+Frontend will start on `http://localhost:3000`
 
-The frontend will start on `http://localhost:3000`
+### 🐳 Alternative: Docker Setup
 
-## 🔐 Sample Test Credentials
+For a quicker setup, use Docker Compose:
 
-The application automatically creates sample users on startup:
-
-| Role | Email | Password |
-|------|-------|----------|
-| Developer | developer@prime.com | DevPass123 |
-| Customer | customer@prime.com | CustPass123 |
-
-## 📱 Features
-
-### Customer Features
-- Browse available properties
-- View detailed property information
-- Create transactions for property purchases
-- View transaction history
-
-### Developer Features
-- List properties for sale
-- Edit property details
-- Mark properties as sold
-- Manage property portfolio
-- View transaction history for their properties
-
-### Authentication
-- JWT-based authentication
-- Role-based access control (Customer/Developer)
-- Secure login/logout functionality
-
-## 🎨 Frontend Features
-
-- **Modern React 18** with hooks and functional components
-- **Tailwind CSS** for utility-first styling
-- **Aceternity UI Components** for stunning animations and effects
-- **Framer Motion** for smooth animations and transitions
-- **Lucide React** for beautiful icons
-- **Responsive Design** that works on all devices
-- **Dark Theme** with gradient backgrounds
-
-## 🔧 Configuration
-
-### Backend Configuration (`application.properties`)
-```properties
-# Database Configuration
-spring.datasource.url=jdbc:postgresql://localhost:5432/prime_properties
-spring.datasource.username=postgres
-spring.datasource.password=password
-spring.datasource.driver-class-name=org.postgresql.Driver
-
-# JPA Configuration
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
-spring.jpa.properties.hibernate.format_sql=true
-
-# JWT Configuration
-jwt.secret=sample_secret_for_testing_change_in_production
-jwt.expiration=86400000
-
-# Server Configuration
-server.port=8080
-```
-
-### Frontend Configuration
-- API URL: `http://localhost:8080/api`
-- Development server: `http://localhost:3000`
-
-## 📊 API Endpoints
-
-### Authentication
-- `POST /api/auth/register` - User registration
-- `POST /api/auth/login` - User login
-- `GET /api/users/me` - Get current user profile
-
-### Properties
-- `GET /api/properties` - Get all available properties (public)
-- `GET /api/properties/developer` - Get developer's properties (requires DEVELOPER role)
-- `POST /api/properties/developer` - Create new property (requires DEVELOPER role)
-- `PUT /api/properties/developer/{id}` - Update property (requires DEVELOPER role)
-- `PUT /api/properties/developer/{id}/mark-sold` - Mark property as sold (requires DEVELOPER role)
-
-### Transactions
-- `GET /api/transactions/customer` - Get customer's transactions (requires CUSTOMER role)
-- `GET /api/transactions/property/{propertyId}` - Get property transactions (requires DEVELOPER role)
-- `POST /api/transactions/create` - Create new transaction (requires CUSTOMER role)
-- `GET /api/transactions/{id}` - Get transaction by ID
-- `DELETE /api/transactions/{id}` - Delete transaction (requires CUSTOMER role)
-
-## 🧪 Testing
-
-### Using Postman/curl
-
-#### 1. Register a new user
 ```bash
-curl -X POST http://localhost:8080/api/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Test User",
-    "email": "test@example.com",
-    "password": "password123",
-    "role": "CUSTOMER"
-  }'
-```
+# Clone and navigate to project
+git clone <repository-url>
+cd prime-properties
 
-#### 2. Login
-```bash
-curl -X POST http://localhost:8080/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "test@example.com",
-    "password": "password123"
-  }'
-```
-
-#### 3. Use the token for protected endpoints
-```bash
-curl -X GET http://localhost:8080/api/users/me \
-  -H "Authorization: Bearer YOUR_JWT_TOKEN_HERE"
-```
-
-### Using the Frontend
-1. Open `http://localhost:3000`
-2. Click "Customer Login" or "Developer Login"
-3. Use the sample credentials provided above
-4. Explore the dashboard features
-
-## 🐳 Docker Support
-
-### Using Docker Compose (Recommended)
-```bash
 # Start all services
 docker-compose up --build
 
 # Access points:
 # Frontend: http://localhost:3000
 # Backend: http://localhost:8080
-# PostgreSQL: localhost:5432
+# Database: localhost:5432
 ```
 
-### Manual Docker Setup
-```bash
-# Backend
-cd backend
-docker build -t prime-properties-backend .
-docker run -p 8080:8080 prime-properties-backend
+## 🔑 Sample Credentials
 
-# Frontend
-cd frontend
-docker build -t prime-properties-frontend .
-docker run -p 3000:3000 prime-properties-frontend
-```
+The application automatically loads sample data via `data.sql`. Use these credentials to test the platform:
 
-## 📁 Project Structure
+### 👨‍💻 Developer Account
+- **Email**: `developer@prime.com`
+- **Password**: `DevPass123`
+- **Access**: Property management dashboard
 
-```
-prime-properties/
-├── backend/
-│   ├── src/main/java/com/primeproperties/
-│   │   ├── config/          # Security and web configuration
-│   │   ├── controller/      # REST API controllers
-│   │   ├── dto/            # Data Transfer Objects
-│   │   ├── exception/      # Global exception handling
-│   │   ├── model/          # JPA entities
-│   │   ├── repository/     # Data access layer
-│   │   ├── security/       # JWT and security components
-│   │   └── service/        # Business logic
-│   ├── src/main/resources/
-│   │   └── application.properties
-│   ├── src/test/           # Test files
-│   ├── Dockerfile
-│   └── pom.xml
-├── frontend/
-│   ├── src/
-│   │   ├── components/     # Reusable React components
-│   │   │   └── ui/         # Aceternity UI components
-│   │   ├── pages/         # Page components
-│   │   ├── services/      # API services and context
-│   │   └── lib/           # Utility functions
-│   ├── public/
-│   ├── package.json
-│   ├── tailwind.config.js
-│   └── Dockerfile
-├── docker-compose.yml
-├── README.md
-└── AUTHENTICATION.md
-```
+### 👤 Customer Account
+- **Email**: `customer@prime.com`
+- **Password**: `CustPass123`
+- **Access**: Property browsing dashboard
 
-## 🔒 Security Features
+### 🏠 Sample Properties
+The system includes preloaded properties from major Indian cities:
+- **Luxury Apartment in Mumbai** - ₹1.5 Crore (Available)
+- **Modern Villa in Bangalore** - ₹2.5 Crore (Available)
+- **Cozy 2BHK in Delhi** - ₹85 Lakh (Sold)
 
-- **BCrypt Password Hashing**: All passwords are securely hashed
-- **JWT Token Security**: Tokens are signed with HMAC-SHA256
-- **Role-Based Access Control**: Method-level security with @PreAuthorize
-- **CORS Configuration**: Configured for frontend origins
-- **Input Validation**: Comprehensive validation using Bean Validation
-- **Exception Handling**: Global exception handler for consistent error responses
+## 🧪 Testing
 
-## 🎨 UI Components
-
-### Available Aceternity UI Components
-- **AnimatedCard**: Cards with hover animations and smooth transitions
-- **ShimmerButton**: Buttons with shimmer effects and animations
-- **ShimmerCard**: Cards with animated shimmer backgrounds
-- **GradientBorder**: Cards with animated gradient borders
-- **GradientText**: Text with gradient color effects
-- **Navbar**: Responsive navigation with mobile menu and animations
-- **HeroSection**: Animated hero section with background effects
-
-## 🚨 Security Notes
-
-1. **JWT Secret**: Change the default secret in production
-2. **Database Credentials**: Update database credentials for production
-3. **HTTPS**: Use HTTPS in production
-4. **Environment Variables**: Use environment variables for secrets in production
-
-## 🔧 Development
-
-### Backend Development
+### Backend Tests
 ```bash
 cd backend
-./mvnw spring-boot:run
+mvn test
 ```
 
-### Frontend Development
+### Frontend Tests
 ```bash
-cd frontend
-npm start
-```
-
-### Running Tests
-```bash
-# Backend tests
-cd backend
-./mvnw test
-
-# Frontend tests
 cd frontend
 npm test
 ```
 
-## 📝 API Documentation
+### Manual Testing
+1. Open `http://localhost:3000`
+2. Click "Customer Login" or "Developer Login"
+3. Use the sample credentials above
+4. Explore the features:
+   - **Customers**: Browse properties, use search/filters
+   - **Developers**: Manage properties, add/edit/delete listings
 
-For complete API documentation, visit: `http://localhost:8080/swagger-ui.html` (if Swagger is enabled)
+### API Testing
+Use Postman or curl to test the REST API:
 
-## 🤝 Contributing
+```bash
+# Login example
+curl -X POST http://localhost:8080/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "developer",
+    "password": "DevPass123"
+  }'
+```
 
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
+## 📱 Screenshots
 
-## 📄 License
+> **Note**: Screenshots will be added here to showcase the application's beautiful UI and features.
 
-This project is licensed under the MIT License.
+### 🏠 Landing Page
+![Landing Page](screenshots/landing-page.png)
+*Modern landing page with hero section and smooth animations*
 
-## 🆘 Troubleshooting
+### 🔐 Authentication
+![Login Page](screenshots/login-page.png)
+*Beautiful login forms with Aceternity UI components*
+
+### 👤 Customer Dashboard
+![Customer Dashboard](screenshots/customer-dashboard.png)
+*Property browsing with advanced search and filter capabilities*
+
+### 🏗️ Developer Dashboard
+![Developer Dashboard](screenshots/developer-dashboard.png)
+*Property management with CRUD operations and portfolio analytics*
+
+### 📱 Mobile View
+![Mobile View](screenshots/mobile-view.png)
+*Fully responsive design that works perfectly on mobile devices*
+
+## 🏗️ Project Structure
+
+```
+prime-properties/
+├── 📁 backend/                 # Spring Boot backend
+│   ├── 📁 src/main/java/      # Java source code
+│   ├── 📁 src/main/resources/ # Configuration files
+│   └── 📄 pom.xml             # Maven dependencies
+├── 📁 frontend/               # React frontend
+│   ├── 📁 src/                # React source code
+│   ├── 📁 public/             # Static assets
+│   └── 📄 package.json        # Node dependencies
+├── 📄 docker-compose.yml      # Docker orchestration
+└── 📄 README.md              # This file
+```
+
+## 🔧 Configuration
+
+### Database Configuration
+Update `backend/src/main/resources/application.properties`:
+
+```properties
+# Database settings
+spring.datasource.url=jdbc:postgresql://localhost:5432/prime_properties
+spring.datasource.username=postgres
+spring.datasource.password=postgres
+
+# JWT settings
+app.jwt.secret=your_secret_key_here
+app.jwt.expiration=86400000
+```
+
+### Frontend Configuration
+Update `frontend/.env`:
+
+```env
+REACT_APP_API_URL=http://localhost:8080/api
+```
+
+## 🚨 Troubleshooting
 
 ### Common Issues
 
-1. **Database Connection Error**
-   - Ensure PostgreSQL is running
-   - Check database credentials in application.properties
-   - Verify database exists
-
-2. **Frontend Build Errors**
-   - Run `npm install` to install dependencies
-   - Check Node.js version (requires 18+)
-
-3. **CORS Issues**
-   - Verify backend is running on port 8080
-   - Check CORS configuration in WebSecurityConfig
-
-4. **Authentication Issues**
-   - Use the provided sample credentials
-   - Check JWT secret configuration
-   - Verify token format (Bearer <token>)
+| Issue | Solution |
+|-------|----------|
+| **Database Connection Error** | Ensure PostgreSQL is running and database exists |
+| **Frontend Build Errors** | Run `npm install` and check Node.js version |
+| **CORS Issues** | Verify backend is running on port 8080 |
+| **Authentication Issues** | Use provided sample credentials |
+| **Docker Issues** | Check if ports 3000, 8080, 5432 are available |
 
 ### Getting Help
 
-If you encounter issues:
 1. Check the troubleshooting section above
-2. Review the AUTHENTICATION.md file for detailed setup
-3. Check the application logs for error messages
-4. Ensure all prerequisites are installed correctly
+2. Review application logs for error messages
+3. Ensure all prerequisites are installed correctly
+4. Create an issue with detailed information
+
+## 🤝 Contributing
+
+We welcome contributions! Here's how you can help:
+
+### 1️⃣ Fork the Repository
+Click the "Fork" button on GitHub
+
+### 2️⃣ Create a Feature Branch
+```bash
+git checkout -b feature/amazing-feature
+```
+
+### 3️⃣ Make Your Changes
+- Write clean, well-documented code
+- Add tests for new features
+- Follow existing code style
+
+### 4️⃣ Commit Your Changes
+```bash
+git commit -m 'Add amazing feature'
+```
+
+### 5️⃣ Push to Your Branch
+```bash
+git push origin feature/amazing-feature
+```
+
+### 6️⃣ Create a Pull Request
+Open a PR with a clear description of your changes
+
+### Contribution Guidelines
+- Follow the existing code style
+- Write tests for new features
+- Update documentation as needed
+- Ensure all tests pass before submitting
+
+## 📄 License
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
 ## 🎉 Success!
 
 Once everything is running, you should see:
-- Backend API running on `http://localhost:8080`
-- Frontend application on `http://localhost:3000`
-- Sample users created automatically
-- Beautiful UI with Aceternity components
-- Full authentication and role-based access working
 
-Enjoy building with Prime Properties! 🏠✨
+- ✅ **Backend API** running on `http://localhost:8080`
+- ✅ **Frontend Application** on `http://localhost:3000`
+- ✅ **Sample Users** created automatically
+- ✅ **Beautiful UI** with Aceternity components
+- ✅ **Full Authentication** and role-based access working
+
+---
+
+<div align="center">
+
+**Ready to explore Prime Properties?** 🏠✨
+
+[![Get Started](https://img.shields.io/badge/Get%20Started-Now-green?style=for-the-badge)](https://github.com/your-repo)
+
+Made with ❤️ using Spring Boot and React
+
+</div>
