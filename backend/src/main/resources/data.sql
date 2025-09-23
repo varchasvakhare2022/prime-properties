@@ -6,12 +6,6 @@
 -- DELETE FROM transactions;
 -- DELETE FROM properties;
 -- DELETE FROM users;
--- DELETE FROM roles;
-
--- Insert default roles if they don't exist
-INSERT INTO roles (name) VALUES ('CUSTOMER') ON CONFLICT (name) DO NOTHING;
-INSERT INTO roles (name) VALUES ('DEVELOPER') ON CONFLICT (name) DO NOTHING;
-INSERT INTO roles (name) VALUES ('ADMIN') ON CONFLICT (name) DO NOTHING;
 
 -- Insert sample users
 -- Note: Passwords are BCrypt hashed for security

@@ -1,19 +1,13 @@
 -- Prime Properties Database Schema
 -- This file is automatically executed when the PostgreSQL container starts
 
--- Create the database if it doesn't exist (handled by Docker)
--- CREATE DATABASE prime_properties;
-
--- Connect to the database
-\c prime_properties;
-
 -- Create extensions if needed
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- The tables will be created automatically by Hibernate JPA
 -- This file is here for reference and potential manual setup
 
--- Sample data will be inserted by the DataInitializer class
+-- Sample data will be inserted by data.sql
 -- The following are the expected table structures:
 
 /*
