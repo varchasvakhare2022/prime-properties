@@ -18,10 +18,10 @@ import java.util.function.Function;
 @Component
 public class JwtUtils {
 
-    @Value("${jwt.secret:defaultSecretKeyForTestingChangeInProduction}")
+    @Value("${app.jwt.secret:defaultSecretKeyForTestingChangeInProduction}")
     private String secret;
 
-    @Value("${jwt.expiration:86400000}") // 24 hours in milliseconds
+    @Value("${app.jwt.expiration:86400000}") // 24 hours in milliseconds
     private Long expiration;
 
     /**
