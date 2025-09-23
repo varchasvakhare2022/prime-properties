@@ -1,124 +1,164 @@
 package com.primeproperties.controller;
 
-import com.primeproperties.model.Property;
-import com.primeproperties.model.PropertyStatus;
+import com.primeproperties.dto.CreatePropertyRequest;
+import com.primeproperties.dto.PropertyResponse;
+import com.primeproperties.dto.UpdatePropertyRequest;
 import com.primeproperties.model.User;
-import com.primeproperties.repository.PropertyRepository;
 import com.primeproperties.repository.UserRepository;
+import com.primeproperties.service.PropertyService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Property Controller with CRUD endpoints and role-based security
+ */
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/properties")
 public class PropertyController {
     
     @Autowired
-    PropertyRepository propertyRepository;
+    private PropertyService propertyService;
     
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
     
-    @GetMapping("/public")
-    public ResponseEntity<List<Property>> getAllAvailableProperties() {
-        List<Property> properties = propertyRepository.findByStatus(PropertyStatus.AVAILABLE);
+    /**
+     * Get all properties (available to everyone)
+     */
+    @GetMapping
+    public ResponseEntity<List<PropertyResponse>> getAllProperties() {
+        List<PropertyResponse> properties = propertyService.getAllProperties();
         return ResponseEntity.ok(properties);
     }
     
-    @GetMapping("/developer")
+    /**
+     * Get property by ID (available to everyone)
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getPropertyById(@PathVariable Long id) {
+        Optional<PropertyResponse> property = propertyService.getPropertyById(id);
+        if (property.isPresent()) {
+            return ResponseEntity.ok(property.get());
+        } else {
+            Map<String, String> error = new HashMap<>();
+            error.put("message", "Property not found");
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
+    /**
+     * Get properties by developer (developer only)
+     */
+    @GetMapping("/developer/my-properties")
     @PreAuthorize("hasRole('DEVELOPER')")
-    public ResponseEntity<List<Property>> getDeveloperProperties() {
-        User currentUser = getCurrentUser();
-        List<Property> properties = propertyRepository.findByDeveloperId(currentUser.getId());
+    public ResponseEntity<List<PropertyResponse>> getMyProperties(Authentication authentication) {
+        User currentUser = getCurrentUser(authentication);
+        List<PropertyResponse> properties = propertyService.getPropertiesByDeveloper(currentUser.getId());
         return ResponseEntity.ok(properties);
     }
     
+    /**
+     * Create a new property (developer only)
+     */
     @PostMapping("/developer")
     @PreAuthorize("hasRole('DEVELOPER')")
-    public ResponseEntity<?> createProperty(@RequestBody Property property) {
+    public ResponseEntity<?> createProperty(@Valid @RequestBody CreatePropertyRequest request, 
+                                          Authentication authentication) {
         try {
-            User currentUser = getCurrentUser();
-            property.setDeveloper(currentUser);
-            Property savedProperty = propertyRepository.save(property);
-            return ResponseEntity.ok(savedProperty);
+            User currentUser = getCurrentUser(authentication);
+            PropertyResponse property = propertyService.createProperty(request, currentUser.getId());
+            return ResponseEntity.ok(property);
         } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                .body("Error creating property: " + e.getMessage());
+            Map<String, String> error = new HashMap<>();
+            error.put("message", "Error creating property: " + e.getMessage());
+            return ResponseEntity.badRequest().body(error);
         }
     }
     
+    /**
+     * Update a property (developer only - own properties)
+     */
     @PutMapping("/developer/{id}")
     @PreAuthorize("hasRole('DEVELOPER')")
-    public ResponseEntity<?> updateProperty(@PathVariable Long id, @RequestBody Property propertyDetails) {
+    public ResponseEntity<?> updateProperty(@PathVariable Long id, 
+                                          @Valid @RequestBody UpdatePropertyRequest request,
+                                          Authentication authentication) {
         try {
-            User currentUser = getCurrentUser();
-            Optional<Property> propertyOptional = propertyRepository.findById(id);
-            
-            if (propertyOptional.isEmpty()) {
+            User currentUser = getCurrentUser(authentication);
+            PropertyResponse property = propertyService.updateProperty(id, request, currentUser.getId());
+            return ResponseEntity.ok(property);
+        } catch (RuntimeException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("message", e.getMessage());
+            if (e.getMessage().contains("not found")) {
                 return ResponseEntity.notFound().build();
+            } else if (e.getMessage().contains("own properties")) {
+                return ResponseEntity.status(403).body(error);
             }
-            
-            Property property = propertyOptional.get();
-            
-            // Check if the property belongs to the current developer
-            if (!property.getDeveloper().getId().equals(currentUser.getId())) {
-                return ResponseEntity.status(403).build();
-            }
-            
-            // Update property details
-            property.setTitle(propertyDetails.getTitle());
-            property.setDescription(propertyDetails.getDescription());
-            property.setPrice(propertyDetails.getPrice());
-            property.setLocation(propertyDetails.getLocation());
-            property.setPropertyType(propertyDetails.getPropertyType());
-            property.setBedrooms(propertyDetails.getBedrooms());
-            property.setBathrooms(propertyDetails.getBathrooms());
-            property.setArea(propertyDetails.getArea());
-            
-            Property updatedProperty = propertyRepository.save(property);
-            return ResponseEntity.ok(updatedProperty);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                .body("Error updating property: " + e.getMessage());
+            return ResponseEntity.badRequest().body(error);
         }
     }
     
+    /**
+     * Delete a property (developer only - own properties)
+     */
+    @DeleteMapping("/developer/{id}")
+    @PreAuthorize("hasRole('DEVELOPER')")
+    public ResponseEntity<?> deleteProperty(@PathVariable Long id, Authentication authentication) {
+        try {
+            User currentUser = getCurrentUser(authentication);
+            propertyService.deleteProperty(id, currentUser.getId());
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Property deleted successfully");
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("message", e.getMessage());
+            if (e.getMessage().contains("not found")) {
+                return ResponseEntity.notFound().build();
+            } else if (e.getMessage().contains("own properties")) {
+                return ResponseEntity.status(403).body(error);
+            }
+            return ResponseEntity.badRequest().body(error);
+        }
+    }
+    
+    /**
+     * Mark property as sold (developer only - own properties)
+     */
     @PutMapping("/developer/{id}/mark-sold")
     @PreAuthorize("hasRole('DEVELOPER')")
-    public ResponseEntity<?> markPropertyAsSold(@PathVariable Long id) {
+    public ResponseEntity<?> markPropertyAsSold(@PathVariable Long id, Authentication authentication) {
         try {
-            User currentUser = getCurrentUser();
-            Optional<Property> propertyOptional = propertyRepository.findById(id);
-            
-            if (propertyOptional.isEmpty()) {
+            User currentUser = getCurrentUser(authentication);
+            PropertyResponse property = propertyService.markPropertyAsSold(id, currentUser.getId());
+            return ResponseEntity.ok(property);
+        } catch (RuntimeException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("message", e.getMessage());
+            if (e.getMessage().contains("not found")) {
                 return ResponseEntity.notFound().build();
+            } else if (e.getMessage().contains("own properties")) {
+                return ResponseEntity.status(403).body(error);
             }
-            
-            Property property = propertyOptional.get();
-            
-            // Check if the property belongs to the current developer
-            if (!property.getDeveloper().getId().equals(currentUser.getId())) {
-                return ResponseEntity.status(403).build();
-            }
-            
-            property.setStatus(PropertyStatus.SOLD);
-            Property updatedProperty = propertyRepository.save(property);
-            return ResponseEntity.ok(updatedProperty);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                .body("Error marking property as sold: " + e.getMessage());
+            return ResponseEntity.badRequest().body(error);
         }
     }
     
-    private User getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    /**
+     * Get current authenticated user
+     */
+    private User getCurrentUser(Authentication authentication) {
         String username = authentication.getName();
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));

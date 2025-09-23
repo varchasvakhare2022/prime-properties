@@ -52,7 +52,7 @@ public class TransactionController {
         
         // Check if the property belongs to the current developer
         if (!property.getDeveloper().getId().equals(currentUser.getId())) {
-            return ResponseEntity.forbidden().build();
+            return ResponseEntity.status(403).build();
         }
         
         List<Transaction> transactions = transactionRepository.findByProperty(property);

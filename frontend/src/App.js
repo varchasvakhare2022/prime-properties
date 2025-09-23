@@ -1,9 +1,11 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './services/AuthContext';
+import { AuthProvider } from './contexts/AuthContext';
 import LandingPage from './pages/LandingPage';
 import CustomerLogin from './pages/CustomerLogin';
 import DeveloperLogin from './pages/DeveloperLogin';
+import CustomerSignup from './pages/CustomerSignup';
+import DeveloperSignup from './pages/DeveloperSignup';
 import CustomerDashboard from './pages/CustomerDashboard';
 import DeveloperDashboard from './pages/DeveloperDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -17,8 +19,10 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/customer-login" element={<CustomerLogin />} />
             <Route path="/developer-login" element={<DeveloperLogin />} />
+            <Route path="/customer-signup" element={<CustomerSignup />} />
+            <Route path="/developer-signup" element={<DeveloperSignup />} />
             <Route 
-              path="/customer-dashboard" 
+              path="/customer/dashboard" 
               element={
                 <ProtectedRoute role="CUSTOMER">
                   <CustomerDashboard />
@@ -26,7 +30,7 @@ function App() {
               } 
             />
             <Route 
-              path="/developer-dashboard" 
+              path="/developer/dashboard" 
               element={
                 <ProtectedRoute role="DEVELOPER">
                   <DeveloperDashboard />

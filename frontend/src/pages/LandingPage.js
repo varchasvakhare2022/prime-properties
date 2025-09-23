@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Home, Building2, Star, Shield, Zap, Heart } from 'lucide-react';
+import { Home, Building2, Shield, Zap, Heart } from 'lucide-react';
 import { Navbar } from '../components/ui/navbar';
-import { AnimatedCard, Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/card';
+import { CardTitle, CardDescription } from '../components/ui/card';
 import { ShimmerButton, ShimmerCard } from '../components/ui/shimmer';
 import { GradientBorder, GradientText } from '../components/ui/gradient';
 

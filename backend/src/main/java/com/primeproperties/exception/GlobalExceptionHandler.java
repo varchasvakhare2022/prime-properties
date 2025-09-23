@@ -4,24 +4,26 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
 
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Global Exception Handler for the application
+ */
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    
+
     /**
      * Handle validation errors
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidationExceptions(
-            MethodArgumentNotValidException ex) {
+    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
@@ -30,52 +32,54 @@ public class GlobalExceptionHandler {
         });
         return ResponseEntity.badRequest().body(errors);
     }
-    
-    /**
-     * Handle authentication errors
-     */
-    @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<Map<String, String>> handleBadCredentialsException(
-            BadCredentialsException ex, WebRequest request) {
-        Map<String, String> error = new HashMap<>();
-        error.put("error", "Invalid credentials");
-        error.put("message", "Email or password is incorrect");
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
-    }
-    
-    /**
-     * Handle access denied errors
-     */
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<Map<String, String>> handleAccessDeniedException(
-            AccessDeniedException ex, WebRequest request) {
-        Map<String, String> error = new HashMap<>();
-        error.put("error", "Access Denied");
-        error.put("message", "You don't have permission to access this resource");
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
-    }
-    
+
     /**
      * Handle runtime exceptions
      */
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<Map<String, String>> handleRuntimeException(
-            RuntimeException ex, WebRequest request) {
+    public ResponseEntity<Map<String, String>> handleRuntimeException(RuntimeException ex) {
         Map<String, String> error = new HashMap<>();
-        error.put("error", "Internal Server Error");
         error.put("message", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+        return ResponseEntity.badRequest().body(error);
     }
-    
+
+    /**
+     * Handle username not found exceptions
+     */
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleUsernameNotFoundException(UsernameNotFoundException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("message", "User not found");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    /**
+     * Handle bad credentials exceptions
+     */
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<Map<String, String>> handleBadCredentialsException(BadCredentialsException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("message", "Invalid username or password");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+    }
+
+    /**
+     * Handle access denied exceptions
+     */
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Map<String, String>> handleAccessDeniedException(AccessDeniedException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("message", "Access denied");
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
+    }
+
     /**
      * Handle generic exceptions
      */
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, String>> handleGenericException(
-            Exception ex, WebRequest request) {
+    public ResponseEntity<Map<String, String>> handleGenericException(Exception ex) {
         Map<String, String> error = new HashMap<>();
-        error.put("error", "An error occurred");
-        error.put("message", "Please try again later");
+        error.put("message", "An error occurred: " + ex.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 }
