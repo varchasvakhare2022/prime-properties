@@ -4,70 +4,100 @@ import com.primeproperties.model.Role;
 
 public class AuthResponse {
     
-    private String token;
-    private String type = "Bearer";
-    private Long id;
-    private String username;
-    private String email;
-    private Role role;
+    private String accessToken;
+    private String tokenType = "Bearer";
+    private Long expiresIn;
+    private UserInfo user;
     
     // Constructors
     public AuthResponse() {}
     
-    public AuthResponse(String token, Long id, String username, String email, Role role) {
-        this.token = token;
-        this.id = id;
-        this.username = username;
-        this.email = email;
-        this.role = role;
+    public AuthResponse(String accessToken, Long expiresIn, UserInfo user) {
+        this.accessToken = accessToken;
+        this.expiresIn = expiresIn;
+        this.user = user;
     }
     
     // Getters and Setters
-    public String getToken() {
-        return token;
+    public String getAccessToken() {
+        return accessToken;
     }
     
-    public void setToken(String token) {
-        this.token = token;
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
     
-    public String getType() {
-        return type;
+    public String getTokenType() {
+        return tokenType;
     }
     
-    public void setType(String type) {
-        this.type = type;
+    public void setTokenType(String tokenType) {
+        this.tokenType = tokenType;
     }
     
-    public Long getId() {
-        return id;
+    public Long getExpiresIn() {
+        return expiresIn;
     }
     
-    public void setId(Long id) {
-        this.id = id;
+    public void setExpiresIn(Long expiresIn) {
+        this.expiresIn = expiresIn;
     }
     
-    public String getUsername() {
-        return username;
+    public UserInfo getUser() {
+        return user;
     }
     
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUser(UserInfo user) {
+        this.user = user;
     }
     
-    public String getEmail() {
-        return email;
-    }
-    
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    
-    public Role getRole() {
-        return role;
-    }
-    
-    public void setRole(Role role) {
-        this.role = role;
+    // Inner class for user info
+    public static class UserInfo {
+        private Long id;
+        private String name;
+        private String email;
+        private Role role;
+        
+        public UserInfo() {}
+        
+        public UserInfo(Long id, String name, String email, Role role) {
+            this.id = id;
+            this.name = name;
+            this.email = email;
+            this.role = role;
+        }
+        
+        // Getters and Setters
+        public Long getId() {
+            return id;
+        }
+        
+        public void setId(Long id) {
+            this.id = id;
+        }
+        
+        public String getName() {
+            return name;
+        }
+        
+        public void setName(String name) {
+            this.name = name;
+        }
+        
+        public String getEmail() {
+            return email;
+        }
+        
+        public void setEmail(String email) {
+            this.email = email;
+        }
+        
+        public Role getRole() {
+            return role;
+        }
+        
+        public void setRole(Role role) {
+            this.role = role;
+        }
     }
 }

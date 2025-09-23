@@ -27,6 +27,10 @@ public class User implements UserDetails {
     
     @NotBlank
     @Size(max = 100)
+    private String name;
+    
+    @NotBlank
+    @Size(max = 100)
     @Email
     @Column(unique = true)
     private String email;
@@ -42,11 +46,15 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "developer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Property> properties;
     
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Transaction> transactions;
+    
     // Constructors
     public User() {}
     
-    public User(String username, String email, String password, Role role) {
+    public User(String username, String name, String email, String password, Role role) {
         this.username = username;
+        this.name = name;
         this.email = email;
         this.password = password;
         this.role = role;
@@ -67,6 +75,14 @@ public class User implements UserDetails {
     
     public void setUsername(String username) {
         this.username = username;
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
     }
     
     public String getEmail() {
@@ -99,6 +115,14 @@ public class User implements UserDetails {
     
     public void setProperties(List<Property> properties) {
         this.properties = properties;
+    }
+    
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+    
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
     }
     
     // UserDetails implementation

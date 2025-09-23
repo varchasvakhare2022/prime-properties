@@ -4,8 +4,10 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "properties")
@@ -47,8 +49,9 @@ public class Property {
     @Positive
     private Double area; // in square meters
     
-    @Column(name = "is_sold", nullable = false)
-    private Boolean isSold = false;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PropertyStatus status = PropertyStatus.AVAILABLE;
     
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -59,6 +62,9 @@ public class Property {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "developer_id", nullable = false)
     private User developer;
+    
+    @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Transaction> transactions;
     
     // Constructors
     public Property() {
@@ -153,12 +159,12 @@ public class Property {
         this.area = area;
     }
     
-    public Boolean getIsSold() {
-        return isSold;
+    public PropertyStatus getStatus() {
+        return status;
     }
     
-    public void setIsSold(Boolean isSold) {
-        this.isSold = isSold;
+    public void setStatus(PropertyStatus status) {
+        this.status = status;
     }
     
     public LocalDateTime getCreatedAt() {
@@ -183,6 +189,14 @@ public class Property {
     
     public void setDeveloper(User developer) {
         this.developer = developer;
+    }
+    
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+    
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
     }
     
     @PreUpdate

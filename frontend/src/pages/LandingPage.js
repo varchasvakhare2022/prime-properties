@@ -1,106 +1,228 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { Home, Building2, Star, Shield, Zap, Heart } from 'lucide-react';
+import { Navbar } from '../components/ui/navbar';
+import { AnimatedCard, Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/card';
+import { ShimmerButton, ShimmerCard } from '../components/ui/shimmer';
+import { GradientBorder, GradientText } from '../components/ui/gradient';
 
 const LandingPage = () => {
+  const features = [
+    {
+      icon: Shield,
+      title: "Verified Properties",
+      description: "All properties are thoroughly verified and authenticated"
+    },
+    {
+      icon: Zap,
+      title: "Fast Transactions",
+      description: "Streamlined process for quick property transactions"
+    },
+    {
+      icon: Heart,
+      title: "Premium Service",
+      description: "Dedicated support for all your property needs"
+    }
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900">
-      <div className="container mx-auto px-4 py-16">
-        {/* Header */}
-        <header className="text-center mb-16">
-          <h1 className="text-6xl font-bold text-white mb-4">
-            Prime Properties
-          </h1>
-          <p className="text-xl text-blue-200 max-w-2xl mx-auto">
-            Your premier destination for luxury real estate. Find your dream property or showcase your developments.
-          </p>
-        </header>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+      <Navbar />
+      
+      <div className="pt-16">
+        {/* Hero Section */}
+        <section className="relative overflow-hidden py-20 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="text-center"
+            >
+              <motion.h1
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="text-6xl md:text-8xl font-bold mb-6"
+              >
+                <GradientText>Prime Properties</GradientText>
+              </motion.h1>
+              
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+                className="text-xl md:text-2xl text-slate-300 max-w-3xl mx-auto mb-12"
+              >
+                Your premier destination for luxury real estate. Find your dream property or showcase your developments.
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.6 }}
+                className="flex flex-col sm:flex-row gap-4 justify-center"
+              >
+                <ShimmerButton asChild>
+                  <Link to="/customer-login" className="text-white">
+                    Customer Login
+                  </Link>
+                </ShimmerButton>
+                <ShimmerButton asChild>
+                  <Link to="/developer-login" className="text-white">
+                    Developer Login
+                  </Link>
+                </ShimmerButton>
+              </motion.div>
+            </motion.div>
+          </div>
+        </section>
 
         {/* Main Content */}
-        <div className="max-w-4xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-8 mb-16">
-            {/* Customer Section */}
-            <div className="bg-white rounded-lg shadow-xl p-8 transform hover:scale-105 transition-transform duration-300">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                  </svg>
-                </div>
-                <h2 className="text-2xl font-bold text-gray-800 mb-4">
-                  Find Your Dream Home
-                </h2>
-                <p className="text-gray-600 mb-6">
-                  Browse through our extensive collection of premium properties. From luxury apartments to spacious villas, find the perfect place to call home.
-                </p>
-                <Link
-                  to="/customer-login"
-                  className="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-300"
-                >
-                  Customer Login
-                </Link>
-              </div>
+        <section className="py-20 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-8 mb-20">
+              {/* Customer Section */}
+              <motion.div
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+              >
+                <GradientBorder>
+                  <div className="text-center">
+                    <motion.div
+                      whileHover={{ scale: 1.1, rotate: 5 }}
+                      className="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-6"
+                    >
+                      <Home className="w-10 h-10 text-white" />
+                    </motion.div>
+                    
+                    <CardTitle className="text-3xl font-bold text-white mb-4">
+                      Find Your Dream Home
+                    </CardTitle>
+                    
+                    <CardDescription className="text-slate-300 mb-8 text-lg">
+                      Browse through our extensive collection of premium properties. From luxury apartments to spacious villas, find the perfect place to call home.
+                    </CardDescription>
+                    
+                    <ShimmerButton asChild>
+                      <Link to="/customer-login" className="text-white">
+                        Start Browsing
+                      </Link>
+                    </ShimmerButton>
+                  </div>
+                </GradientBorder>
+              </motion.div>
+
+              {/* Developer Section */}
+              <motion.div
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+              >
+                <GradientBorder>
+                  <div className="text-center">
+                    <motion.div
+                      whileHover={{ scale: 1.1, rotate: -5 }}
+                      className="w-20 h-20 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6"
+                    >
+                      <Building2 className="w-10 h-10 text-white" />
+                    </motion.div>
+                    
+                    <CardTitle className="text-3xl font-bold text-white mb-4">
+                      Showcase Your Properties
+                    </CardTitle>
+                    
+                    <CardDescription className="text-slate-300 mb-8 text-lg">
+                      List your premium properties, manage details, and connect with potential buyers. Join our network of trusted developers.
+                    </CardDescription>
+                    
+                    <ShimmerButton asChild>
+                      <Link to="/developer-login" className="text-white">
+                        Start Listing
+                      </Link>
+                    </ShimmerButton>
+                  </div>
+                </GradientBorder>
+              </motion.div>
             </div>
 
-            {/* Developer Section */}
-            <div className="bg-white rounded-lg shadow-xl p-8 transform hover:scale-105 transition-transform duration-300">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                  </svg>
-                </div>
-                <h2 className="text-2xl font-bold text-gray-800 mb-4">
-                  Showcase Your Properties
+            {/* Features Section */}
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+            >
+              <div className="text-center mb-16">
+                <h2 className="text-4xl font-bold text-white mb-4">
+                  Why Choose <GradientText>Prime Properties</GradientText>?
                 </h2>
-                <p className="text-gray-600 mb-6">
-                  List your premium properties, manage details, and connect with potential buyers. Join our network of trusted developers.
+                <p className="text-slate-300 text-lg">
+                  Experience the future of real estate with our cutting-edge platform
                 </p>
-                <Link
-                  to="/developer-login"
-                  className="inline-block bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors duration-300"
-                >
-                  Developer Login
-                </Link>
               </div>
-            </div>
-          </div>
 
-          {/* Features Section */}
-          <div className="bg-white rounded-lg shadow-xl p-8">
-            <h3 className="text-3xl font-bold text-center text-gray-800 mb-8">
-              Why Choose Prime Properties?
-            </h3>
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="text-center">
-                <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <h4 className="font-semibold text-gray-800 mb-2">Verified Properties</h4>
-                <p className="text-gray-600 text-sm">All properties are thoroughly verified and authenticated</p>
+              <div className="grid md:grid-cols-3 gap-8">
+                {features.map((feature, index) => (
+                  <motion.div
+                    key={feature.title}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.8 + index * 0.1 }}
+                  >
+                    <ShimmerCard>
+                      <div className="text-center">
+                        <motion.div
+                          whileHover={{ scale: 1.1 }}
+                          className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-4"
+                        >
+                          <feature.icon className="w-8 h-8 text-white" />
+                        </motion.div>
+                        <h3 className="text-xl font-semibold text-white mb-2">
+                          {feature.title}
+                        </h3>
+                        <p className="text-slate-300">
+                          {feature.description}
+                        </p>
+                      </div>
+                    </ShimmerCard>
+                  </motion.div>
+                ))}
               </div>
-              <div className="text-center">
-                <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                </div>
-                <h4 className="font-semibold text-gray-800 mb-2">Fast Transactions</h4>
-                <p className="text-gray-600 text-sm">Streamlined process for quick property transactions</p>
+            </motion.div>
+
+            {/* Stats Section */}
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 1.0 }}
+              className="mt-20"
+            >
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                {[
+                  { number: "10K+", label: "Properties Listed" },
+                  { number: "5K+", label: "Happy Customers" },
+                  { number: "500+", label: "Trusted Developers" },
+                  { number: "99%", label: "Satisfaction Rate" }
+                ].map((stat, index) => (
+                  <motion.div
+                    key={stat.label}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5, delay: 1.2 + index * 0.1 }}
+                    className="text-center"
+                  >
+                    <div className="text-3xl md:text-4xl font-bold text-white mb-2">
+                      <GradientText>{stat.number}</GradientText>
+                    </div>
+                    <div className="text-slate-300">{stat.label}</div>
+                  </motion.div>
+                ))}
               </div>
-              <div className="text-center">
-                <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                  </svg>
-                </div>
-                <h4 className="font-semibold text-gray-800 mb-2">Premium Service</h4>
-                <p className="text-gray-600 text-sm">Dedicated support for all your property needs</p>
-              </div>
-            </div>
+            </motion.div>
           </div>
-        </div>
+        </section>
       </div>
     </div>
   );

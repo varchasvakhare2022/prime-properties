@@ -3,6 +3,7 @@ version: '3.8'
 services:
   postgres:
     image: postgres:15
+    container_name: prime-properties-db
     environment:
       POSTGRES_DB: prime_properties
       POSTGRES_USER: postgres
@@ -11,32 +12,47 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./backend/src/main/resources/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    networks:
+      - prime-properties-network
 
   backend:
-    build: ./backend
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: prime-properties-backend
     ports:
       - "8080:8080"
-    depends_on:
-      - postgres
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/prime_properties
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: password
-    volumes:
-      - ./backend:/app
-      - /app/target
+      JWT_SECRET: sample_secret_for_testing_change_in_production
+      JWT_EXPIRATION: 86400000
+    depends_on:
+      - postgres
+    networks:
+      - prime-properties-network
+    restart: unless-stopped
 
   frontend:
-    build: ./frontend
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: prime-properties-frontend
     ports:
       - "3000:3000"
-    depends_on:
-      - backend
     environment:
       REACT_APP_API_URL: http://localhost:8080/api
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
+    depends_on:
+      - backend
+    networks:
+      - prime-properties-network
+    restart: unless-stopped
 
 volumes:
   postgres_data:
+
+networks:
+  prime-properties-network:
+    driver: bridge

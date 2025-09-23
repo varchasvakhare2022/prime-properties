@@ -1,6 +1,7 @@
 package com.primeproperties.controller;
 
 import com.primeproperties.model.Property;
+import com.primeproperties.model.PropertyStatus;
 import com.primeproperties.model.User;
 import com.primeproperties.repository.PropertyRepository;
 import com.primeproperties.repository.UserRepository;
@@ -27,7 +28,7 @@ public class PropertyController {
     
     @GetMapping("/public")
     public ResponseEntity<List<Property>> getAllAvailableProperties() {
-        List<Property> properties = propertyRepository.findByIsSoldFalse();
+        List<Property> properties = propertyRepository.findByStatus(PropertyStatus.AVAILABLE);
         return ResponseEntity.ok(properties);
     }
     
@@ -68,7 +69,7 @@ public class PropertyController {
             
             // Check if the property belongs to the current developer
             if (!property.getDeveloper().getId().equals(currentUser.getId())) {
-                return ResponseEntity.forbidden().build();
+                return ResponseEntity.status(403).build();
             }
             
             // Update property details
@@ -104,10 +105,10 @@ public class PropertyController {
             
             // Check if the property belongs to the current developer
             if (!property.getDeveloper().getId().equals(currentUser.getId())) {
-                return ResponseEntity.forbidden().build();
+                return ResponseEntity.status(403).build();
             }
             
-            property.setIsSold(true);
+            property.setStatus(PropertyStatus.SOLD);
             Property updatedProperty = propertyRepository.save(property);
             return ResponseEntity.ok(updatedProperty);
         } catch (Exception e) {

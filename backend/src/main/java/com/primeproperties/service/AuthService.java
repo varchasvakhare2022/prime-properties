@@ -3,7 +3,6 @@ package com.primeproperties.service;
 import com.primeproperties.dto.LoginRequest;
 import com.primeproperties.dto.RegisterRequest;
 import com.primeproperties.dto.AuthResponse;
-import com.primeproperties.model.Role;
 import com.primeproperties.model.User;
 import com.primeproperties.repository.UserRepository;
 import com.primeproperties.security.JwtUtils;
@@ -39,7 +38,7 @@ public class AuthService {
         
         User user = (User) authentication.getPrincipal();
         
-        return new AuthResponse(jwt, user.getId(), user.getUsername(), user.getEmail(), user.getRole());
+        return new AuthResponse(jwt, user.getId(), user.getUsername(), user.getName(), user.getEmail(), user.getRole());
     }
     
     public AuthResponse registerUser(RegisterRequest registerRequest) {
@@ -53,6 +52,7 @@ public class AuthService {
         
         // Create new user's account
         User user = new User(registerRequest.getUsername(), 
+                           registerRequest.getName(),
                            registerRequest.getEmail(),
                            encoder.encode(registerRequest.getPassword()),
                            registerRequest.getRole());
@@ -62,6 +62,6 @@ public class AuthService {
         // Generate JWT token for the new user
         String jwt = jwtUtils.generateTokenFromUsername(user.getUsername());
         
-        return new AuthResponse(jwt, user.getId(), user.getUsername(), user.getEmail(), user.getRole());
+        return new AuthResponse(jwt, user.getId(), user.getUsername(), user.getName(), user.getEmail(), user.getRole());
     }
 }
