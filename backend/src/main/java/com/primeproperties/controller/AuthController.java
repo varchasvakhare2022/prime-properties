@@ -81,15 +81,21 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         try {
+            System.out.println("Login attempt - Username/Email: " + loginRequest.getUsername());
+            
             // Try to find user by username first, then by email
             User user = userRepository.findByUsername(loginRequest.getUsername())
                 .orElse(userRepository.findByEmail(loginRequest.getUsername())
                     .orElseThrow(() -> new RuntimeException("User not found")));
             
+            System.out.println("User found - Username: " + user.getUsername() + ", Email: " + user.getEmail() + ", Role: " + user.getRole());
+            
             // Authenticate using the actual username from database
             Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(user.getUsername(), loginRequest.getPassword())
             );
+
+            System.out.println("Authentication successful for user: " + user.getUsername());
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
             
@@ -103,8 +109,35 @@ public class AuthController {
                 user.getRole()
             ));
         } catch (Exception e) {
+            System.out.println("Authentication failed: " + e.getMessage());
+            e.printStackTrace();
             return ResponseEntity.badRequest()
                 .body(Map.of("message", "Error: Invalid username or password!"));
+        }
+    }
+
+    /**
+     * Debug endpoint to check if sample users exist
+     */
+    @GetMapping("/debug/users")
+    public ResponseEntity<?> debugUsers() {
+        try {
+            var users = userRepository.findAll();
+            var userList = users.stream().map(user -> Map.of(
+                "id", user.getId(),
+                "username", user.getUsername(),
+                "email", user.getEmail(),
+                "role", user.getRole(),
+                "passwordLength", user.getPassword().length()
+            )).toList();
+            
+            return ResponseEntity.ok(Map.of(
+                "totalUsers", users.size(),
+                "users", userList
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                .body(Map.of("error", e.getMessage()));
         }
     }
 
