@@ -31,24 +31,44 @@ const GoogleSignIn = () => {
 
   const initializeGoogleSignIn = () => {
     if (window.google && googleButtonRef.current) {
-      window.google.accounts.id.initialize({
-        client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || 'your-google-client-id',
-        callback: handleGoogleSignIn,
-        auto_select: false,
-        cancel_on_tap_outside: true
-      });
+      const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || 'your-google-client-id';
+      
+      console.log('Initializing Google Sign-In with Client ID:', clientId);
+      console.log('Current domain:', window.location.origin);
+      
+      if (clientId === 'your-google-client-id') {
+        setError('Google Client ID not configured. Please set NEXT_PUBLIC_GOOGLE_CLIENT_ID in your environment variables.');
+        return;
+      }
 
-      window.google.accounts.id.renderButton(
-        googleButtonRef.current,
-        {
-          theme: 'outline',
-          size: 'large',
-          width: '100%',
-          text: 'signin_with',
-          shape: 'rectangular',
-          logo_alignment: 'left'
-        }
-      );
+      try {
+        window.google.accounts.id.initialize({
+          client_id: clientId,
+          callback: handleGoogleSignIn,
+          auto_select: false,
+          cancel_on_tap_outside: true
+        });
+
+        window.google.accounts.id.renderButton(
+          googleButtonRef.current,
+          {
+            theme: 'outline',
+            size: 'large',
+            width: '100%',
+            text: 'signin_with',
+            shape: 'rectangular',
+            logo_alignment: 'left'
+          }
+        );
+        
+        console.log('Google Sign-In button rendered successfully');
+      } catch (error) {
+        console.error('Error initializing Google Sign-In:', error);
+        setError('Failed to initialize Google Sign-In. Please check your configuration.');
+      }
+    } else {
+      console.error('Google API not loaded or button ref not available');
+      setError('Google Sign-In service not available. Please refresh the page.');
     }
   };
 
@@ -128,6 +148,28 @@ const GoogleSignIn = () => {
               Sign in with your Google account to continue
             </p>
           </div>
+
+          {/* Error Display */}
+          {error && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-4 p-4 bg-red-500/20 border border-red-500/30 rounded-lg"
+            >
+              <p className="text-red-300 text-sm">{error}</p>
+            </motion.div>
+          )}
+
+          {/* Loading State */}
+          {isLoading && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="mb-4 p-4 bg-blue-500/20 border border-blue-500/30 rounded-lg"
+            >
+              <p className="text-blue-300 text-sm">Signing in...</p>
+            </motion.div>
+          )}
 
           {/* Google Sign-In Button */}
           <div className="mb-6">
