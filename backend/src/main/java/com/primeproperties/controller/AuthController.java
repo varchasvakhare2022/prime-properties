@@ -81,34 +81,58 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
         try {
+            System.out.println("=== LOGIN ATTEMPT START ===");
             System.out.println("Login attempt - Username/Email: " + loginRequest.getUsername());
             System.out.println("Login request object: " + loginRequest);
-            
+
             // Check if request body is valid
             if (loginRequest == null || loginRequest.getUsername() == null || loginRequest.getPassword() == null) {
-                System.out.println("Invalid request body");
+                System.out.println("❌ Invalid request body");
                 return ResponseEntity.badRequest()
                     .body(Map.of("message", "Error: Invalid request body!"));
             }
+
+            // Check total users in database first
+            long totalUsers = userRepository.count();
+            System.out.println("📊 Total users in database: " + totalUsers);
             
+            if (totalUsers == 0) {
+                System.out.println("❌ No users found in database! Data initialization may have failed.");
+                return ResponseEntity.badRequest()
+                    .body(Map.of("message", "Error: No users found in database. Please contact administrator."));
+            }
+
             // Try to find user by username first, then by email
-            User user = userRepository.findByUsername(loginRequest.getUsername())
-                .orElse(userRepository.findByEmail(loginRequest.getUsername())
-                    .orElseThrow(() -> new RuntimeException("User not found")));
+            System.out.println("🔍 Searching for user by username: " + loginRequest.getUsername());
+            User user = userRepository.findByUsername(loginRequest.getUsername()).orElse(null);
             
-            System.out.println("User found - Username: " + user.getUsername() + ", Email: " + user.getEmail() + ", Role: " + user.getRole());
+            if (user == null) {
+                System.out.println("🔍 User not found by username, trying email: " + loginRequest.getUsername());
+                user = userRepository.findByEmail(loginRequest.getUsername()).orElse(null);
+            }
             
+            if (user == null) {
+                System.out.println("❌ User not found with username/email: " + loginRequest.getUsername());
+                return ResponseEntity.badRequest()
+                    .body(Map.of("message", "Error: User not found!"));
+            }
+
+            System.out.println("✅ User found - Username: " + user.getUsername() + ", Email: " + user.getEmail() + ", Role: " + user.getRole());
+
             // Authenticate using the actual username from database
+            System.out.println("🔐 Attempting authentication for username: " + user.getUsername());
             Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(user.getUsername(), loginRequest.getPassword())
             );
 
-            System.out.println("Authentication successful for user: " + user.getUsername());
+            System.out.println("✅ Authentication successful for user: " + user.getUsername());
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            
-            String jwt = jwtUtils.generateToken(authentication.getName(), user.getRole());
 
+            String jwt = jwtUtils.generateToken(authentication.getName(), user.getRole());
+            System.out.println("🎫 JWT token generated successfully");
+
+            System.out.println("=== LOGIN ATTEMPT SUCCESS ===");
             return ResponseEntity.ok(new JwtResponse(
                 jwt,
                 user.getUsername(),
@@ -117,8 +141,9 @@ public class AuthController {
                 user.getRole()
             ));
         } catch (Exception e) {
-            System.out.println("Authentication failed: " + e.getMessage());
+            System.out.println("❌ Authentication failed: " + e.getMessage());
             e.printStackTrace();
+            System.out.println("=== LOGIN ATTEMPT FAILED ===");
             return ResponseEntity.badRequest()
                 .body(Map.of("message", "Error: Invalid username or password!"));
         }
@@ -134,6 +159,64 @@ public class AuthController {
             "message", "Auth service is running",
             "timestamp", System.currentTimeMillis()
         ));
+    }
+
+    /**
+     * Manual data initialization endpoint
+     */
+    @PostMapping("/debug/init-data")
+    public ResponseEntity<?> initializeData() {
+        try {
+            System.out.println("=== Manual Data Initialization Requested ===");
+            
+            long userCount = userRepository.count();
+            System.out.println("Current user count: " + userCount);
+            
+            if (userCount == 0) {
+                // Create Developer User
+                User developer = new User();
+                developer.setId(1L);
+                developer.setUsername("developer");
+                developer.setName("Developer User");
+                developer.setEmail("developer@prime.com");
+                developer.setPassword(passwordEncoder.encode("DevPass123"));
+                developer.setRole("DEVELOPER");
+                
+                userRepository.save(developer);
+                System.out.println("✅ Created Developer User");
+
+                // Create Customer User
+                User customer = new User();
+                customer.setId(2L);
+                customer.setUsername("customer");
+                customer.setName("Customer User");
+                customer.setEmail("customer@prime.com");
+                customer.setPassword(passwordEncoder.encode("CustPass123"));
+                customer.setRole("CUSTOMER");
+                
+                userRepository.save(customer);
+                System.out.println("✅ Created Customer User");
+                
+                return ResponseEntity.ok(Map.of(
+                    "message", "Sample users created successfully!",
+                    "usersCreated", 2,
+                    "credentials", Map.of(
+                        "developer", "developer@prime.com / DevPass123",
+                        "customer", "customer@prime.com / CustPass123"
+                    )
+                ));
+            } else {
+                return ResponseEntity.ok(Map.of(
+                    "message", "Users already exist",
+                    "userCount", userCount
+                ));
+            }
+        } catch (Exception e) {
+            System.err.println("❌ Error in manual data initialization: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.badRequest()
+                .body(Map.of("error", e.getMessage()));
+        }
     }
 
     /**
