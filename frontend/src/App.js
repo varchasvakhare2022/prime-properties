@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import LandingPage from './pages/LandingPage';
+import PropertiesPage from './pages/PropertiesPage';
 import CustomerLogin from './pages/CustomerLogin';
 import DeveloperLogin from './pages/DeveloperLogin';
 import CustomerSignup from './pages/CustomerSignup';
@@ -17,6 +18,7 @@ function App() {
         <div className="App">
           <Routes>
             <Route path="/" element={<LandingPage />} />
+            <Route path="/properties" element={<PropertiesPage />} />
             <Route path="/customer-login" element={<CustomerLogin />} />
             <Route path="/developer-login" element={<DeveloperLogin />} />
             <Route path="/customer-signup" element={<CustomerSignup />} />

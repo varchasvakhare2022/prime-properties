@@ -49,8 +49,13 @@ public class WebSecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        // This must be the URL of your deployed frontend
-        configuration.setAllowedOrigins(Arrays.asList("https://prime-frontend-production.up.railway.app"));
+        // Allow multiple origins for flexibility
+        configuration.setAllowedOrigins(Arrays.asList(
+            "prime-properties.railway.internal",
+            "https://prime-properties.up.railway.app",
+            "http://localhost:3000", // For local development
+            "http://localhost:3001"  // Alternative local port
+        ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);
