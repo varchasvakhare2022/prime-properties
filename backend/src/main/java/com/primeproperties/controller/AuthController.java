@@ -15,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -47,6 +48,7 @@ public class AuthController {
      * Register a new user
      */
     @PostMapping("/register")
+    @Transactional
     public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest registerRequest) {
         // Check if username already exists
         if (userRepository.existsByUsername(registerRequest.getUsername())) {
@@ -77,6 +79,14 @@ public class AuthController {
         System.out.println("📝 Creating user: " + user.getUsername() + " with email: " + user.getEmail());
         User savedUser = userRepository.save(user);
         System.out.println("✅ User saved with ID: " + savedUser.getId());
+        
+        // Force flush to ensure the user is committed to database immediately
+        userRepository.flush();
+        System.out.println("🔄 Database flushed - user committed");
+        
+        // Test if user can be found immediately after creation
+        var testUser = userRepository.findByUsername(user.getUsername());
+        System.out.println("🧪 Test lookup after save: " + (testUser.isPresent() ? "SUCCESS" : "FAILED"));
 
         return ResponseEntity.ok(Map.of("message", "User registered successfully!"));
     }
