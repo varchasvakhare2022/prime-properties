@@ -13,6 +13,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,6 +39,9 @@ public class AuthController {
 
     @Autowired
     private JwtUtils jwtUtils;
+
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     /**
      * Register a new user
@@ -70,7 +74,9 @@ public class AuthController {
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         user.setRole(registerRequest.getRole());
 
-        userRepository.save(user);
+        System.out.println("📝 Creating user: " + user.getUsername() + " with email: " + user.getEmail());
+        User savedUser = userRepository.save(user);
+        System.out.println("✅ User saved with ID: " + savedUser.getId());
 
         return ResponseEntity.ok(Map.of("message", "User registered successfully!"));
     }
@@ -266,6 +272,48 @@ public class AuthController {
         } catch (Exception e) {
             System.err.println("❌ Error in manual data initialization: " + e.getMessage());
             e.printStackTrace();
+            return ResponseEntity.badRequest()
+                .body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    /**
+     * Test user lookup endpoint
+     */
+    @GetMapping("/debug/test-user-lookup/{username}")
+    public ResponseEntity<?> testUserLookup(@PathVariable String username) {
+        try {
+            System.out.println("🔍 Testing user lookup for: " + username);
+            
+            // Test repository methods
+            var userByUsername = userRepository.findByUsername(username);
+            var userByEmail = userRepository.findByEmail(username);
+            
+            System.out.println("Repository findByUsername result: " + (userByUsername.isPresent() ? "Found" : "Not found"));
+            System.out.println("Repository findByEmail result: " + (userByEmail.isPresent() ? "Found" : "Not found"));
+            
+            // Test UserDetailsService
+            try {
+                var userDetails = userDetailsService.loadUserByUsername(username);
+                System.out.println("UserDetailsService result: Found user with authorities: " + userDetails.getAuthorities());
+                
+                return ResponseEntity.ok(Map.of(
+                    "username", username,
+                    "repositoryByUsername", userByUsername.isPresent(),
+                    "repositoryByEmail", userByEmail.isPresent(),
+                    "userDetailsService", "Found",
+                    "authorities", userDetails.getAuthorities().toString()
+                ));
+            } catch (Exception e) {
+                System.out.println("UserDetailsService error: " + e.getMessage());
+                return ResponseEntity.ok(Map.of(
+                    "username", username,
+                    "repositoryByUsername", userByUsername.isPresent(),
+                    "repositoryByEmail", userByEmail.isPresent(),
+                    "userDetailsService", "Error: " + e.getMessage()
+                ));
+            }
+        } catch (Exception e) {
             return ResponseEntity.badRequest()
                 .body(Map.of("error", e.getMessage()));
         }
