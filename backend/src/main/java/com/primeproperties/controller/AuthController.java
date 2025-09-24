@@ -303,6 +303,50 @@ public class AuthController {
     }
 
     /**
+     * Fix plain text passwords in database
+     */
+    @PostMapping("/debug/fix-passwords")
+    public ResponseEntity<?> fixPlainTextPasswords() {
+        try {
+            System.out.println("=== Fixing Plain Text Passwords ===");
+            
+            var users = userRepository.findAll();
+            int fixedCount = 0;
+            
+            for (User user : users) {
+                String password = user.getPassword();
+                
+                // Check if password is plain text (not bcrypt)
+                if (!password.startsWith("$2a$") && !password.startsWith("$2b$") && !password.startsWith("$2y$")) {
+                    System.out.println("🔧 Fixing plain text password for user: " + user.getUsername());
+                    System.out.println("🔧 Old password: " + password);
+                    
+                    // Hash the plain text password
+                    String hashedPassword = passwordEncoder.encode(password);
+                    user.setPassword(hashedPassword);
+                    userRepository.save(user);
+                    
+                    System.out.println("🔧 New hashed password: " + hashedPassword);
+                    fixedCount++;
+                }
+            }
+            
+            System.out.println("✅ Fixed " + fixedCount + " plain text passwords");
+            
+            return ResponseEntity.ok(Map.of(
+                "message", "Password fixing completed",
+                "fixedCount", fixedCount,
+                "totalUsers", users.size()
+            ));
+        } catch (Exception e) {
+            System.err.println("❌ Error fixing passwords: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.badRequest()
+                .body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    /**
      * Test password encoding/verification
      */
     @GetMapping("/debug/test-password/{password}")
