@@ -3,13 +3,9 @@
 let API_BASE_URL = process.env.REACT_APP_API_URL || 'https://prime-properties-production-d021.up.railway.app';
 
 // If Railway sets an internal URL, override it with the public URL
-if (API_BASE_URL.includes('railway.internal') || API_BASE_URL.includes('internal')) {
+if (API_BASE_URL.includes('railway.internal') || API_BASE_URL.includes('internal') || !API_BASE_URL.startsWith('http')) {
   API_BASE_URL = 'https://prime-properties-production-d021.up.railway.app';
 }
-
-// Debug logging
-console.log('AuthService API_BASE_URL:', API_BASE_URL);
-console.log('REACT_APP_API_URL env var:', process.env.REACT_APP_API_URL);
 
 class AuthService {
   // Login user

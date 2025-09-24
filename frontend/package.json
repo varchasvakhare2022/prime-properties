@@ -48,5 +48,5 @@
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.21"
   },
-  "proxy": "https://prime-properties-production.up.railway.app"
+  "proxy": "https://prime-properties-production-d021.up.railway.app"
 }
