@@ -125,25 +125,46 @@ public class AuthController {
     }
 
     /**
+     * Simple health check endpoint
+     */
+    @GetMapping("/health")
+    public ResponseEntity<?> healthCheck() {
+        return ResponseEntity.ok(Map.of(
+            "status", "OK",
+            "message", "Auth service is running",
+            "timestamp", System.currentTimeMillis()
+        ));
+    }
+
+    /**
      * Debug endpoint to check if sample users exist
      */
     @GetMapping("/debug/users")
     public ResponseEntity<?> debugUsers() {
         try {
+            System.out.println("Debug: Checking users in database...");
             var users = userRepository.findAll();
-            var userList = users.stream().map(user -> Map.of(
-                "id", user.getId(),
-                "username", user.getUsername(),
-                "email", user.getEmail(),
-                "role", user.getRole(),
-                "passwordLength", user.getPassword().length()
-            )).toList();
+            System.out.println("Debug: Found " + users.size() + " users in database");
+            
+            var userList = users.stream().map(user -> {
+                System.out.println("Debug: User - ID: " + user.getId() + ", Username: " + user.getUsername() + ", Email: " + user.getEmail() + ", Role: " + user.getRole());
+                return Map.of(
+                    "id", user.getId(),
+                    "username", user.getUsername(),
+                    "email", user.getEmail(),
+                    "role", user.getRole(),
+                    "passwordLength", user.getPassword().length()
+                );
+            }).toList();
             
             return ResponseEntity.ok(Map.of(
                 "totalUsers", users.size(),
-                "users", userList
+                "users", userList,
+                "message", "Database connection successful"
             ));
         } catch (Exception e) {
+            System.out.println("Debug: Error checking users - " + e.getMessage());
+            e.printStackTrace();
             return ResponseEntity.badRequest()
                 .body(Map.of("error", e.getMessage()));
         }
