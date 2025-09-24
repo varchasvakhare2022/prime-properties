@@ -51,8 +51,8 @@ public class WebSecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         // Allow multiple origins for flexibility
         configuration.setAllowedOrigins(Arrays.asList(
-            "prime-properties.railway.internal",
             "https://prime-properties.up.railway.app",
+            "prime-properties-production-d021.up.railway.app",
             "http://localhost:3000", // For local development
             "http://localhost:3001"  // Alternative local port
         ));

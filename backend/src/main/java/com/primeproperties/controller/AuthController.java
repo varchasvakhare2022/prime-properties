@@ -23,7 +23,7 @@ import java.util.Map;
  * Authentication Controller for user registration and login
  */
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 @CrossOrigin(origins = "*")
 public class AuthController {
 

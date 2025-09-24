@@ -15,7 +15,7 @@ import java.util.Map;
  * User Controller for user-related operations
  */
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 @CrossOrigin(origins = "*")
 public class UserController {
 
