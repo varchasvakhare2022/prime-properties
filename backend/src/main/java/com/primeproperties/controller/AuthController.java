@@ -162,6 +162,58 @@ public class AuthController {
     }
 
     /**
+     * Create sample users with different IDs to avoid conflicts
+     */
+    @PostMapping("/debug/create-sample-users")
+    public ResponseEntity<?> createSampleUsers() {
+        try {
+            System.out.println("=== Creating Sample Users ===");
+            
+            // Create Developer User with ID 100 (to avoid conflicts)
+            User developer = new User();
+            developer.setId(100L);
+            developer.setUsername("developer");
+            developer.setName("Developer User");
+            developer.setEmail("developer@prime.com");
+            developer.setPassword(passwordEncoder.encode("DevPass123"));
+            developer.setRole("DEVELOPER");
+            
+            userRepository.save(developer);
+            System.out.println("✅ Created Developer User");
+
+            // Create Customer User with ID 200 (to avoid conflicts)
+            User customer = new User();
+            customer.setId(200L);
+            customer.setUsername("customer");
+            customer.setName("Customer User");
+            customer.setEmail("customer@prime.com");
+            customer.setPassword(passwordEncoder.encode("CustPass123"));
+            customer.setRole("CUSTOMER");
+            
+            userRepository.save(customer);
+            System.out.println("✅ Created Customer User");
+            
+            long finalUserCount = userRepository.count();
+            System.out.println("Final user count: " + finalUserCount);
+            
+            return ResponseEntity.ok(Map.of(
+                "message", "Sample users created successfully!",
+                "usersCreated", 2,
+                "totalUsers", finalUserCount,
+                "credentials", Map.of(
+                    "developer", "developer@prime.com / DevPass123",
+                    "customer", "customer@prime.com / CustPass123"
+                )
+            ));
+        } catch (Exception e) {
+            System.err.println("❌ Error creating sample users: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.badRequest()
+                .body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    /**
      * Manual data initialization endpoint
      */
     @PostMapping("/debug/init-data")
@@ -172,45 +224,45 @@ public class AuthController {
             long userCount = userRepository.count();
             System.out.println("Current user count: " + userCount);
             
-            if (userCount == 0) {
-                // Create Developer User
-                User developer = new User();
-                developer.setId(1L);
-                developer.setUsername("developer");
-                developer.setName("Developer User");
-                developer.setEmail("developer@prime.com");
-                developer.setPassword(passwordEncoder.encode("DevPass123"));
-                developer.setRole("DEVELOPER");
-                
-                userRepository.save(developer);
-                System.out.println("✅ Created Developer User");
+            // Always create sample users (force creation)
+            System.out.println("Force creating sample users...");
+            
+            // Create Developer User
+            User developer = new User();
+            developer.setId(1L);
+            developer.setUsername("developer");
+            developer.setName("Developer User");
+            developer.setEmail("developer@prime.com");
+            developer.setPassword(passwordEncoder.encode("DevPass123"));
+            developer.setRole("DEVELOPER");
+            
+            userRepository.save(developer);
+            System.out.println("✅ Created Developer User");
 
-                // Create Customer User
-                User customer = new User();
-                customer.setId(2L);
-                customer.setUsername("customer");
-                customer.setName("Customer User");
-                customer.setEmail("customer@prime.com");
-                customer.setPassword(passwordEncoder.encode("CustPass123"));
-                customer.setRole("CUSTOMER");
-                
-                userRepository.save(customer);
-                System.out.println("✅ Created Customer User");
-                
-                return ResponseEntity.ok(Map.of(
-                    "message", "Sample users created successfully!",
-                    "usersCreated", 2,
-                    "credentials", Map.of(
-                        "developer", "developer@prime.com / DevPass123",
-                        "customer", "customer@prime.com / CustPass123"
-                    )
-                ));
-            } else {
-                return ResponseEntity.ok(Map.of(
-                    "message", "Users already exist",
-                    "userCount", userCount
-                ));
-            }
+            // Create Customer User
+            User customer = new User();
+            customer.setId(2L);
+            customer.setUsername("customer");
+            customer.setName("Customer User");
+            customer.setEmail("customer@prime.com");
+            customer.setPassword(passwordEncoder.encode("CustPass123"));
+            customer.setRole("CUSTOMER");
+            
+            userRepository.save(customer);
+            System.out.println("✅ Created Customer User");
+            
+            long finalUserCount = userRepository.count();
+            System.out.println("Final user count: " + finalUserCount);
+            
+            return ResponseEntity.ok(Map.of(
+                "message", "Sample users created successfully!",
+                "usersCreated", 2,
+                "totalUsers", finalUserCount,
+                "credentials", Map.of(
+                    "developer", "developer@prime.com / DevPass123",
+                    "customer", "customer@prime.com / CustPass123"
+                )
+            ));
         } catch (Exception e) {
             System.err.println("❌ Error in manual data initialization: " + e.getMessage());
             e.printStackTrace();
@@ -243,7 +295,12 @@ public class AuthController {
             return ResponseEntity.ok(Map.of(
                 "totalUsers", users.size(),
                 "users", userList,
-                "message", "Database connection successful"
+                "message", "Database connection successful",
+                "sampleCredentials", Map.of(
+                    "note", "Use existing user credentials or create new ones",
+                    "existingUser", userList.isEmpty() ? "None" : userList.get(0),
+                    "suggestedLogin", userList.isEmpty() ? "No users found" : "Try username: " + userList.get(0).get("username")
+                )
             ));
         } catch (Exception e) {
             System.out.println("Debug: Error checking users - " + e.getMessage());
