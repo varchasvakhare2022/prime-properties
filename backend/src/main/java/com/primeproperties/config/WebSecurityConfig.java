@@ -62,16 +62,15 @@ public class WebSecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        // Allow multiple origins for flexibility
+        // Allow only Vercel frontend domain
         configuration.setAllowedOrigins(Arrays.asList(
-            "https://prime-properties.up.railway.app",
-            "prime-properties-production-d021.up.railway.app",
-            "http://localhost:3000", // For local development
-            "http://localhost:3001"  // Alternative local port
+            "https://prime-properties.vercel.app"
         ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With"));
         configuration.setAllowCredentials(true);
+        configuration.setMaxAge(3600L); // Cache preflight response for 1 hour
+        
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

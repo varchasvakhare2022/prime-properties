@@ -55,7 +55,7 @@ const GoogleSignIn = () => {
       console.log('Google Sign-In response:', response);
       
       // Send the credential to backend
-      const backendResponse = await fetch(`${process.env.REACT_APP_API_URL || 'https://prime-properties-production-d021.up.railway.app'}/auth/google`, {
+      const backendResponse = await fetch(`${process.env.REACT_APP_API_URL || 'https://prime-properties.up.railway.app'}/auth/google`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

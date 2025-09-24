@@ -16,7 +16,6 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin(origins = "*")
 public class OAuthController {
 
     @Autowired
@@ -36,7 +35,7 @@ public class OAuthController {
             if (authentication == null || !(authentication.getPrincipal() instanceof OAuth2User)) {
                 System.out.println("❌ Invalid authentication");
                 return ResponseEntity.badRequest()
-                    .body(Map.of("message", "Authentication failed"));
+                    .body(Map.of("error", "Authentication failed"));
             }
 
             OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
@@ -51,7 +50,7 @@ public class OAuthController {
             if (googleId == null || email == null || name == null) {
                 System.out.println("❌ Missing required Google user information");
                 return ResponseEntity.badRequest()
-                    .body(Map.of("message", "Missing user information from Google"));
+                    .body(Map.of("error", "Missing user information from Google"));
             }
 
             // Check if user already exists
@@ -106,7 +105,7 @@ public class OAuthController {
             System.err.println("❌ Google OAuth callback error: " + e.getMessage());
             e.printStackTrace();
             return ResponseEntity.badRequest()
-                .body(Map.of("message", "Google authentication failed: " + e.getMessage()));
+                .body(Map.of("error", "Google authentication failed", "message", e.getMessage()));
         }
     }
 

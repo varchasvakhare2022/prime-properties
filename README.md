@@ -93,8 +93,8 @@ cd prime-properties
 4. Go to "Credentials" → "Create Credentials" → "OAuth 2.0 Client IDs"
 5. Configure OAuth consent screen:
    - Application type: Web application
-   - Authorized JavaScript origins: `https://prime-properties.up.railway.app`
-   - Authorized redirect URIs: `https://prime-properties-production-d021.up.railway.app/auth/google/callback`
+   - Authorized JavaScript origins: `https://prime-properties.vercel.app`
+   - Authorized redirect URIs: `https://prime-properties.up.railway.app/auth/google/callback`
 6. Copy the Client ID and Client Secret
 
 **Set Environment Variables:**
@@ -108,7 +108,7 @@ GOOGLE_CLIENT_SECRET=your-google-client-secret
 **Frontend (.env file):**
 ```bash
 REACT_APP_GOOGLE_CLIENT_ID=your-google-client-id
-REACT_APP_API_URL=https://prime-properties-production-d021.up.railway.app
+REACT_APP_API_URL=https://prime-properties.up.railway.app
 ```
 
 #### 3️⃣ Setup PostgreSQL Database
@@ -146,8 +146,8 @@ Frontend will start on `http://localhost:3000`
 The application is already deployed on Railway:
 
 **Live URLs:**
-- **Frontend**: https://prime-properties.up.railway.app
-- **Backend**: https://prime-properties-production-d021.up.railway.app
+- **Frontend**: https://prime-properties.vercel.app
+- **Backend**: https://prime-properties.up.railway.app
 
 **Environment Variables to Set in Railway:**
 - `GOOGLE_CLIENT_ID`: Your Google OAuth Client ID
