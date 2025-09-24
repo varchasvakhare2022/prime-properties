@@ -79,9 +79,17 @@ public class AuthController {
      * Login user and return JWT token
      */
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
         try {
             System.out.println("Login attempt - Username/Email: " + loginRequest.getUsername());
+            System.out.println("Login request object: " + loginRequest);
+            
+            // Check if request body is valid
+            if (loginRequest == null || loginRequest.getUsername() == null || loginRequest.getPassword() == null) {
+                System.out.println("Invalid request body");
+                return ResponseEntity.badRequest()
+                    .body(Map.of("message", "Error: Invalid request body!"));
+            }
             
             // Try to find user by username first, then by email
             User user = userRepository.findByUsername(loginRequest.getUsername())

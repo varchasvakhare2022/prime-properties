@@ -11,16 +11,24 @@ class AuthService {
   // Login user
   async login(username, password) {
     try {
+      const requestBody = { username, password };
+      console.log('Login request body:', requestBody);
+      console.log('Login URL:', `${API_BASE_URL}/auth/login`);
+      
       const response = await fetch(`${API_BASE_URL}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify(requestBody),
       });
 
+      console.log('Login response status:', response.status);
+      console.log('Login response headers:', response.headers);
+      
       const data = await response.json();
-
+      console.log('Login response data:', data);
+      
       if (!response.ok) {
         throw new Error(data.message || 'Login failed');
       }
@@ -36,6 +44,7 @@ class AuthService {
 
       return data;
     } catch (error) {
+      console.error('Login error:', error);
       throw error;
     }
   }
