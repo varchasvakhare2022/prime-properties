@@ -81,14 +81,17 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         try {
+            // Try to find user by username first, then by email
+            User user = userRepository.findByUsername(loginRequest.getUsername())
+                .orElse(userRepository.findByEmail(loginRequest.getUsername())
+                    .orElseThrow(() -> new RuntimeException("User not found")));
+            
+            // Authenticate using the actual username from database
             Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
+                new UsernamePasswordAuthenticationToken(user.getUsername(), loginRequest.getPassword())
             );
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            
-            User user = userRepository.findByUsername(loginRequest.getUsername())
-                .orElseThrow(() -> new RuntimeException("User not found"));
             
             String jwt = jwtUtils.generateToken(authentication.getName(), user.getRole());
 
