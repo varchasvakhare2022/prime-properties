@@ -77,6 +77,9 @@ public class AuthController {
         user.setRole(registerRequest.getRole());
 
         System.out.println("📝 Creating user: " + user.getUsername() + " with email: " + user.getEmail());
+        System.out.println("🔐 Plain password: " + registerRequest.getPassword());
+        System.out.println("🔐 Hashed password: " + user.getPassword());
+        
         User savedUser = userRepository.save(user);
         System.out.println("✅ User saved with ID: " + savedUser.getId());
         
@@ -87,6 +90,12 @@ public class AuthController {
         // Test if user can be found immediately after creation
         var testUser = userRepository.findByUsername(user.getUsername());
         System.out.println("🧪 Test lookup after save: " + (testUser.isPresent() ? "SUCCESS" : "FAILED"));
+        
+        // Test password verification
+        if (testUser.isPresent()) {
+            boolean passwordMatches = passwordEncoder.matches(registerRequest.getPassword(), testUser.get().getPassword());
+            System.out.println("🔐 Password verification test: " + (passwordMatches ? "SUCCESS" : "FAILED"));
+        }
 
         return ResponseEntity.ok(Map.of("message", "User registered successfully!"));
     }
@@ -134,6 +143,12 @@ public class AuthController {
             }
 
             System.out.println("✅ User found - Username: " + user.getUsername() + ", Email: " + user.getEmail() + ", Role: " + user.getRole());
+            System.out.println("🔐 Stored password hash: " + user.getPassword());
+            System.out.println("🔐 Login password: " + loginRequest.getPassword());
+            
+            // Test password verification manually
+            boolean passwordMatches = passwordEncoder.matches(loginRequest.getPassword(), user.getPassword());
+            System.out.println("🔐 Manual password verification: " + (passwordMatches ? "SUCCESS" : "FAILED"));
 
             // Authenticate using the actual username from database
             System.out.println("🔐 Attempting authentication for username: " + user.getUsername());
@@ -282,6 +297,33 @@ public class AuthController {
         } catch (Exception e) {
             System.err.println("❌ Error in manual data initialization: " + e.getMessage());
             e.printStackTrace();
+            return ResponseEntity.badRequest()
+                .body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    /**
+     * Test password encoding/verification
+     */
+    @GetMapping("/debug/test-password/{password}")
+    public ResponseEntity<?> testPassword(@PathVariable String password) {
+        try {
+            System.out.println("🔐 Testing password: " + password);
+            
+            // Encode the password
+            String encodedPassword = passwordEncoder.encode(password);
+            System.out.println("🔐 Encoded password: " + encodedPassword);
+            
+            // Test verification
+            boolean matches = passwordEncoder.matches(password, encodedPassword);
+            System.out.println("🔐 Password verification: " + (matches ? "SUCCESS" : "FAILED"));
+            
+            return ResponseEntity.ok(Map.of(
+                "originalPassword", password,
+                "encodedPassword", encodedPassword,
+                "verification", matches ? "SUCCESS" : "FAILED"
+            ));
+        } catch (Exception e) {
             return ResponseEntity.badRequest()
                 .body(Map.of("error", e.getMessage()));
         }

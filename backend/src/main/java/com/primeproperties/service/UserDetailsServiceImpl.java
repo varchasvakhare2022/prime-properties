@@ -35,6 +35,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                         }));
 
         System.out.println("✅ UserDetailsService: User found - Username: " + user.getUsername() + ", Email: " + user.getEmail() + ", Role: " + user.getRole());
+        System.out.println("🔐 UserDetailsService: Password hash from DB: " + user.getPassword());
         
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getUsername())
