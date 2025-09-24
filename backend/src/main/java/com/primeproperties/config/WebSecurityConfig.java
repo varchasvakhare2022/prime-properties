@@ -8,8 +8,14 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -33,13 +39,20 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // 1. THIS LINE ENABLES CORS
+                // Enable CORS
                 .cors(withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/properties/**").permitAll()
+                        .requestMatchers("/auth/**", "/properties/**", "/oauth2/**").permitAll()
                         .anyRequest().authenticated())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                // Configure OAuth 2.0 Login
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/auth/google/login")
+                        .defaultSuccessUrl("/auth/google/callback", true)
+                        .failureUrl("/auth/google/error")
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(oauth2UserService())));
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
@@ -73,5 +86,21 @@ public class WebSecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService() {
+        return new OAuth2UserService<OAuth2UserRequest, OAuth2User>() {
+            @Override
+            public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+                // This is a simple implementation that just returns the user info
+                // In a real application, you might want to fetch additional user details
+                return new DefaultOAuth2User(
+                    Arrays.asList(new SimpleGrantedAuthority("ROLE_CUSTOMER")),
+                    userRequest.getAdditionalParameters(),
+                    "sub" // Use 'sub' as the name attribute key for Google
+                );
+            }
+        };
     }
 }

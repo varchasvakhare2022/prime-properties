@@ -57,9 +57,10 @@ Prime Properties is a modern, full-stack real estate platform that connects prop
 - **Analytics**: View property performance metrics
 
 ### 🔐 Authentication & Security
+- **Google OAuth 2.0**: Secure authentication with Google Sign-In
 - **JWT Authentication**: Secure token-based authentication
 - **Role-Based Dashboards**: Customized experience for each user type
-- **Password Security**: BCrypt password hashing
+- **Auto-Registration**: Users are automatically registered on first Google login
 - **Protected Routes**: Secure API endpoints
 
 ## 🚀 Installation
@@ -82,7 +83,35 @@ git clone <repository-url>
 cd prime-properties
 ```
 
-#### 2️⃣ Setup PostgreSQL Database
+#### 2️⃣ Setup Google OAuth 2.0
+
+**Create Google OAuth Credentials:**
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project or select existing one
+3. Enable Google+ API
+4. Go to "Credentials" → "Create Credentials" → "OAuth 2.0 Client IDs"
+5. Configure OAuth consent screen:
+   - Application type: Web application
+   - Authorized JavaScript origins: `https://prime-properties.up.railway.app`
+   - Authorized redirect URIs: `https://prime-properties-production-d021.up.railway.app/auth/google/callback`
+6. Copy the Client ID and Client Secret
+
+**Set Environment Variables:**
+
+**Backend (.env or Railway environment variables):**
+```bash
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+```
+
+**Frontend (.env file):**
+```bash
+REACT_APP_GOOGLE_CLIENT_ID=your-google-client-id
+REACT_APP_API_URL=https://prime-properties-production-d021.up.railway.app
+```
+
+#### 3️⃣ Setup PostgreSQL Database
 ```bash
 # Start PostgreSQL service
 sudo service postgresql start  # Linux/Mac
@@ -112,37 +141,34 @@ npm start
 ```
 Frontend will start on `http://localhost:3000`
 
-### 🐳 Alternative: Docker Setup
+### 🚀 Railway Deployment
 
-For a quicker setup, use Docker Compose:
+The application is already deployed on Railway:
 
-```bash
-# Clone and navigate to project
-git clone <repository-url>
-cd prime-properties
+**Live URLs:**
+- **Frontend**: https://prime-properties.up.railway.app
+- **Backend**: https://prime-properties-production-d021.up.railway.app
 
-# Start all services
-docker-compose up --build
+**Environment Variables to Set in Railway:**
+- `GOOGLE_CLIENT_ID`: Your Google OAuth Client ID
+- `GOOGLE_CLIENT_SECRET`: Your Google OAuth Client Secret
+- `DATABASE_URL`: PostgreSQL connection string (auto-provided by Railway)
 
-# Access points:
-# Frontend: http://localhost:3000
-# Backend: http://localhost:8080
-# Database: localhost:5432
+## 🔑 Authentication
+
+The application now uses **Google OAuth 2.0** for authentication. Users are automatically registered when they sign in with Google for the first time.
+
+### 🔐 How to Test
+1. Click "Sign In with Google" on the landing page
+2. Complete Google authentication
+3. You'll be automatically registered as a **CUSTOMER** and redirected to the customer dashboard
+4. All users start with **CUSTOMER** role by default
+
+### 👨‍💻 Developer Access
+To access developer features, you'll need to manually update your role in the database:
+```sql
+UPDATE users SET role = 'DEVELOPER' WHERE email = 'your-email@gmail.com';
 ```
-
-## 🔑 Sample Credentials
-
-The application automatically loads sample data via `data.sql`. Use these credentials to test the platform:
-
-### 👨‍💻 Developer Account
-- **Email**: `developer@prime.com`
-- **Password**: `DevPass123`
-- **Access**: Property management dashboard
-
-### 👤 Customer Account
-- **Email**: `customer@prime.com`
-- **Password**: `CustPass123`
-- **Access**: Property browsing dashboard
 
 ### 🏠 Sample Properties
 The system includes preloaded properties from major Indian cities:

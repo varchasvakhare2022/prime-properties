@@ -5,10 +5,7 @@ import LandingPage from './pages/LandingPage';
 import PropertiesPage from './pages/PropertiesPage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
-import CustomerLogin from './pages/CustomerLogin';
-import DeveloperLogin from './pages/DeveloperLogin';
-import CustomerSignup from './pages/CustomerSignup';
-import DeveloperSignup from './pages/DeveloperSignup';
+import GoogleSignIn from './pages/GoogleSignIn';
 import CustomerDashboard from './pages/CustomerDashboard';
 import DeveloperDashboard from './pages/DeveloperDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -23,10 +20,7 @@ function App() {
             <Route path="/properties" element={<PropertiesPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />
-            <Route path="/customer-login" element={<CustomerLogin />} />
-            <Route path="/developer-login" element={<DeveloperLogin />} />
-            <Route path="/customer-signup" element={<CustomerSignup />} />
-            <Route path="/developer-signup" element={<DeveloperSignup />} />
+            <Route path="/login" element={<GoogleSignIn />} />
             <Route 
               path="/customer/dashboard" 
               element={

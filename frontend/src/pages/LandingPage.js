@@ -65,13 +65,13 @@ const LandingPage = () => {
                 className="flex flex-col sm:flex-row gap-4 justify-center"
               >
                 <ShimmerButton asChild>
-                  <Link to="/customer-login" className="text-white">
-                    Customer Login
+                  <Link to="/login" className="text-white">
+                    Sign In with Google
                   </Link>
                 </ShimmerButton>
                 <ShimmerButton asChild>
-                  <Link to="/developer-login" className="text-white">
-                    Developer Login
+                  <Link to="/properties" className="text-white">
+                    Browse Properties
                   </Link>
                 </ShimmerButton>
               </motion.div>
@@ -107,7 +107,7 @@ const LandingPage = () => {
                     </CardDescription>
                     
                     <ShimmerButton asChild>
-                      <Link to="/customer-login" className="text-white">
+                      <Link to="/login" className="text-white">
                         Start Browsing
                       </Link>
                     </ShimmerButton>
@@ -139,7 +139,7 @@ const LandingPage = () => {
                     </CardDescription>
                     
                     <ShimmerButton asChild>
-                      <Link to="/developer-login" className="text-white">
+                      <Link to="/login" className="text-white">
                         Start Listing
                       </Link>
                     </ShimmerButton>

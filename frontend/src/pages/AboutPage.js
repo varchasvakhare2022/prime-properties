@@ -39,17 +39,17 @@ const AboutPage = () => {
 
   const team = [
     {
-      name: "Rajesh Kumar",
+      name: "xyz",
       role: "CEO & Founder",
       description: "15+ years in real estate with a vision to revolutionize property transactions."
     },
     {
-      name: "Priya Sharma",
+      name: "abc",
       role: "CTO",
       description: "Tech expert focused on building scalable and secure platforms for property management."
     },
     {
-      name: "Amit Patel",
+      name: "def",
       role: "Head of Operations",
       description: "Ensures smooth operations and customer satisfaction across all touchpoints."
     }

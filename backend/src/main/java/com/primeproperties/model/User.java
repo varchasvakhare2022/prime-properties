@@ -35,12 +35,17 @@ public class User implements UserDetails {
     @Column(unique = true)
     private String email;
     
-    @NotBlank
     @Size(max = 100)
-    private String password;
+    private String password; // Optional for OAuth users
     
     @Column(nullable = false)
     private String role;
+    
+    @Column(name = "google_id", unique = true)
+    private String googleId; // Google OAuth ID
+    
+    @Column(name = "provider")
+    private String provider = "LOCAL"; // LOCAL, GOOGLE
     
     @OneToMany(mappedBy = "developer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Property> properties;
@@ -122,6 +127,22 @@ public class User implements UserDetails {
     
     public void setTransactions(List<Transaction> transactions) {
         this.transactions = transactions;
+    }
+    
+    public String getGoogleId() {
+        return googleId;
+    }
+    
+    public void setGoogleId(String googleId) {
+        this.googleId = googleId;
+    }
+    
+    public String getProvider() {
+        return provider;
+    }
+    
+    public void setProvider(String provider) {
+        this.provider = provider;
     }
     
     // UserDetails implementation
