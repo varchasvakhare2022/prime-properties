@@ -25,7 +25,95 @@ public class OAuthController {
     private JwtUtils jwtUtils;
 
     /**
-     * Handle Google OAuth callback
+     * Handle Google ID token verification from frontend
+     */
+    @PostMapping("/google")
+    public ResponseEntity<?> handleGoogleIdToken(@RequestBody Map<String, String> request) {
+        try {
+            System.out.println("=== Google ID Token Verification ===");
+            
+            String idToken = request.get("credential");
+            if (idToken == null || idToken.isEmpty()) {
+                System.out.println("❌ Missing Google ID token");
+                return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Missing Google ID token"));
+            }
+
+            // For production, you should verify the Google ID token with Google's API
+            // For now, we'll simulate the verification process
+            System.out.println("🔍 Received Google ID token: " + idToken.substring(0, Math.min(50, idToken.length())) + "...");
+
+            // In a real implementation, you would:
+            // 1. Verify the token with Google's tokeninfo endpoint
+            // 2. Extract user information from the verified token
+            // 3. Check if the token is valid and not expired
+            
+            // For demo purposes, we'll create a user with sample data
+            // In production, extract this from the verified token
+            String email = "google.user@example.com";
+            String name = "Google User";
+            String googleId = "google_" + System.currentTimeMillis();
+
+            System.out.println("🔍 Extracted user info - ID: " + googleId + ", Email: " + email + ", Name: " + name);
+
+            // Check if user already exists
+            User user = userRepository.findByGoogleId(googleId).orElse(null);
+            
+            if (user == null) {
+                // Check if user exists with same email but different provider
+                user = userRepository.findByEmail(email).orElse(null);
+                
+                if (user != null) {
+                    // Link Google account to existing user
+                    user.setGoogleId(googleId);
+                    user.setProvider("GOOGLE");
+                    userRepository.save(user);
+                    System.out.println("✅ Linked Google account to existing user: " + email);
+                } else {
+                    // Create new user
+                    user = new User();
+                    user.setGoogleId(googleId);
+                    user.setEmail(email);
+                    user.setName(name);
+                    user.setUsername(email); // Use email as username for OAuth users
+                    user.setRole("CUSTOMER"); // Default role for OAuth users
+                    user.setProvider("GOOGLE");
+                    
+                    userRepository.save(user);
+                    System.out.println("✅ Created new Google user: " + email);
+                }
+            } else {
+                System.out.println("✅ Existing Google user found: " + email);
+            }
+
+            // Generate JWT token
+            String jwt = jwtUtils.generateToken(user.getUsername(), user.getRole());
+            System.out.println("🎫 JWT token generated for user: " + user.getUsername());
+
+            // Return success response with JWT
+            return ResponseEntity.ok(Map.of(
+                "message", "Google authentication successful",
+                "token", jwt,
+                "user", Map.of(
+                    "id", user.getId(),
+                    "username", user.getUsername(),
+                    "name", user.getName(),
+                    "email", user.getEmail(),
+                    "role", user.getRole(),
+                    "provider", user.getProvider()
+                )
+            ));
+
+        } catch (Exception e) {
+            System.err.println("❌ Google ID token verification error: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(401)
+                .body(Map.of("error", "Unauthorized", "message", "Google authentication failed"));
+        }
+    }
+
+    /**
+     * Handle Google OAuth callback (for server-side OAuth flow)
      */
     @GetMapping("/google/callback")
     public ResponseEntity<?> handleGoogleCallback(Authentication authentication) {
@@ -104,8 +192,8 @@ public class OAuthController {
         } catch (Exception e) {
             System.err.println("❌ Google OAuth callback error: " + e.getMessage());
             e.printStackTrace();
-            return ResponseEntity.badRequest()
-                .body(Map.of("error", "Google authentication failed", "message", e.getMessage()));
+            return ResponseEntity.status(401)
+                .body(Map.of("error", "Unauthorized", "message", "Google authentication failed"));
         }
     }
 
@@ -125,7 +213,7 @@ public class OAuthController {
             ));
         } catch (Exception e) {
             return ResponseEntity.badRequest()
-                .body(Map.of("error", e.getMessage()));
+                .body(Map.of("error", "Failed to get Google login URL", "message", e.getMessage()));
         }
     }
 

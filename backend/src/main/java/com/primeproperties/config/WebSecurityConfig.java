@@ -43,7 +43,15 @@ public class WebSecurityConfig {
                 .cors(withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/properties/**", "/oauth2/**").permitAll()
+                        // Permit all auth endpoints including OAuth
+                        .requestMatchers("/auth/**").permitAll()
+                        // Permit OAuth2 endpoints
+                        .requestMatchers("/oauth2/**").permitAll()
+                        // Permit properties endpoints for public access
+                        .requestMatchers("/properties/**").permitAll()
+                        // Permit health check endpoints
+                        .requestMatchers("/actuator/health", "/health").permitAll()
+                        // All other requests require authentication
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // Configure OAuth 2.0 Login
@@ -62,16 +70,49 @@ public class WebSecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        // Allow only Vercel frontend domain
+        
+        // Allow frontend domain from environment variable or default
+        String frontendUrl = System.getenv("FRONTEND_URL");
+        if (frontendUrl == null || frontendUrl.isEmpty()) {
+            frontendUrl = "https://prime-properties.up.railway.app";
+        }
+        
         configuration.setAllowedOrigins(Arrays.asList(
-            "https://prime-properties.vercel.app"
+            frontendUrl,
+            "http://localhost:3000", // Keep for local dev
+            "http://localhost:5173" // Keep for local dev
         ));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With"));
+        
+        // Allow all necessary HTTP methods
+        configuration.setAllowedMethods(Arrays.asList(
+            "GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"
+        ));
+        
+        // Allow necessary headers for OAuth and API requests
+        configuration.setAllowedHeaders(Arrays.asList(
+            "Authorization", 
+            "Content-Type", 
+            "X-Requested-With",
+            "Accept",
+            "Origin",
+            "Access-Control-Request-Method",
+            "Access-Control-Request-Headers"
+        ));
+        
+        // Allow credentials for OAuth authentication
         configuration.setAllowCredentials(true);
-        configuration.setMaxAge(3600L); // Cache preflight response for 1 hour
+        
+        // Cache preflight response for 1 hour
+        configuration.setMaxAge(3600L);
+        
+        // Expose headers that frontend might need
+        configuration.setExposedHeaders(Arrays.asList(
+            "Authorization",
+            "Content-Type"
+        ));
         
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        // Apply CORS configuration to all endpoints
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }

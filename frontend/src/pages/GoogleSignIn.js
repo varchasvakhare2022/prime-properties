@@ -8,6 +8,8 @@ import { GradientText } from '../components/ui/gradient';
 const GoogleSignIn = () => {
   const navigate = useNavigate();
   const googleButtonRef = useRef(null);
+  const [error, setError] = React.useState(null);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   useEffect(() => {
     // Load Google Identity Services script
@@ -30,7 +32,7 @@ const GoogleSignIn = () => {
   const initializeGoogleSignIn = () => {
     if (window.google && googleButtonRef.current) {
       window.google.accounts.id.initialize({
-        client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID || 'your-google-client-id',
+        client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || 'your-google-client-id',
         callback: handleGoogleSignIn,
         auto_select: false,
         cancel_on_tap_outside: true
@@ -52,10 +54,19 @@ const GoogleSignIn = () => {
 
   const handleGoogleSignIn = async (response) => {
     try {
+      setIsLoading(true);
+      setError(null);
+      
       console.log('Google Sign-In response:', response);
       
+      // Ensure we're using HTTPS
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://prime-properties-production-d021.up.railway.app';
+      if (!apiUrl.startsWith('https://')) {
+        throw new Error('API URL must use HTTPS');
+      }
+      
       // Send the credential to backend
-      const backendResponse = await fetch(`${process.env.REACT_APP_API_URL || 'https://prime-properties.up.railway.app'}/auth/google`, {
+      const backendResponse = await fetch(`${apiUrl}/auth/google`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -75,12 +86,14 @@ const GoogleSignIn = () => {
         // Redirect to customer dashboard
         navigate('/customer/dashboard');
       } else {
-        console.error('Backend authentication failed:', data.message);
-        alert('Authentication failed: ' + data.message);
+        console.error('Backend authentication failed:', data);
+        setError(data.error || data.message || 'Authentication failed');
       }
     } catch (error) {
       console.error('Google Sign-In error:', error);
-      alert('Sign-in failed. Please try again.');
+      setError(error.message || 'Sign-in failed. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
