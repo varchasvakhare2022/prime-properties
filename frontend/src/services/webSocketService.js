@@ -14,11 +14,21 @@ class WebSocketService {
   getWebSocketUrl() {
     const apiUrl = process.env.REACT_APP_API_URL || 'https://prime-properties-production-d021.up.railway.app';
     
+    // Force HTTPS for WebSocket connections
+    let secureApiUrl = apiUrl;
+    if (apiUrl.startsWith('http://')) {
+      console.warn('⚠️ Converting HTTP to HTTPS for WebSocket to prevent mixed content errors');
+      secureApiUrl = apiUrl.replace('http://', 'https://');
+    }
+    
     // Remove protocol and add WebSocket protocol
-    const wsUrl = apiUrl.replace(/^https?:\/\//, '');
+    const wsUrl = secureApiUrl.replace(/^https?:\/\//, '');
     
     // Railway apps expose only ports 443/80, so no :8080 needed
-    return `wss://${wsUrl}/ws`;
+    const wssUrl = `wss://${wsUrl}/ws`;
+    
+    console.log('🔒 WebSocket using HTTPS URL:', wssUrl);
+    return wssUrl;
   }
 
   // Connect to WebSocket

@@ -7,6 +7,7 @@ This guide ensures your Railway deployment works correctly with Google OAuth and
 ## 🔧 **1. Railway Environment Variables**
 
 ### **Frontend Service Environment Variables:**
+Set these directly in Railway dashboard (no local .env files needed):
 ```bash
 REACT_APP_GOOGLE_CLIENT_ID=your-actual-google-client-id
 REACT_APP_API_URL=https://prime-properties-production-d021.up.railway.app

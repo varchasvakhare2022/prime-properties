@@ -84,14 +84,24 @@ const GoogleSignIn = () => {
       
       console.log('Google Sign-In response:', response);
       
-      // Ensure we're using HTTPS
+      // ENFORCE HTTPS to prevent mixed content errors
       const apiUrl = process.env.REACT_APP_API_URL || 'https://prime-properties-production-d021.up.railway.app';
-      if (!apiUrl.startsWith('https://')) {
-        throw new Error('API URL must use HTTPS');
+      
+      // Force HTTPS for all API calls
+      let secureApiUrl = apiUrl;
+      if (apiUrl.startsWith('http://')) {
+        console.warn('⚠️ Converting HTTP to HTTPS to prevent mixed content errors');
+        secureApiUrl = apiUrl.replace('http://', 'https://');
       }
       
+      if (!secureApiUrl.startsWith('https://')) {
+        throw new Error('API URL must use HTTPS to prevent mixed content errors');
+      }
+      
+      console.log('🔒 GoogleSignIn using HTTPS API URL:', secureApiUrl);
+      
       // Send the credential to backend
-      const backendResponse = await fetch(`${apiUrl}/auth/google`, {
+      const backendResponse = await fetch(`${secureApiUrl}/auth/google`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
