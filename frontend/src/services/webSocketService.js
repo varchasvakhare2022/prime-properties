@@ -18,9 +18,17 @@ class WebSocketService {
     if (apiUrl) {
       // Use provided API URL and convert to WebSocket
       let secureApiUrl = apiUrl;
-      if (apiUrl.startsWith('http://')) {
+      
+      // Force HTTPS and remove any port numbers
+      if (secureApiUrl.startsWith('http://')) {
         console.warn('⚠️ Converting HTTP to HTTPS for WebSocket to prevent mixed content errors');
-        secureApiUrl = apiUrl.replace('http://', 'https://');
+        secureApiUrl = secureApiUrl.replace('http://', 'https://');
+      }
+      
+      // Ensure HTTPS protocol
+      if (!secureApiUrl.startsWith('https://')) {
+        console.warn('⚠️ Forcing HTTPS protocol for WebSocket');
+        secureApiUrl = 'https://' + secureApiUrl.replace(/^https?:\/\//, '');
       }
       
       // Remove any port numbers from the URL (Railway doesn't use :8080)
