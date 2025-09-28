@@ -93,8 +93,8 @@ cd prime-properties
 4. Go to "Credentials" → "Create Credentials" → "OAuth 2.0 Client IDs"
 5. Configure OAuth consent screen:
    - Application type: Web application
-   - Authorized JavaScript origins: `https://prime-properties.vercel.app`
-   - Authorized redirect URIs: `https://prime-properties.up.railway.app/auth/google/callback`
+   - Authorized JavaScript origins: `https://prime-properties.up.railway.app`
+   - Authorized redirect URIs: `https://prime-properties.up.railway.app/api/auth/callback/google`
 6. Copy the Client ID and Client Secret
 
 **Set Environment Variables:**

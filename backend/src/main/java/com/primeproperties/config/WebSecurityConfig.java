@@ -96,7 +96,9 @@ public class WebSecurityConfig {
             "Accept",
             "Origin",
             "Access-Control-Request-Method",
-            "Access-Control-Request-Headers"
+            "Access-Control-Request-Headers",
+            "Cross-Origin-Opener-Policy",
+            "Cross-Origin-Embedder-Policy"
         ));
         
         // Allow credentials for OAuth authentication

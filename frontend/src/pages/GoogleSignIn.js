@@ -59,7 +59,7 @@ const GoogleSignIn = () => {
           {
             theme: 'outline',
             size: 'large',
-            width: '100%',
+            width: 240,
             text: 'signin_with',
             shape: 'rectangular',
             logo_alignment: 'left'

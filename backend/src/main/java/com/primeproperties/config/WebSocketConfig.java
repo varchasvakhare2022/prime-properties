@@ -24,8 +24,13 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         // Register WebSocket endpoint for Railway deployment
+        // Railway apps expose only ports 443/80, so no :8080 needed
         registry.addEndpoint("/ws")
-                .setAllowedOrigins("https://prime-properties.vercel.app")
+                .setAllowedOrigins(
+                    "https://prime-properties.up.railway.app",
+                    "http://localhost:3000", // Keep for local dev
+                    "http://localhost:5173"  // Keep for local dev
+                )
                 .withSockJS(); // Enable SockJS fallback options
     }
 }
