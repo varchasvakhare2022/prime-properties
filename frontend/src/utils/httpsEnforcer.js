@@ -46,6 +46,15 @@ class HTTPSEnforcer {
       apiUrl = 'https://prime-properties-production-d021.up.railway.app';
     }
     
+    // EMERGENCY FALLBACK: Use window.location.origin if still not HTTPS
+    if (typeof window !== 'undefined' && window.location && window.location.origin.startsWith('https://')) {
+      const originApiUrl = window.location.origin.replace('prime-properties.up.railway.app', 'prime-properties-production-d021.up.railway.app');
+      if (originApiUrl.startsWith('https://')) {
+        console.warn('🚨 EMERGENCY FALLBACK: Using window.location.origin for API URL:', originApiUrl);
+        apiUrl = originApiUrl;
+      }
+    }
+    
     console.log('🔒 HttpsEnforcer using HTTPS API URL:', apiUrl);
     return apiUrl;
   }

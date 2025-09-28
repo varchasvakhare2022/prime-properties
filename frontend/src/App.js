@@ -9,12 +9,14 @@ import GoogleSignIn from './pages/GoogleSignIn';
 import CustomerDashboard from './pages/CustomerDashboard';
 import DeveloperDashboard from './pages/DeveloperDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
+import DebugInfo from './components/DebugInfo';
 
 function App() {
   return (
     <AuthProvider>
       <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <div className="App">
+          <DebugInfo />
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/properties" element={<PropertiesPage />} />

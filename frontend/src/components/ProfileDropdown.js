@@ -56,7 +56,7 @@ const ProfileDropdown = () => {
 
   const initializeGoogleSignIn = () => {
     if (window.google && googleButtonRef.current && !isAuthenticated && isOpen) {
-      const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || process.env.REACT_APP_GOOGLE_CLIENT_ID || 'your-google-client-id';
+      const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || 'your-google-client-id';
       
       console.log('Initializing Google Sign-In with client ID:', clientId);
       

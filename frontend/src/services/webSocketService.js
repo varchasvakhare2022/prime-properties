@@ -13,7 +13,7 @@ class WebSocketService {
   // Get WebSocket URL for Railway deployment
   getWebSocketUrl() {
     // Use NEXT_PUBLIC_API_URL if available, otherwise build from current origin
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || process.env.REACT_APP_API_URL;
+    const apiUrl = process.env.REACT_APP_API_URL;
     
     if (apiUrl) {
       // Use provided API URL and convert to WebSocket
