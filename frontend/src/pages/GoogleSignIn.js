@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Home } from 'lucide-react';
 import { ShimmerButton } from '../components/ui/shimmer';
 import { GradientText } from '../components/ui/gradient';
-import HTTPSEnforcer from '../utils/httpsEnforcer.js';
+import HTTPSEnforcer from '../utils/httpsEnforcer';
 
 const GoogleSignIn = () => {
   const navigate = useNavigate();

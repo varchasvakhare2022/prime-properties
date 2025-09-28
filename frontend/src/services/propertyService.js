@@ -2,7 +2,7 @@
 // Handle Railway internal URLs - they should not be used for frontend API calls
 // ENFORCE HTTPS to prevent mixed content errors
 
-import HTTPSEnforcer from '../utils/httpsEnforcer.js';
+import HTTPSEnforcer from '../utils/httpsEnforcer';
 
 // Get secure API URL using centralized HTTPS enforcer
 const API_BASE_URL = HTTPSEnforcer.getSecureAPIUrl();

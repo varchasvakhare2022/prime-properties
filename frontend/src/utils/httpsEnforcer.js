@@ -29,6 +29,8 @@ class HTTPSEnforcer {
     console.log('🔍 HttpsEnforcer - Original API URL from env:', apiUrl);
     console.log('🔍 HttpsEnforcer - NEXT_PUBLIC_API_URL:', process.env.NEXT_PUBLIC_API_URL);
     console.log('🔍 HttpsEnforcer - REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
+    console.log('🔍 HttpsEnforcer - NODE_ENV:', process.env.NODE_ENV);
+    console.log('🔍 HttpsEnforcer - All env vars:', Object.keys(process.env).filter(key => key.includes('API') || key.includes('URL')));
     
     // Force HTTPS for all API calls to prevent mixed content errors
     if (apiUrl.includes('railway.internal') || apiUrl.includes('internal') || !apiUrl.startsWith('https://')) {
