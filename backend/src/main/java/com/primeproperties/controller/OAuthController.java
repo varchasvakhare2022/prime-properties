@@ -39,22 +39,38 @@ public class OAuthController {
                     .body(Map.of("error", "Missing Google ID token"));
             }
 
-            // For production, you should verify the Google ID token with Google's API
-            // For now, we'll simulate the verification process
             System.out.println("🔍 Received Google ID token: " + idToken.substring(0, Math.min(50, idToken.length())) + "...");
 
-            // In a real implementation, you would:
-            // 1. Verify the token with Google's tokeninfo endpoint
-            // 2. Extract user information from the verified token
-            // 3. Check if the token is valid and not expired
-            
-            // For demo purposes, we'll create a user with sample data
-            // In production, extract this from the verified token
-            String email = "google.user@example.com";
-            String name = "Google User";
-            String googleId = "google_" + System.currentTimeMillis();
+            // Parse the JWT token to extract user information
+            // Note: In production, you should verify the token signature with Google's public keys
+            String[] tokenParts = idToken.split("\\.");
+            if (tokenParts.length != 3) {
+                System.out.println("❌ Invalid JWT token format");
+                return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Invalid token format"));
+            }
 
+            // Decode the payload (second part of JWT)
+            String payload = new String(java.util.Base64.getUrlDecoder().decode(tokenParts[1]));
+            System.out.println("🔍 Token payload: " + payload);
+            
+            // Parse JSON payload
+            com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+            Map<String, Object> claims = mapper.readValue(payload, Map.class);
+            
+            // Extract user information
+            String googleId = (String) claims.get("sub");
+            String email = (String) claims.get("email");
+            String name = (String) claims.get("name");
+            String picture = (String) claims.get("picture");
+            
             System.out.println("🔍 Extracted user info - ID: " + googleId + ", Email: " + email + ", Name: " + name);
+
+            if (googleId == null || email == null || name == null) {
+                System.out.println("❌ Missing required user information in token");
+                return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Missing user information in token"));
+            }
 
             // Check if user already exists
             User user = userRepository.findByGoogleId(googleId).orElse(null);

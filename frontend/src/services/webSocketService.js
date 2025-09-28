@@ -23,7 +23,9 @@ class WebSocketService {
         secureApiUrl = apiUrl.replace('http://', 'https://');
       }
       
-      const wsUrl = secureApiUrl.replace(/^https?:\/\//, '');
+      // Remove any port numbers from the URL (Railway doesn't use :8080)
+      const cleanUrl = secureApiUrl.replace(/:\d+/, '');
+      const wsUrl = cleanUrl.replace(/^https?:\/\//, '');
       const wssUrl = `wss://${wsUrl}/ws`;
       
       console.log('🔒 WebSocket using API URL:', wssUrl);
