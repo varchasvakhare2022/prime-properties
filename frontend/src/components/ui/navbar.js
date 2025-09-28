@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Menu, X, Home, Building2, Info, Mail, Building } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { GradientText } from "./gradient";
+import ProfileDropdown from "../ProfileDropdown";
 
 export const Navbar = ({ className, ...props }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -61,6 +62,15 @@ export const Navbar = ({ className, ...props }) => {
                 </Link>
               </motion.div>
             ))}
+            
+            {/* Profile Dropdown */}
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+            >
+              <ProfileDropdown />
+            </motion.div>
           </div>
 
           {/* Mobile menu button */}
@@ -103,6 +113,16 @@ export const Navbar = ({ className, ...props }) => {
                 </Link>
               </motion.div>
             ))}
+            
+            {/* Mobile Profile Dropdown */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: isOpen ? 1 : 0, x: isOpen ? 0 : -20 }}
+              transition={{ duration: 0.3, delay: 0.4 }}
+              className="px-3 py-2"
+            >
+              <ProfileDropdown />
+            </motion.div>
           </div>
         </motion.div>
       </div>

@@ -58,25 +58,35 @@ class AuthService {
     }
   }
 
-  // Register user
-  async register(username, name, email, password, role) {
+  // Google OAuth login
+  async googleLogin(credential) {
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/register`, {
+      const response = await fetch(`${API_BASE_URL}/auth/google`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, name, email, password, role }),
+        body: JSON.stringify({ credential }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || 'Registration failed');
+        throw new Error(data.error || data.message || 'Google authentication failed');
       }
 
-      return data;
+      // Store JWT token and user info
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify({
+        username: data.user.username,
+        name: data.user.name,
+        email: data.user.email,
+        role: data.user.role
+      }));
+
+      return data.user;
     } catch (error) {
+      console.error('Google login error:', error);
       throw error;
     }
   }

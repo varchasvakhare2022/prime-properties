@@ -82,10 +82,21 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
-    authService.logout();
-    setUser(null);
-    setError(null);
+  const googleLogin = async (credential) => {
+    try {
+      setError(null);
+      setLoading(true);
+      
+      const userData = await authService.googleLogin(credential);
+      setUser(userData);
+      
+      return userData;
+    } catch (error) {
+      setError(error.message);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
   };
 
   const clearError = () => {
@@ -98,6 +109,7 @@ export const AuthProvider = ({ children }) => {
     error,
     login,
     register,
+    googleLogin,
     logout,
     clearError,
     isAuthenticated: !!user,

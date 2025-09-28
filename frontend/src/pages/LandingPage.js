@@ -57,24 +57,6 @@ const LandingPage = () => {
               >
                 Your premier destination for luxury real estate. Find your dream property or showcase your developments.
               </motion.p>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.6 }}
-                className="flex flex-col sm:flex-row gap-4 justify-center"
-              >
-                <ShimmerButton asChild>
-                  <Link to="/login" className="text-white">
-                    Sign In with Google
-                  </Link>
-                </ShimmerButton>
-                <ShimmerButton asChild>
-                  <Link to="/properties" className="text-white">
-                    Browse Properties
-                  </Link>
-                </ShimmerButton>
-              </motion.div>
             </motion.div>
           </div>
         </section>
@@ -105,12 +87,6 @@ const LandingPage = () => {
                     <CardDescription className="text-slate-300 mb-8 text-lg">
                       Browse thousands of verified property listings across India using powerful search and filter tools.
                     </CardDescription>
-                    
-                    <ShimmerButton asChild>
-                      <Link to="/login" className="text-white">
-                        Start Browsing
-                      </Link>
-                    </ShimmerButton>
                   </div>
                 </GradientBorder>
               </motion.div>
@@ -137,12 +113,6 @@ const LandingPage = () => {
                     <CardDescription className="text-slate-300 mb-8 text-lg">
                       Easily list new properties, update details, and mark projects as sold using your dedicated dashboard.
                     </CardDescription>
-                    
-                    <ShimmerButton asChild>
-                      <Link to="/login" className="text-white">
-                        Start Listing
-                      </Link>
-                    </ShimmerButton>
                   </div>
                 </GradientBorder>
               </motion.div>
