@@ -99,6 +99,12 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const logout = () => {
+    authService.logout();
+    setUser(null);
+    setError(null);
+  };
+
   const clearError = () => {
     setError(null);
   };
