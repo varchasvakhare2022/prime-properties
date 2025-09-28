@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Home } from 'lucide-react';
 import { ShimmerButton } from '../components/ui/shimmer';
 import { GradientText } from '../components/ui/gradient';
+import HTTPSEnforcer from '../utils/httpsEnforcer.js';
 
 const GoogleSignIn = () => {
   const navigate = useNavigate();
@@ -87,18 +88,7 @@ const GoogleSignIn = () => {
       console.log('Google Sign-In response:', response);
       
       // ENFORCE HTTPS to prevent mixed content errors
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || process.env.REACT_APP_API_URL || 'https://prime-properties-production-d021.up.railway.app';
-      
-      // Force HTTPS for all API calls
-      let secureApiUrl = apiUrl;
-      if (apiUrl.startsWith('http://')) {
-        console.warn('⚠️ Converting HTTP to HTTPS to prevent mixed content errors');
-        secureApiUrl = apiUrl.replace('http://', 'https://');
-      }
-      
-      if (!secureApiUrl.startsWith('https://')) {
-        throw new Error('API URL must use HTTPS to prevent mixed content errors');
-      }
+      const secureApiUrl = HTTPSEnforcer.getSecureAPIUrl();
       
       console.log('🔒 GoogleSignIn using HTTPS API URL:', secureApiUrl);
       

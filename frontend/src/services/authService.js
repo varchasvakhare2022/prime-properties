@@ -1,20 +1,11 @@
 // Authentication service for API calls
 // Handle Railway internal URLs - they should not be used for frontend API calls
 // ENFORCE HTTPS to prevent mixed content errors
-let API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || process.env.REACT_APP_API_URL || 'https://prime-properties-production-d021.up.railway.app';
 
-// Force HTTPS for all API calls to prevent mixed content errors
-if (API_BASE_URL.includes('railway.internal') || API_BASE_URL.includes('internal') || !API_BASE_URL.startsWith('https://')) {
-  API_BASE_URL = 'https://prime-properties-production-d021.up.railway.app';
-}
+import HTTPSEnforcer from '../utils/httpsEnforcer.js';
 
-// Additional HTTPS enforcement
-if (API_BASE_URL.startsWith('http://')) {
-  console.warn('⚠️ Converting HTTP to HTTPS to prevent mixed content errors');
-  API_BASE_URL = API_BASE_URL.replace('http://', 'https://');
-}
-
-console.log('🔒 AuthService using HTTPS API URL:', API_BASE_URL);
+// Get secure API URL using centralized HTTPS enforcer
+const API_BASE_URL = HTTPSEnforcer.getSecureAPIUrl();
 
 class AuthService {
   // Login user

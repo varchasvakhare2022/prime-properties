@@ -23,8 +23,30 @@ class HTTPSEnforcer {
   }
 
   static getSecureAPIUrl() {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || process.env.REACT_APP_API_URL || 'https://prime-properties-production-d021.up.railway.app';
-    return this.enforceHTTPS(apiUrl);
+    // Get API URL from environment variables
+    let apiUrl = process.env.NEXT_PUBLIC_API_URL || process.env.REACT_APP_API_URL || 'https://prime-properties-production-d021.up.railway.app';
+    
+    console.log('🔍 HttpsEnforcer - Original API URL from env:', apiUrl);
+    console.log('🔍 HttpsEnforcer - NEXT_PUBLIC_API_URL:', process.env.NEXT_PUBLIC_API_URL);
+    console.log('🔍 HttpsEnforcer - REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
+    
+    // Force HTTPS for all API calls to prevent mixed content errors
+    if (apiUrl.includes('railway.internal') || apiUrl.includes('internal') || !apiUrl.startsWith('https://')) {
+      console.warn('⚠️ HttpsEnforcer - Overriding API URL to HTTPS Railway URL');
+      apiUrl = 'https://prime-properties-production-d021.up.railway.app';
+    }
+    
+    // Additional HTTPS enforcement
+    apiUrl = this.enforceHTTPS(apiUrl);
+    
+    // Final validation - ensure HTTPS
+    if (!apiUrl.startsWith('https://')) {
+      console.error('❌ HttpsEnforcer - CRITICAL: API URL is not HTTPS, forcing HTTPS');
+      apiUrl = 'https://prime-properties-production-d021.up.railway.app';
+    }
+    
+    console.log('🔒 HttpsEnforcer using HTTPS API URL:', apiUrl);
+    return apiUrl;
   }
 
   static getSecureWebSocketUrl() {
