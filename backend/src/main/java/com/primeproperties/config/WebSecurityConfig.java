@@ -41,6 +41,9 @@ public class WebSecurityConfig {
         http
                 .cors(withDefaults())
                 .csrf(csrf -> csrf.disable())
+                // Configure headers to allow Google Sign-In popups
+                .headers(headers -> headers
+                        .crossOriginOpenerPolicy(opener -> opener.policy("same-origin-allow-popups")))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/oauth2/**").permitAll()
