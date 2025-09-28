@@ -25,9 +25,14 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         // Register WebSocket endpoint for Railway deployment
         // Railway apps expose only ports 443/80, so no :8080 needed
+        String frontendUrl = System.getenv("FRONTEND_URL");
+        if (frontendUrl == null || frontendUrl.isEmpty()) {
+            frontendUrl = "https://prime-properties.up.railway.app";
+        }
+        
         registry.addEndpoint("/ws")
                 .setAllowedOrigins(
-                    "https://prime-properties.up.railway.app",
+                    frontendUrl,
                     "http://localhost:3000", // Keep for local dev
                     "http://localhost:5173"  // Keep for local dev
                 )

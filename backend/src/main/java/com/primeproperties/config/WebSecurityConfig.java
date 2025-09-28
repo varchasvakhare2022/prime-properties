@@ -39,25 +39,15 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // Enable CORS
                 .cors(withDefaults())
                 .csrf(csrf -> csrf.disable())
-                // Disable only Cross-Origin-Opener-Policy to allow Google Sign-In postMessage
-                .headers(headers -> headers
-                        .crossOriginOpenerPolicy(opener -> opener.disable()))
                 .authorizeHttpRequests(auth -> auth
-                        // Permit all auth endpoints including OAuth
                         .requestMatchers("/auth/**").permitAll()
-                        // Permit OAuth2 endpoints
                         .requestMatchers("/oauth2/**").permitAll()
-                        // Permit properties endpoints for public access
                         .requestMatchers("/properties/**").permitAll()
-                        // Permit health check endpoints
                         .requestMatchers("/actuator/health", "/health").permitAll()
-                        // All other requests require authentication
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                // Configure OAuth 2.0 Login
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/auth/google/login")
                         .defaultSuccessUrl("/auth/google/callback", true)
@@ -69,12 +59,11 @@ public class WebSecurityConfig {
         return http.build();
     }
 
-    // 2. THIS NEW METHOD DEFINES THE CORS RULES
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         
-        // Allow frontend domain from environment variable or default
+        // Allow frontend domain from environment variable
         String frontendUrl = System.getenv("FRONTEND_URL");
         if (frontendUrl == null || frontendUrl.isEmpty()) {
             frontendUrl = "https://prime-properties.up.railway.app";
@@ -83,41 +72,14 @@ public class WebSecurityConfig {
         configuration.setAllowedOrigins(Arrays.asList(
             frontendUrl,
             "http://localhost:3000", // Keep for local dev
-            "http://localhost:5173" // Keep for local dev
+            "http://localhost:5173"  // Keep for local dev
         ));
         
-        // Allow all necessary HTTP methods
-        configuration.setAllowedMethods(Arrays.asList(
-            "GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"
-        ));
-        
-        // Allow necessary headers for OAuth and API requests
-        configuration.setAllowedHeaders(Arrays.asList(
-            "Authorization", 
-            "Content-Type", 
-            "X-Requested-With",
-            "Accept",
-            "Origin",
-            "Access-Control-Request-Method",
-            "Access-Control-Request-Headers",
-            "Cross-Origin-Opener-Policy",
-            "Cross-Origin-Embedder-Policy"
-        ));
-        
-        // Allow credentials for OAuth authentication
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
         
-        // Cache preflight response for 1 hour
-        configuration.setMaxAge(3600L);
-        
-        // Expose headers that frontend might need
-        configuration.setExposedHeaders(Arrays.asList(
-            "Authorization",
-            "Content-Type"
-        ));
-        
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        // Apply CORS configuration to all endpoints
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
