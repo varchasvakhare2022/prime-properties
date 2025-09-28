@@ -10,6 +10,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * OAuth Controller for handling Google Sign-In authentication
@@ -103,6 +104,19 @@ public class OAuthController {
             return ResponseEntity.status(401)
                 .body(Map.of("error", "Unauthorized", "message", "Google authentication failed"));
         }
+    }
+
+    /**
+     * Test endpoint to verify COOP headers are being set
+     */
+    @GetMapping("/test-headers")
+    public ResponseEntity<?> testHeaders(HttpServletResponse response) {
+        // This endpoint will be intercepted by HttpHeadersConfig
+        return ResponseEntity.ok(Map.of(
+            "message", "Headers test endpoint",
+            "timestamp", System.currentTimeMillis(),
+            "note", "Check response headers for Cross-Origin-Opener-Policy"
+        ));
     }
 
     /**
