@@ -86,19 +86,10 @@ const GoogleSignIn = () => {
       // ENFORCE HTTPS to prevent mixed content errors
       let secureApiUrl = HTTPSEnforcer.getSecureAPIUrl();
       
-      // EMERGENCY FALLBACK: Force HTTPS if still not secure
+      // Final validation - ensure HTTPS
       if (!secureApiUrl.startsWith('https://')) {
-        console.error('🚨 EMERGENCY: API URL is not HTTPS, forcing HTTPS');
+        console.error('🚨 CRITICAL: API URL is not HTTPS, forcing HTTPS');
         secureApiUrl = 'https://prime-properties-production-d021.up.railway.app';
-      }
-      
-      // Additional validation
-      if (typeof window !== 'undefined' && window.location && window.location.origin.startsWith('https://')) {
-        const originApiUrl = window.location.origin.replace('prime-properties.up.railway.app', 'prime-properties-production-d021.up.railway.app');
-        if (originApiUrl.startsWith('https://')) {
-          console.warn('🚨 EMERGENCY FALLBACK: Using window.location.origin for API URL:', originApiUrl);
-          secureApiUrl = originApiUrl;
-        }
       }
       
       console.log('🔒 GoogleSignIn using HTTPS API URL:', secureApiUrl);

@@ -24,7 +24,19 @@ class HTTPSEnforcer {
 
   static getSecureAPIUrl() {
     // Get API URL from environment variables
-    let apiUrl = process.env.REACT_APP_API_URL || 'https://prime-properties-production-d021.up.railway.app';
+    let apiUrl = process.env.REACT_APP_API_URL;
+    
+    // Debug logging
+    console.log('🔍 Environment variables debug:');
+    console.log('  REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
+    console.log('  NODE_ENV:', process.env.NODE_ENV);
+    console.log('  Current origin:', typeof window !== 'undefined' ? window.location.origin : 'undefined');
+    
+    // If no API URL is set, use the HTTPS Railway URL
+    if (!apiUrl) {
+      console.warn('⚠️ REACT_APP_API_URL not set, using HTTPS Railway URL');
+      apiUrl = 'https://prime-properties-production-d021.up.railway.app';
+    }
     
     // Force HTTPS for all API calls to prevent mixed content errors
     if (apiUrl.includes('railway.internal') || apiUrl.includes('internal') || !apiUrl.startsWith('https://')) {
@@ -41,16 +53,7 @@ class HTTPSEnforcer {
       apiUrl = 'https://prime-properties-production-d021.up.railway.app';
     }
     
-    // EMERGENCY FALLBACK: Use window.location.origin if still not HTTPS
-    if (typeof window !== 'undefined' && window.location && window.location.origin.startsWith('https://')) {
-      const originApiUrl = window.location.origin.replace('prime-properties.up.railway.app', 'prime-properties-production-d021.up.railway.app');
-      if (originApiUrl.startsWith('https://') && !apiUrl.startsWith('https://')) {
-        console.warn('🚨 EMERGENCY FALLBACK: Using window.location.origin for API URL:', originApiUrl);
-        apiUrl = originApiUrl;
-      }
-    }
-    
-    console.log('🔒 Using HTTPS API URL:', apiUrl);
+    console.log('🔒 Final HTTPS API URL:', apiUrl);
     return apiUrl;
   }
 

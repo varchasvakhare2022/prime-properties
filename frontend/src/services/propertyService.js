@@ -20,7 +20,28 @@ class PropertyService {
   // Get all properties (public)
   async getAllProperties() {
     try {
-      const response = await fetch(`${API_BASE_URL}/properties`);
+      // Get secure API URL with HTTPS enforcement
+      const secureApiUrl = HTTPSEnforcer.getSecureAPIUrl();
+      
+      // Final validation - ensure HTTPS
+      if (!secureApiUrl.startsWith('https://')) {
+        console.error('🚨 CRITICAL: API URL is not HTTPS, forcing HTTPS');
+        const fallbackUrl = 'https://prime-properties-production-d021.up.railway.app';
+        console.log('🔒 PropertyService using fallback HTTPS API URL:', fallbackUrl);
+        
+        const response = await fetch(`${fallbackUrl}/properties`);
+        const data = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(data.message || 'Failed to fetch properties');
+        }
+        
+        return data;
+      }
+      
+      console.log('🔒 PropertyService using HTTPS API URL:', secureApiUrl);
+      
+      const response = await fetch(`${secureApiUrl}/properties`);
       const data = await response.json();
       
       if (!response.ok) {
