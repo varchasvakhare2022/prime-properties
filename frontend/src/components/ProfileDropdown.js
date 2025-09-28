@@ -26,28 +26,39 @@ const ProfileDropdown = () => {
     };
   }, []);
 
-  // Load Google Identity Services script
+  // Load Google Identity Services script and initialize when dropdown opens
   useEffect(() => {
-    if (!isAuthenticated) {
-      const script = document.createElement('script');
-      script.src = 'https://accounts.google.com/gsi/client';
-      script.async = true;
-      script.defer = true;
-      script.onload = initializeGoogleSignIn;
-      document.head.appendChild(script);
-
-      return () => {
-        const existingScript = document.querySelector('script[src="https://accounts.google.com/gsi/client"]');
-        if (existingScript) {
-          document.head.removeChild(existingScript);
-        }
-      };
+    if (!isAuthenticated && isOpen) {
+      // Check if script is already loaded
+      if (!window.google) {
+        const script = document.createElement('script');
+        script.src = 'https://accounts.google.com/gsi/client';
+        script.async = true;
+        script.defer = true;
+        script.onload = () => {
+          // Small delay to ensure DOM is ready
+          setTimeout(initializeGoogleSignIn, 100);
+        };
+        document.head.appendChild(script);
+      } else {
+        // Script already loaded, initialize immediately
+        setTimeout(initializeGoogleSignIn, 100);
+      }
     }
-  }, [isAuthenticated]);
+
+    // Cleanup when dropdown closes
+    return () => {
+      if (googleButtonRef.current && googleButtonRef.current.innerHTML) {
+        googleButtonRef.current.innerHTML = '';
+      }
+    };
+  }, [isAuthenticated, isOpen]);
 
   const initializeGoogleSignIn = () => {
-    if (window.google && googleButtonRef.current && !isAuthenticated) {
+    if (window.google && googleButtonRef.current && !isAuthenticated && isOpen) {
       const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || process.env.REACT_APP_GOOGLE_CLIENT_ID || 'your-google-client-id';
+      
+      console.log('Initializing Google Sign-In with client ID:', clientId);
       
       if (clientId === 'your-google-client-id') {
         setGoogleError('Google Client ID not configured');
@@ -55,6 +66,11 @@ const ProfileDropdown = () => {
       }
 
       try {
+        // Clear any existing button first
+        if (googleButtonRef.current) {
+          googleButtonRef.current.innerHTML = '';
+        }
+
         window.google.accounts.id.initialize({
           client_id: clientId,
           callback: handleGoogleSignIn,
@@ -73,6 +89,8 @@ const ProfileDropdown = () => {
             logo_alignment: 'left'
           }
         );
+        
+        console.log('Google Sign-In button rendered successfully');
       } catch (error) {
         console.error('Error initializing Google Sign-In:', error);
         setGoogleError('Failed to initialize Google Sign-In');
@@ -131,9 +149,24 @@ const ProfileDropdown = () => {
                   </div>
                 )}
 
-                <div className="flex justify-center">
+                <div className="flex justify-center mb-3">
                   <div ref={googleButtonRef}></div>
                 </div>
+
+                {/* Fallback button if Google Sign-In doesn't load */}
+                {!window.google && (
+                  <div className="text-center">
+                    <button
+                      onClick={() => setGoogleError('Google Sign-In is loading. Please try again in a moment.')}
+                      className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors text-sm"
+                    >
+                      Sign In with Google
+                    </button>
+                    <p className="text-xs text-muted-foreground mt-2">
+                      Loading Google Sign-In...
+                    </p>
+                  </div>
+                )}
 
                 {isGoogleLoading && (
                   <div className="mt-3 text-center text-sm text-muted-foreground">
