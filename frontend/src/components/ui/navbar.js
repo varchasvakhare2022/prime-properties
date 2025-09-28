@@ -44,7 +44,7 @@ export const Navbar = ({ className, ...props }) => {
           </motion.div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-12">
             {navItems.map((item, index) => (
               <motion.div
                 key={item.name}
@@ -54,7 +54,7 @@ export const Navbar = ({ className, ...props }) => {
               >
                 <Link
                   to={item.href}
-                  className="flex items-center space-x-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors group"
+                  className="flex items-center space-x-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors group px-3 py-2 rounded-md hover:bg-accent/50"
                 >
                   <item.icon className="w-4 h-4 group-hover:scale-110 transition-transform" />
                   <span>{item.name}</span>

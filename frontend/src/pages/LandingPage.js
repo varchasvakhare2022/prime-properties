@@ -53,7 +53,7 @@ const LandingPage = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.4 }}
-                className="text-xl md:text-2xl text-slate-300 max-w-3xl mx-auto mb-12"
+                className="text-xl md:text-2xl text-white font-medium max-w-3xl mx-auto mb-12 drop-shadow-lg"
               >
                 Your premier destination for luxury real estate. Find your dream property or showcase your developments.
               </motion.p>
@@ -103,7 +103,7 @@ const LandingPage = () => {
                     </CardTitle>
                     
                     <CardDescription className="text-slate-300 mb-8 text-lg">
-                      Browse through our extensive collection of premium properties. From luxury apartments to spacious villas, find the perfect place to call home.
+                      Browse thousands of verified property listings across India using powerful search and filter tools.
                     </CardDescription>
                     
                     <ShimmerButton asChild>
@@ -131,11 +131,11 @@ const LandingPage = () => {
                     </motion.div>
                     
                     <CardTitle className="text-3xl font-bold text-white mb-4">
-                      Showcase Your Properties
+                      Exclusive Developer Access
                     </CardTitle>
                     
                     <CardDescription className="text-slate-300 mb-8 text-lg">
-                      List your premium properties, manage details, and connect with potential buyers. Join our network of trusted developers.
+                      Easily list new properties, update details, and mark projects as sold using your dedicated dashboard.
                     </CardDescription>
                     
                     <ShimmerButton asChild>
