@@ -41,8 +41,11 @@ public class OAuthController {
 
             System.out.println("🔍 Received Google ID token: " + idToken.substring(0, Math.min(50, idToken.length())) + "...");
 
+            // For now, we'll use a simplified approach to extract user information
+            // In production, you should verify the token signature with Google's public keys
+            // For demo purposes, we'll extract basic info from the token
+            
             // Parse the JWT token to extract user information
-            // Note: In production, you should verify the token signature with Google's public keys
             String[] tokenParts = idToken.split("\\.");
             if (tokenParts.length != 3) {
                 System.out.println("❌ Invalid JWT token format");
@@ -54,15 +57,11 @@ public class OAuthController {
             String payload = new String(java.util.Base64.getUrlDecoder().decode(tokenParts[1]));
             System.out.println("🔍 Token payload: " + payload);
             
-            // Parse JSON payload
-            com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
-            Map<String, Object> claims = mapper.readValue(payload, Map.class);
-            
-            // Extract user information
-            String googleId = (String) claims.get("sub");
-            String email = (String) claims.get("email");
-            String name = (String) claims.get("name");
-            String picture = (String) claims.get("picture");
+            // Simple JSON parsing to extract user information
+            // Extract email
+            String email = extractValueFromJson(payload, "email");
+            String name = extractValueFromJson(payload, "name");
+            String googleId = extractValueFromJson(payload, "sub");
             
             System.out.println("🔍 Extracted user info - ID: " + googleId + ", Email: " + email + ", Name: " + name);
 
@@ -126,6 +125,23 @@ public class OAuthController {
             return ResponseEntity.status(401)
                 .body(Map.of("error", "Unauthorized", "message", "Google authentication failed"));
         }
+    }
+
+    /**
+     * Simple JSON value extraction helper method
+     */
+    private String extractValueFromJson(String json, String key) {
+        try {
+            String pattern = "\"" + key + "\"\\s*:\\s*\"([^\"]+)\"";
+            java.util.regex.Pattern p = java.util.regex.Pattern.compile(pattern);
+            java.util.regex.Matcher m = p.matcher(json);
+            if (m.find()) {
+                return m.group(1);
+            }
+        } catch (Exception e) {
+            System.err.println("Error extracting " + key + " from JSON: " + e.getMessage());
+        }
+        return null;
     }
 
     /**
