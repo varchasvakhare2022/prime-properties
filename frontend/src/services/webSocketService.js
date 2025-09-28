@@ -12,23 +12,32 @@ class WebSocketService {
 
   // Get WebSocket URL for Railway deployment
   getWebSocketUrl() {
-    const apiUrl = process.env.REACT_APP_API_URL || 'https://prime-properties-production-d021.up.railway.app';
+    // Use NEXT_PUBLIC_API_URL if available, otherwise build from current origin
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || process.env.REACT_APP_API_URL;
     
-    // Force HTTPS for WebSocket connections
-    let secureApiUrl = apiUrl;
-    if (apiUrl.startsWith('http://')) {
-      console.warn('⚠️ Converting HTTP to HTTPS for WebSocket to prevent mixed content errors');
-      secureApiUrl = apiUrl.replace('http://', 'https://');
+    if (apiUrl) {
+      // Use provided API URL and convert to WebSocket
+      let secureApiUrl = apiUrl;
+      if (apiUrl.startsWith('http://')) {
+        console.warn('⚠️ Converting HTTP to HTTPS for WebSocket to prevent mixed content errors');
+        secureApiUrl = apiUrl.replace('http://', 'https://');
+      }
+      
+      const wsUrl = secureApiUrl.replace(/^https?:\/\//, '');
+      const wssUrl = `wss://${wsUrl}/ws`;
+      
+      console.log('🔒 WebSocket using API URL:', wssUrl);
+      return wssUrl;
+    } else {
+      // Build WebSocket URL dynamically from current origin
+      const origin = window.location.origin;
+      const wsUrl = origin.replace(/^https?:\/\//, '');
+      const protocol = origin.startsWith('https://') ? 'wss://' : 'ws://';
+      const wssUrl = `${protocol}${wsUrl}/ws`;
+      
+      console.log('🔒 WebSocket using dynamic origin:', wssUrl);
+      return wssUrl;
     }
-    
-    // Remove protocol and add WebSocket protocol
-    const wsUrl = secureApiUrl.replace(/^https?:\/\//, '');
-    
-    // Railway apps expose only ports 443/80, so no :8080 needed
-    const wssUrl = `wss://${wsUrl}/ws`;
-    
-    console.log('🔒 WebSocket using HTTPS URL:', wssUrl);
-    return wssUrl;
   }
 
   // Connect to WebSocket
@@ -42,8 +51,9 @@ class WebSocketService {
       this.stompClient = Stomp.over(socket);
       
       // Disable debug logging in production
+      const nodeEnv = process.env.NODE_ENV || 'production';
       this.stompClient.debug = (str) => {
-        if (process.env.NODE_ENV === 'development') {
+        if (nodeEnv === 'development') {
           console.log('WebSocket Debug:', str);
         }
       };

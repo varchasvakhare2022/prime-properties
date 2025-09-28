@@ -42,6 +42,13 @@ public class WebSecurityConfig {
                 // Enable CORS
                 .cors(withDefaults())
                 .csrf(csrf -> csrf.disable())
+                // Disable Cross-Origin-Opener-Policy to allow Google Sign-In postMessage
+                .headers(headers -> headers
+                        .crossOriginOpenerPolicy(policy -> policy.disable())
+                        .crossOriginEmbedderPolicy(policy -> policy.disable())
+                        .frameOptions().deny()
+                        .contentTypeOptions().and()
+                        .httpStrictTransportSecurity(hstsConfig -> hstsConfig.disable()))
                 .authorizeHttpRequests(auth -> auth
                         // Permit all auth endpoints including OAuth
                         .requestMatchers("/auth/**").permitAll()

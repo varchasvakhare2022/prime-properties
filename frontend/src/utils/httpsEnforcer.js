@@ -23,7 +23,7 @@ class HTTPSEnforcer {
   }
 
   static getSecureAPIUrl() {
-    const apiUrl = process.env.REACT_APP_API_URL || 'https://prime-properties-production-d021.up.railway.app';
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || process.env.REACT_APP_API_URL || 'https://prime-properties-production-d021.up.railway.app';
     return this.enforceHTTPS(apiUrl);
   }
 

@@ -109,8 +109,8 @@ FRONTEND_URL=https://prime-properties.up.railway.app
 
 **Frontend Service Environment Variables:**
 ```bash
-REACT_APP_GOOGLE_CLIENT_ID=your-google-client-id
-REACT_APP_API_URL=https://prime-properties-production-d021.up.railway.app
+NEXT_PUBLIC_GOOGLE_CLIENT_ID=your-google-client-id
+NEXT_PUBLIC_API_URL=https://prime-properties-production-d021.up.railway.app
 NODE_ENV=production
 ```
 
@@ -155,8 +155,8 @@ The application is already deployed on Railway:
 **Environment Variables to Set in Railway:**
 
 **Frontend Service:**
-- `REACT_APP_GOOGLE_CLIENT_ID`: Your Google OAuth Client ID
-- `REACT_APP_API_URL`: Backend API URL (https://prime-properties-production-d021.up.railway.app)
+- `NEXT_PUBLIC_GOOGLE_CLIENT_ID`: Your Google OAuth Client ID
+- `NEXT_PUBLIC_API_URL`: Backend API URL (https://prime-properties-production-d021.up.railway.app)
 - `NODE_ENV`: production
 
 **Backend Service:**

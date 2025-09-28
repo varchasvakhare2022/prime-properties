@@ -1,7 +1,7 @@
 // Property service for API calls
 // Handle Railway internal URLs - they should not be used for frontend API calls
 // ENFORCE HTTPS to prevent mixed content errors
-let API_BASE_URL = process.env.REACT_APP_API_URL || 'https://prime-properties-production-d021.up.railway.app';
+let API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || process.env.REACT_APP_API_URL || 'https://prime-properties-production-d021.up.railway.app';
 
 // Force HTTPS for all API calls to prevent mixed content errors
 if (API_BASE_URL.includes('railway.internal') || API_BASE_URL.includes('internal') || !API_BASE_URL.startsWith('https://')) {
