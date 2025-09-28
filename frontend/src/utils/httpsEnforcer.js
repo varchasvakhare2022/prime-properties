@@ -24,10 +24,9 @@ class HTTPSEnforcer {
 
   static getSecureAPIUrl() {
     // Get API URL from environment variables
-    let apiUrl = process.env.NEXT_PUBLIC_API_URL || process.env.REACT_APP_API_URL || 'https://prime-properties-production-d021.up.railway.app';
+    let apiUrl = process.env.REACT_APP_API_URL || 'https://prime-properties-production-d021.up.railway.app';
     
     console.log('🔍 HttpsEnforcer - Original API URL from env:', apiUrl);
-    console.log('🔍 HttpsEnforcer - NEXT_PUBLIC_API_URL:', process.env.NEXT_PUBLIC_API_URL);
     console.log('🔍 HttpsEnforcer - REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
     console.log('🔍 HttpsEnforcer - NODE_ENV:', process.env.NODE_ENV);
     console.log('🔍 HttpsEnforcer - All env vars:', Object.keys(process.env).filter(key => key.includes('API') || key.includes('URL')));

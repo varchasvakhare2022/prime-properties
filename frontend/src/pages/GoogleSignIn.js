@@ -32,20 +32,18 @@ const GoogleSignIn = () => {
 
   const initializeGoogleSignIn = () => {
     if (window.google && googleButtonRef.current) {
-      const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || process.env.REACT_APP_GOOGLE_CLIENT_ID || 'your-google-client-id';
+      const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || 'your-google-client-id';
       
       // Debug logging for environment variables
       console.log('=== Google Sign-In Debug Info ===');
-      console.log('NEXT_PUBLIC_GOOGLE_CLIENT_ID:', process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID);
       console.log('REACT_APP_GOOGLE_CLIENT_ID:', process.env.REACT_APP_GOOGLE_CLIENT_ID);
-      console.log('NEXT_PUBLIC_API_URL:', process.env.NEXT_PUBLIC_API_URL);
       console.log('REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
       console.log('Current domain:', window.location.origin);
       console.log('All environment variables:', process.env);
       console.log('================================');
       
       if (clientId === 'your-google-client-id') {
-        setError('Google Client ID not configured. Please set NEXT_PUBLIC_GOOGLE_CLIENT_ID or REACT_APP_GOOGLE_CLIENT_ID in your environment variables.');
+        setError('Google Client ID not configured. Please set REACT_APP_GOOGLE_CLIENT_ID in your environment variables.');
         return;
       }
 
