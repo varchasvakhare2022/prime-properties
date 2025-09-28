@@ -26,14 +26,9 @@ class HTTPSEnforcer {
     // Get API URL from environment variables
     let apiUrl = process.env.REACT_APP_API_URL || 'https://prime-properties-production-d021.up.railway.app';
     
-    console.log('🔍 HttpsEnforcer - Original API URL from env:', apiUrl);
-    console.log('🔍 HttpsEnforcer - REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
-    console.log('🔍 HttpsEnforcer - NODE_ENV:', process.env.NODE_ENV);
-    console.log('🔍 HttpsEnforcer - All env vars:', Object.keys(process.env).filter(key => key.includes('API') || key.includes('URL')));
-    
     // Force HTTPS for all API calls to prevent mixed content errors
     if (apiUrl.includes('railway.internal') || apiUrl.includes('internal') || !apiUrl.startsWith('https://')) {
-      console.warn('⚠️ HttpsEnforcer - Overriding API URL to HTTPS Railway URL');
+      console.warn('⚠️ Overriding API URL to HTTPS Railway URL');
       apiUrl = 'https://prime-properties-production-d021.up.railway.app';
     }
     
@@ -42,20 +37,20 @@ class HTTPSEnforcer {
     
     // Final validation - ensure HTTPS
     if (!apiUrl.startsWith('https://')) {
-      console.error('❌ HttpsEnforcer - CRITICAL: API URL is not HTTPS, forcing HTTPS');
+      console.error('❌ CRITICAL: API URL is not HTTPS, forcing HTTPS');
       apiUrl = 'https://prime-properties-production-d021.up.railway.app';
     }
     
     // EMERGENCY FALLBACK: Use window.location.origin if still not HTTPS
     if (typeof window !== 'undefined' && window.location && window.location.origin.startsWith('https://')) {
       const originApiUrl = window.location.origin.replace('prime-properties.up.railway.app', 'prime-properties-production-d021.up.railway.app');
-      if (originApiUrl.startsWith('https://')) {
+      if (originApiUrl.startsWith('https://') && !apiUrl.startsWith('https://')) {
         console.warn('🚨 EMERGENCY FALLBACK: Using window.location.origin for API URL:', originApiUrl);
         apiUrl = originApiUrl;
       }
     }
     
-    console.log('🔒 HttpsEnforcer using HTTPS API URL:', apiUrl);
+    console.log('🔒 Using HTTPS API URL:', apiUrl);
     return apiUrl;
   }
 

@@ -1,6 +1,8 @@
 // WebSocket service for real-time communication
 // Handles connection to Railway backend without :8080 port
 
+import HTTPSEnforcer from '../utils/httpsEnforcer';
+
 class WebSocketService {
   constructor() {
     this.socket = null;
@@ -12,42 +14,16 @@ class WebSocketService {
 
   // Get WebSocket URL for Railway deployment
   getWebSocketUrl() {
-    // Use NEXT_PUBLIC_API_URL if available, otherwise build from current origin
-    const apiUrl = process.env.REACT_APP_API_URL;
+    // Use HTTPSEnforcer to get secure API URL
+    const secureApiUrl = HTTPSEnforcer.getSecureAPIUrl();
     
-    if (apiUrl) {
-      // Use provided API URL and convert to WebSocket
-      let secureApiUrl = apiUrl;
-      
-      // Force HTTPS and remove any port numbers
-      if (secureApiUrl.startsWith('http://')) {
-        console.warn('⚠️ Converting HTTP to HTTPS for WebSocket to prevent mixed content errors');
-        secureApiUrl = secureApiUrl.replace('http://', 'https://');
-      }
-      
-      // Ensure HTTPS protocol
-      if (!secureApiUrl.startsWith('https://')) {
-        console.warn('⚠️ Forcing HTTPS protocol for WebSocket');
-        secureApiUrl = 'https://' + secureApiUrl.replace(/^https?:\/\//, '');
-      }
-      
-      // Remove any port numbers from the URL (Railway doesn't use :8080)
-      const cleanUrl = secureApiUrl.replace(/:\d+/, '');
-      const wsUrl = cleanUrl.replace(/^https?:\/\//, '');
-      const wssUrl = `wss://${wsUrl}/ws`;
-      
-      console.log('🔒 WebSocket using API URL:', wssUrl);
-      return wssUrl;
-    } else {
-      // Build WebSocket URL dynamically from current origin
-      const origin = window.location.origin;
-      const wsUrl = origin.replace(/^https?:\/\//, '');
-      const protocol = origin.startsWith('https://') ? 'wss://' : 'ws://';
-      const wssUrl = `${protocol}${wsUrl}/ws`;
-      
-      console.log('🔒 WebSocket using dynamic origin:', wssUrl);
-      return wssUrl;
-    }
+    // Remove any port numbers from the URL (Railway doesn't use :8080)
+    const cleanUrl = secureApiUrl.replace(/:\d+/, '');
+    const wsUrl = cleanUrl.replace(/^https?:\/\//, '');
+    const wssUrl = `wss://${wsUrl}/ws`;
+    
+    console.log('🔒 WebSocket using HTTPS API URL:', wssUrl);
+    return wssUrl;
   }
 
   // Connect to WebSocket

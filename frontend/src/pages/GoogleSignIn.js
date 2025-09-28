@@ -37,9 +37,7 @@ const GoogleSignIn = () => {
       // Debug logging for environment variables
       console.log('=== Google Sign-In Debug Info ===');
       console.log('REACT_APP_GOOGLE_CLIENT_ID:', process.env.REACT_APP_GOOGLE_CLIENT_ID);
-      console.log('REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
       console.log('Current domain:', window.location.origin);
-      console.log('All environment variables:', process.env);
       console.log('================================');
       
       if (clientId === 'your-google-client-id') {
