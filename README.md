@@ -108,7 +108,7 @@ GOOGLE_CLIENT_SECRET=your-google-client-secret
 **Frontend (.env file):**
 ```bash
 REACT_APP_GOOGLE_CLIENT_ID=your-google-client-id
-REACT_APP_API_URL=https://prime-properties.up.railway.app
+REACT_APP_API_URL=https://prime-properties-production-d021.up.railway.app
 ```
 
 #### 3️⃣ Setup PostgreSQL Database
@@ -150,8 +150,16 @@ The application is already deployed on Railway:
 - **Backend**: https://prime-properties.up.railway.app
 
 **Environment Variables to Set in Railway:**
+
+**Frontend Service:**
+- `REACT_APP_GOOGLE_CLIENT_ID`: Your Google OAuth Client ID
+- `REACT_APP_API_URL`: Backend API URL
+
+**Backend Service:**
 - `GOOGLE_CLIENT_ID`: Your Google OAuth Client ID
 - `GOOGLE_CLIENT_SECRET`: Your Google OAuth Client Secret
+- `JWT_SECRET`: Strong JWT secret key
+- `FRONTEND_URL`: Frontend domain URL
 - `DATABASE_URL`: PostgreSQL connection string (auto-provided by Railway)
 
 ## 🔑 Authentication

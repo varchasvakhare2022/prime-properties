@@ -1,6 +1,6 @@
 // Authentication service for API calls
 // Handle Railway internal URLs - they should not be used for frontend API calls
-let API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://prime-properties-production-d021.up.railway.app';
+let API_BASE_URL = process.env.REACT_APP_API_URL || 'https://prime-properties-production-d021.up.railway.app';
 
 // If Railway sets an internal URL, override it with the public URL
 if (API_BASE_URL.includes('railway.internal') || API_BASE_URL.includes('internal') || !API_BASE_URL.startsWith('http')) {

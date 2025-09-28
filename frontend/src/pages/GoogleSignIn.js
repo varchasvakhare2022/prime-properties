@@ -31,13 +31,18 @@ const GoogleSignIn = () => {
 
   const initializeGoogleSignIn = () => {
     if (window.google && googleButtonRef.current) {
-      const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || 'your-google-client-id';
+      const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || 'your-google-client-id';
       
-      console.log('Initializing Google Sign-In with Client ID:', clientId);
+      // Debug logging for environment variables
+      console.log('=== Google Sign-In Debug Info ===');
+      console.log('REACT_APP_GOOGLE_CLIENT_ID:', process.env.REACT_APP_GOOGLE_CLIENT_ID);
+      console.log('REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
       console.log('Current domain:', window.location.origin);
+      console.log('All environment variables:', process.env);
+      console.log('================================');
       
       if (clientId === 'your-google-client-id') {
-        setError('Google Client ID not configured. Please set NEXT_PUBLIC_GOOGLE_CLIENT_ID in your environment variables.');
+        setError('Google Client ID not configured. Please set REACT_APP_GOOGLE_CLIENT_ID in your environment variables.');
         return;
       }
 
@@ -61,13 +66,13 @@ const GoogleSignIn = () => {
           }
         );
         
-        console.log('Google Sign-In button rendered successfully');
+        console.log('✅ Google Sign-In button rendered successfully');
       } catch (error) {
-        console.error('Error initializing Google Sign-In:', error);
+        console.error('❌ Error initializing Google Sign-In:', error);
         setError('Failed to initialize Google Sign-In. Please check your configuration.');
       }
     } else {
-      console.error('Google API not loaded or button ref not available');
+      console.error('❌ Google API not loaded or button ref not available');
       setError('Google Sign-In service not available. Please refresh the page.');
     }
   };
@@ -80,7 +85,7 @@ const GoogleSignIn = () => {
       console.log('Google Sign-In response:', response);
       
       // Ensure we're using HTTPS
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://prime-properties-production-d021.up.railway.app';
+      const apiUrl = process.env.REACT_APP_API_URL || 'https://prime-properties-production-d021.up.railway.app';
       if (!apiUrl.startsWith('https://')) {
         throw new Error('API URL must use HTTPS');
       }
