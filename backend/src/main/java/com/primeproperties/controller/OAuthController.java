@@ -107,6 +107,18 @@ public class OAuthController {
     }
 
     /**
+     * Simple health check endpoint
+     */
+    @GetMapping("/health")
+    public ResponseEntity<?> healthCheck() {
+        return ResponseEntity.ok(Map.of(
+            "status", "UP",
+            "timestamp", System.currentTimeMillis(),
+            "service", "Prime Properties OAuth Service"
+        ));
+    }
+
+    /**
      * Test endpoint to verify COOP headers are being set
      */
     @GetMapping("/test-headers")

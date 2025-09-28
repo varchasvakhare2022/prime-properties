@@ -41,9 +41,6 @@ public class WebSecurityConfig {
         http
                 .cors(withDefaults())
                 .csrf(csrf -> csrf.disable())
-                // Configure headers to allow Google Sign-In popups
-                .headers(headers -> headers
-                        .crossOriginOpenerPolicy(opener -> opener.policy("same-origin-allow-popups")))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/oauth2/**").permitAll()
@@ -74,6 +71,8 @@ public class WebSecurityConfig {
         
         configuration.setAllowedOrigins(Arrays.asList(
             frontendUrl,
+            "https://prime-properties.up.railway.app", // Frontend URL
+            "https://prime-properties-production-d021.up.railway.app", // Backend URL (for testing)
             "http://localhost:3000", // Keep for local dev
             "http://localhost:5173"  // Keep for local dev
         ));
@@ -81,6 +80,7 @@ public class WebSecurityConfig {
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
+        configuration.setMaxAge(3600L);
         
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
