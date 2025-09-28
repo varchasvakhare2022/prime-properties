@@ -63,24 +63,16 @@ public class WebSecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         
-        // Allow frontend domain from environment variable
-        String frontendUrl = System.getenv("FRONTEND_URL");
-        if (frontendUrl == null || frontendUrl.isEmpty()) {
-            frontendUrl = "https://prime-properties.up.railway.app";
-        }
-        
+        // Simple CORS configuration
         configuration.setAllowedOrigins(Arrays.asList(
-            frontendUrl,
-            "https://prime-properties.up.railway.app", // Frontend URL
-            "https://prime-properties-production-d021.up.railway.app", // Backend URL (for testing)
-            "http://localhost:3000", // Keep for local dev
-            "http://localhost:5173"  // Keep for local dev
+            "https://prime-properties.up.railway.app",
+            "http://localhost:3000",
+            "http://localhost:5173"
         ));
         
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
-        configuration.setMaxAge(3600L);
         
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
