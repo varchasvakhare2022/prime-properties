@@ -75,7 +75,10 @@ const ProfileDropdown = () => {
           client_id: clientId,
           callback: handleGoogleSignIn,
           auto_select: false,
-          cancel_on_tap_outside: true
+          cancel_on_tap_outside: true,
+          // Force redirect flow to avoid COOP issues
+          use_fedcm_for_prompt: false,
+          ux_mode: 'redirect' // Use redirect instead of popup
         });
 
         window.google.accounts.id.renderButton(
@@ -86,11 +89,13 @@ const ProfileDropdown = () => {
             width: 200,
             text: 'signin_with',
             shape: 'rectangular',
-            logo_alignment: 'left'
+            logo_alignment: 'left',
+            // Force redirect flow
+            type: 'standard'
           }
         );
         
-        console.log('Google Sign-In button rendered successfully');
+        console.log('Google Sign-In button rendered successfully with redirect flow');
       } catch (error) {
         console.error('Error initializing Google Sign-In:', error);
         setGoogleError('Failed to initialize Google Sign-In');
