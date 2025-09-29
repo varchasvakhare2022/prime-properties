@@ -106,6 +106,18 @@ public class OAuthController {
     }
 
     /**
+     * Test endpoint to verify COOP headers are being set
+     */
+    @GetMapping("/test-headers")
+    public ResponseEntity<?> testHeaders() {
+        return ResponseEntity.ok(Map.of(
+            "message", "Headers test endpoint",
+            "timestamp", System.currentTimeMillis(),
+            "note", "Check response headers for Cross-Origin-Opener-Policy"
+        ));
+    }
+
+    /**
      * Handle Google OAuth callback (for server-side OAuth flow)
      */
     @GetMapping("/google/callback")

@@ -15,7 +15,9 @@ public class HttpHeadersConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new SimpleHeaderInterceptor());
+        registry.addInterceptor(new SimpleHeaderInterceptor())
+                .addPathPatterns("/**") // Apply to all paths
+                .excludePathPatterns("/actuator/**"); // Exclude actuator endpoints
     }
 
     /**
@@ -25,8 +27,16 @@ public class HttpHeadersConfig implements WebMvcConfigurer {
         
         @Override
         public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-            // Only set the essential COOP header
+            // Set Cross-Origin-Opener-Policy to allow Google Sign-In popups
             response.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
+            
+            // Additional headers for Google Sign-In compatibility
+            response.setHeader("Cross-Origin-Embedder-Policy", "unsafe-none");
+            response.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
+            
+            // Log for debugging
+            System.out.println("🔒 Setting COOP header for request: " + request.getRequestURI());
+            
             return true;
         }
     }
