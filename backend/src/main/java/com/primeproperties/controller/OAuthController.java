@@ -10,6 +10,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * OAuth Controller for handling Google Sign-In authentication
@@ -28,9 +29,18 @@ public class OAuthController {
      * Handle Google ID token verification from frontend
      */
     @PostMapping("/google")
-    public ResponseEntity<?> handleGoogleIdToken(@RequestBody Map<String, String> request) {
+    public ResponseEntity<?> handleGoogleIdToken(@RequestBody Map<String, String> request, HttpServletRequest httpRequest) {
         try {
             System.out.println("=== Google ID Token Verification ===");
+            
+            // Log proxy headers for debugging
+            String forwardedProto = httpRequest.getHeader("X-Forwarded-Proto");
+            String forwardedHost = httpRequest.getHeader("X-Forwarded-Host");
+            System.out.println("🔍 Request Headers:");
+            System.out.println("  X-Forwarded-Proto: " + forwardedProto);
+            System.out.println("  X-Forwarded-Host: " + forwardedHost);
+            System.out.println("  Request Scheme: " + httpRequest.getScheme());
+            System.out.println("  Request URL: " + httpRequest.getRequestURL());
             
             String idToken = request.get("credential");
             if (idToken == null || idToken.isEmpty()) {
