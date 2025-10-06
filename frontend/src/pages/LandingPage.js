@@ -143,12 +143,11 @@ const LandingPage = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <Link 
-                    to="/login" 
-                    className="px-8 py-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl text-white font-semibold hover:bg-white/20 transition-all duration-300 hover-glow"
-                  >
-                    Get Started
-                  </Link>
+                  <ShimmerButton asChild>
+                    <Link to="/login" className="text-white font-semibold px-8 py-4 rounded-xl">
+                      Sign In
+                    </Link>
+                  </ShimmerButton>
                 </motion.div>
               </motion.div>
             </motion.div>
