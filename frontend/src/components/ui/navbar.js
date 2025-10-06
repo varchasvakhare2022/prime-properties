@@ -93,17 +93,6 @@ export const Navbar = ({ className, ...props }) => {
                       <item.icon className="w-4 h-4" />
                     </motion.div>
                     <span>{item.name}</span>
-                    {isActive && (
-                      <motion.div
-                        layoutId="activeTab"
-                        className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-lg border border-purple-500/20"
-                        initial={false}
-                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                      />
-                    )}
-                    <motion.div
-                      className="absolute inset-0 rounded-lg bg-gradient-to-r from-purple-500/5 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                    />
                   </Link>
                 </motion.div>
               );
