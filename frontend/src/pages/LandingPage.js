@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Home, Building2, Shield, Zap, Heart, Star, TrendingUp, Users, Award } from 'lucide-react';
 import { Navbar } from '../components/ui/navbar';
+import { Footer } from '../components/ui/footer';
 import { CardTitle, CardDescription } from '../components/ui/card';
 import { ShimmerButton, ShimmerCard } from '../components/ui/shimmer';
 import { GradientBorder, GradientText } from '../components/ui/gradient';
@@ -334,6 +335,9 @@ const LandingPage = () => {
           </div>
         </section>
       </div>
+      
+      {/* Professional Footer */}
+      <Footer />
     </div>
   );
 };
