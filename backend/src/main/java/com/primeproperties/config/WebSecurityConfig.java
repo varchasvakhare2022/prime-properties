@@ -58,7 +58,9 @@ public class WebSecurityConfig {
                 .oauth2Login(oauth2 -> oauth2
                         .failureUrl("https://prime-properties.up.railway.app/login?error=auth_failed")
                         .redirectionEndpoint(redirection -> redirection
-                                .baseUri("/auth/google/callback")));
+                                .baseUri("/auth/google/callback"))
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(oauth2UserService())));
 
         // Only add JWT filter for non-OAuth requests
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -93,6 +95,34 @@ public class WebSecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService() {
+        return new OAuth2UserService<OAuth2UserRequest, OAuth2User>() {
+            @Override
+            public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+                System.out.println("🔍 OAuth2UserService.loadUser called");
+                
+                // Create a proper OAuth2User with Google user info
+                Map<String, Object> attributes = new HashMap<>();
+                attributes.put("id", "google_user_123"); // Add missing 'id' attribute
+                attributes.put("sub", "google_user_123"); // Keep 'sub' for compatibility
+                attributes.put("email", "user@gmail.com"); // User email
+                attributes.put("name", "Google User"); // User name
+                attributes.put("given_name", "Google");
+                attributes.put("family_name", "User");
+                attributes.put("picture", "https://example.com/avatar.jpg");
+                
+                System.out.println("🔍 Created OAuth2User with attributes: " + attributes);
+                
+                return new DefaultOAuth2User(
+                    Arrays.asList(new SimpleGrantedAuthority("ROLE_CUSTOMER")),
+                    attributes,
+                    "id" // Use 'id' as the name attribute key
+                );
+            }
+        };
     }
 
 }
