@@ -129,6 +129,61 @@ public class OAuthController {
         ));
     }
 
+    /**
+     * Handle Google OAuth callback
+     */
+    @GetMapping("/google/callback")
+    public ResponseEntity<?> handleGoogleCallback(Authentication authentication) {
+        try {
+            System.out.println("🔍 OAuth callback received");
+            System.out.println("🔍 Authentication: " + authentication);
+            
+            if (authentication != null && authentication.getPrincipal() instanceof OAuth2User) {
+                OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
+                
+                String email = oauth2User.getAttribute("email");
+                String name = oauth2User.getAttribute("name");
+                String googleId = oauth2User.getAttribute("sub");
+                
+                System.out.println("🔍 User: " + name + " (" + email + ")");
+                
+                // Create or find user
+                User user = userRepository.findByEmail(email).orElse(null);
+                if (user == null) {
+                    user = new User();
+                    user.setEmail(email);
+                    user.setName(name);
+                    user.setUsername(email);
+                    user.setRole("CUSTOMER");
+                    user.setProvider("GOOGLE");
+                    user.setGoogleId(googleId);
+                    userRepository.save(user);
+                    System.out.println("✅ Created new user: " + email);
+                } else {
+                    System.out.println("✅ Found existing user: " + email);
+                }
+                
+                // Generate JWT
+                String jwt = jwtUtils.generateToken(user.getUsername(), user.getRole());
+                
+                // Redirect to frontend
+                String frontendUrl = "https://prime-properties.up.railway.app/login?success=true&token=" + jwt;
+                return ResponseEntity.status(HttpStatus.FOUND)
+                    .location(URI.create(frontendUrl))
+                    .build();
+            }
+            
+            return ResponseEntity.status(HttpStatus.FOUND)
+                .location(URI.create("https://prime-properties.up.railway.app/login?error=auth_failed"))
+                .build();
+                
+        } catch (Exception e) {
+            System.err.println("❌ OAuth callback error: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.FOUND)
+                .location(URI.create("https://prime-properties.up.railway.app/login?error=auth_failed"))
+                .build();
+        }
+    }
 
     /**
      * Get Google OAuth login URL
