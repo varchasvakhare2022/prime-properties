@@ -38,7 +38,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             System.out.println("✅ OAuth2User obtained successfully");
             
             // Extract user information from Google
-            String googleId = oauth2User.getAttribute("sub");
+            String googleId = oauth2User.getAttribute("id"); // Use 'id' instead of 'sub'
             String email = oauth2User.getAttribute("email");
             String name = oauth2User.getAttribute("name");
 

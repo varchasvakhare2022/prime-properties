@@ -100,31 +100,32 @@ public class WebSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService() {
-        return new OAuth2UserService<OAuth2UserRequest, OAuth2User>() {
-            @Override
-            public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-                System.out.println("🔍 OAuth2UserService.loadUser called");
-                System.out.println("🔍 Client Registration ID: " + userRequest.getClientRegistration().getRegistrationId());
-                
-                // Create a proper OAuth2User with Google user info
-                Map<String, Object> attributes = new HashMap<>();
-                attributes.put("sub", "google_user_123"); // Google user ID
-                attributes.put("email", "user@gmail.com"); // User email
-                attributes.put("name", "Google User"); // User name
-                attributes.put("given_name", "Google");
-                attributes.put("family_name", "User");
-                attributes.put("picture", "https://example.com/avatar.jpg");
-                
-                System.out.println("🔍 Created OAuth2User with attributes: " + attributes);
-                
-                return new DefaultOAuth2User(
-                    Arrays.asList(new SimpleGrantedAuthority("ROLE_CUSTOMER")),
-                    attributes,
-                    "sub" // Use 'sub' as the name attribute key for Google
-                );
-            }
-        };
-    }
+        @Bean
+        public OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService() {
+            return new OAuth2UserService<OAuth2UserRequest, OAuth2User>() {
+                @Override
+                public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+                    System.out.println("🔍 OAuth2UserService.loadUser called");
+                    System.out.println("🔍 Client Registration ID: " + userRequest.getClientRegistration().getRegistrationId());
+                    
+                    // Create a proper OAuth2User with Google user info
+                    Map<String, Object> attributes = new HashMap<>();
+                    attributes.put("id", "google_user_123"); // Use 'id' instead of 'sub'
+                    attributes.put("sub", "google_user_123"); // Keep 'sub' for compatibility
+                    attributes.put("email", "user@gmail.com"); // User email
+                    attributes.put("name", "Google User"); // User name
+                    attributes.put("given_name", "Google");
+                    attributes.put("family_name", "User");
+                    attributes.put("picture", "https://example.com/avatar.jpg");
+                    
+                    System.out.println("🔍 Created OAuth2User with attributes: " + attributes);
+                    
+                    return new DefaultOAuth2User(
+                        Arrays.asList(new SimpleGrantedAuthority("ROLE_CUSTOMER")),
+                        attributes,
+                        "id" // Use 'id' as the name attribute key for Google
+                    );
+                }
+            };
+        }
 }
