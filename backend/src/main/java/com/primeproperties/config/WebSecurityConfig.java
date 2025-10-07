@@ -60,6 +60,8 @@ public class WebSecurityConfig {
                         .loginPage("/oauth2/authorization/google")
                         .successHandler(oAuth2SuccessHandler)
                         .failureUrl("/auth/google/error")
+                        .redirectionEndpoint(redirection -> redirection
+                                .baseUri("/auth/google/callback"))
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(oauth2UserService())));
 
