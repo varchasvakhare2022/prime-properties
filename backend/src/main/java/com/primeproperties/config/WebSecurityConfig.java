@@ -60,6 +60,7 @@ public class WebSecurityConfig {
                         .redirectionEndpoint(redirection -> redirection
                                 .baseUri("/auth/google/callback"))
                         .userInfoEndpoint(userInfo -> userInfo
+                                .oidcUserService(null)
                                 .userService(oauth2UserService())));
 
         // Only add JWT filter for non-OAuth requests
