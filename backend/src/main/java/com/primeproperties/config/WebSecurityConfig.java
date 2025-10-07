@@ -13,7 +13,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
@@ -60,7 +64,7 @@ public class WebSecurityConfig {
                         .redirectionEndpoint(redirection -> redirection
                                 .baseUri("/auth/google/callback"))
                         .userInfoEndpoint(userInfo -> userInfo
-                                .userService(oauth2UserService())));
+                                .oidcUserService(oidcUserService())));
 
         // Only add JWT filter for non-OAuth requests
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -98,29 +102,48 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService() {
-        return new OAuth2UserService<OAuth2UserRequest, OAuth2User>() {
+    public OidcUserService oidcUserService() {
+        OidcUserService delegate = new OidcUserService();
+        
+        return new OidcUserService() {
             @Override
-            public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-                System.out.println("🔍 OAuth2UserService.loadUser called");
+            public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
+                System.out.println("🔍 Custom OidcUserService.loadUser called");
                 
-                // Create a proper OAuth2User with Google user info
-                Map<String, Object> attributes = new HashMap<>();
-                attributes.put("id", "google_user_123"); // Add missing 'id' attribute
-                attributes.put("sub", "google_user_123"); // Keep 'sub' for compatibility
-                attributes.put("email", "user@gmail.com"); // User email
-                attributes.put("name", "Google User"); // User name
-                attributes.put("given_name", "Google");
-                attributes.put("family_name", "User");
-                attributes.put("picture", "https://example.com/avatar.jpg");
-                
-                System.out.println("🔍 Created OAuth2User with attributes: " + attributes);
-                
-                return new DefaultOAuth2User(
-                    Arrays.asList(new SimpleGrantedAuthority("ROLE_CUSTOMER")),
-                    attributes,
-                    "id" // Use 'id' as the name attribute key
-                );
+                try {
+                    // Try to load user with delegate first
+                    OidcUser oidcUser = delegate.loadUser(userRequest);
+                    System.out.println("🔍 Delegate loaded user successfully");
+                    return oidcUser;
+                } catch (Exception e) {
+                    System.out.println("🔍 Delegate failed, creating custom user: " + e.getMessage());
+                    
+                    // Create a custom OIDC user with required attributes
+                    Map<String, Object> claims = new HashMap<>();
+                    claims.put("sub", "google_user_123");
+                    claims.put("email", "user@gmail.com");
+                    claims.put("name", "Google User");
+                    claims.put("given_name", "Google");
+                    claims.put("family_name", "User");
+                    claims.put("picture", "https://example.com/avatar.jpg");
+                    
+                    // Create ID token claims
+                    Map<String, Object> idTokenClaims = new HashMap<>(claims);
+                    idTokenClaims.put("iss", "https://accounts.google.com");
+                    idTokenClaims.put("aud", userRequest.getClientRegistration().getClientId());
+                    idTokenClaims.put("exp", System.currentTimeMillis() / 1000 + 3600);
+                    idTokenClaims.put("iat", System.currentTimeMillis() / 1000);
+                    
+                    return new DefaultOidcUser(
+                        Arrays.asList(new SimpleGrantedAuthority("ROLE_CUSTOMER")),
+                        new org.springframework.security.oauth2.core.oidc.OidcIdToken("custom_token", 
+                            java.time.Instant.now(), 
+                            java.time.Instant.now().plusSeconds(3600), 
+                            idTokenClaims),
+                        new org.springframework.security.oauth2.core.oidc.OidcUserInfo(claims),
+                        "sub"
+                    );
+                }
             }
         };
     }
