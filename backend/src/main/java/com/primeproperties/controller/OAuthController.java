@@ -130,106 +130,12 @@ public class OAuthController {
     }
 
     /**
-     * Handle Google OAuth callback (for server-side OAuth flow)
+     * Handle Google OAuth callback (now handled by OAuth2SuccessHandler)
      */
     @GetMapping("/google/callback")
-    public ResponseEntity<?> handleGoogleCallback(Authentication authentication, HttpServletRequest request) {
-        try {
-            System.out.println("=== Google OAuth Callback ===");
-            System.out.println("🔍 Authentication object: " + (authentication != null ? authentication.getClass().getSimpleName() : "null"));
-            System.out.println("🔍 Principal: " + (authentication != null ? authentication.getPrincipal() : "null"));
-            
-            // Try to get authentication from SecurityContext if not provided
-            if (authentication == null) {
-                System.out.println("🔍 Trying to get authentication from SecurityContext");
-                org.springframework.security.core.context.SecurityContext context = 
-                    org.springframework.security.core.context.SecurityContextHolder.getContext();
-                authentication = context.getAuthentication();
-                System.out.println("🔍 SecurityContext Authentication: " + (authentication != null ? authentication.getClass().getSimpleName() : "null"));
-            }
-            
-            if (authentication == null) {
-                System.out.println("❌ Authentication is null");
-                return ResponseEntity.status(HttpStatus.FOUND)
-                    .location(URI.create("https://prime-properties.up.railway.app/login?error=auth_failed"))
-                    .build();
-            }
-            
-            if (!(authentication.getPrincipal() instanceof OAuth2User)) {
-                System.out.println("❌ Principal is not OAuth2User: " + authentication.getPrincipal().getClass().getSimpleName());
-                return ResponseEntity.status(HttpStatus.FOUND)
-                    .location(URI.create("https://prime-properties.up.railway.app/login?error=auth_failed"))
-                    .build();
-            }
-
-            OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
-            System.out.println("✅ OAuth2User obtained successfully");
-            
-            // Extract user information from Google
-            String googleId = oauth2User.getAttribute("sub");
-            String email = oauth2User.getAttribute("email");
-            String name = oauth2User.getAttribute("name");
-
-            System.out.println("🔍 Google user info - ID: " + googleId + ", Email: " + email + ", Name: " + name);
-
-            if (googleId == null || email == null || name == null) {
-                System.out.println("❌ Missing required Google user information");
-                return ResponseEntity.status(HttpStatus.FOUND)
-                    .location(URI.create("https://prime-properties.up.railway.app/login?error=missing_info"))
-                    .build();
-            }
-
-            // Check if user already exists
-            User user = userRepository.findByGoogleId(googleId).orElse(null);
-            System.out.println("🔍 User lookup by Google ID: " + (user != null ? "Found" : "Not found"));
-            
-            if (user == null) {
-                // Check if user exists with same email but different provider
-                user = userRepository.findByEmail(email).orElse(null);
-                System.out.println("🔍 User lookup by email: " + (user != null ? "Found" : "Not found"));
-                
-                if (user != null) {
-                    // Link Google account to existing user
-                    user.setGoogleId(googleId);
-                    user.setProvider("GOOGLE");
-                    userRepository.save(user);
-                    System.out.println("✅ Linked Google account to existing user: " + email);
-                } else {
-                    // Create new user
-                    user = new User();
-                    user.setGoogleId(googleId);
-                    user.setEmail(email);
-                    user.setName(name);
-                    user.setUsername(email); // Use email as username for OAuth users
-                    user.setRole("CUSTOMER"); // Default role for OAuth users
-                    user.setProvider("GOOGLE");
-                    
-                    userRepository.save(user);
-                    System.out.println("✅ Created new Google user: " + email);
-                }
-            } else {
-                System.out.println("✅ Existing Google user found: " + email);
-            }
-
-            // Generate JWT token
-            String jwt = jwtUtils.generateToken(user.getUsername(), user.getRole());
-            System.out.println("🎫 JWT token generated for user: " + user.getUsername());
-            System.out.println("🎫 JWT token length: " + jwt.length());
-
-            // Redirect to frontend with success and token
-            String frontendUrl = "https://prime-properties.up.railway.app/login?success=true&token=" + jwt;
-            System.out.println("🔄 Redirecting to: " + frontendUrl);
-            return ResponseEntity.status(HttpStatus.FOUND)
-                .location(URI.create(frontendUrl))
-                .build();
-
-        } catch (Exception e) {
-            System.err.println("❌ Google OAuth callback error: " + e.getMessage());
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.FOUND)
-                .location(URI.create("https://prime-properties.up.railway.app/login?error=auth_failed"))
-                .build();
-        }
+    public ResponseEntity<?> handleGoogleCallback() {
+        // This endpoint is no longer used - OAuth2SuccessHandler handles the callback
+        return ResponseEntity.ok(Map.of("message", "OAuth callback handled by Spring Security"));
     }
 
     /**

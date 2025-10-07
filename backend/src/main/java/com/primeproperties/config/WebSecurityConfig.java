@@ -34,9 +34,11 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class WebSecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
-    public WebSecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
+    public WebSecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, OAuth2SuccessHandler oAuth2SuccessHandler) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        this.oAuth2SuccessHandler = oAuth2SuccessHandler;
     }
 
     @Bean
@@ -55,18 +57,12 @@ public class WebSecurityConfig {
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/oauth2/authorization/google")
                         .defaultSuccessUrl("/auth/google/callback", true)
                         .failureUrl("/auth/google/error")
+                        .successHandler(oAuth2SuccessHandler)
                         .userInfoEndpoint(userInfo -> userInfo
-                                .userService(oauth2UserService()))
-                        .successHandler((request, response, authentication) -> {
-                            System.out.println("✅ OAuth Success Handler called");
-                            System.out.println("🔍 Authentication: " + authentication);
-                            System.out.println("🔍 Principal: " + authentication.getPrincipal());
-                            
-                            // Redirect to our custom callback handler
-                            response.sendRedirect("/auth/google/callback");
-                        }));
+                                .userService(oauth2UserService())));
 
         // Only add JWT filter for non-OAuth requests
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
