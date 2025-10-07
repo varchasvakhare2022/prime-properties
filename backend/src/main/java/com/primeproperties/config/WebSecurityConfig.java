@@ -59,7 +59,9 @@ public class WebSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .oauth2Login(oauth2 -> oauth2
                         .successHandler(simpleOAuth2SuccessHandler)
-                        .failureUrl("https://prime-properties.up.railway.app/login?error=auth_failed"));
+                        .failureUrl("https://prime-properties.up.railway.app/login?error=auth_failed")
+                        .redirectionEndpoint(redirection -> redirection
+                                .baseUri("/auth/google/callback")));
 
         // Only add JWT filter for non-OAuth requests
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
