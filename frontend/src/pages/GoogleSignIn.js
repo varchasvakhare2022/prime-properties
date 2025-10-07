@@ -164,7 +164,23 @@ const GoogleSignIn = () => {
                 </motion.div>
               )}
 
-              {/* Google Sign-In Button */}
+                  {/* Debug Information */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.8 }}
+                    className="mb-4 p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg"
+                  >
+                    <p className="text-blue-300 text-xs mb-2">Debug Info:</p>
+                    <p className="text-blue-300 text-xs">
+                      Backend URL: {process.env.REACT_APP_API_URL || 'https://prime-properties-production-d021.up.railway.app'}
+                    </p>
+                    <p className="text-blue-300 text-xs">
+                      OAuth URL: {process.env.REACT_APP_API_URL || 'https://prime-properties-production-d021.up.railway.app'}/oauth2/authorization/google
+                    </p>
+                  </motion.div>
+
+                  {/* Google Sign-In Button */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}

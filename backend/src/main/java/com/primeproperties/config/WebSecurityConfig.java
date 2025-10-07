@@ -53,7 +53,6 @@ public class WebSecurityConfig {
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/auth/google/login")
                         .defaultSuccessUrl("/auth/google/callback", true)
                         .failureUrl("/auth/google/error")
                         .userInfoEndpoint(userInfo -> userInfo

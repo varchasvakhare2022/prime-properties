@@ -230,6 +230,23 @@ public class OAuthController {
     }
 
     /**
+     * Debug endpoint to check OAuth configuration
+     */
+    @GetMapping("/oauth/debug")
+    public ResponseEntity<?> debugOAuthConfig() {
+        try {
+            return ResponseEntity.ok(Map.of(
+                "message", "OAuth Debug Information",
+                "timestamp", System.currentTimeMillis(),
+                "note", "Check Railway logs for OAuth configuration details"
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                .body(Map.of("error", "Debug failed", "message", e.getMessage()));
+        }
+    }
+
+    /**
      * Health check for OAuth endpoints
      */
     @GetMapping("/oauth/health")
