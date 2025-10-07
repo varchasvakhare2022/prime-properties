@@ -1,135 +1,14 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Home, User, Sparkles, Shield, Zap, Heart } from 'lucide-react';
+import { Home, User, Shield, Zap, Heart } from 'lucide-react';
 import { ShimmerButton } from '../components/ui/shimmer';
 import { GradientText, GradientBorder } from '../components/ui/gradient';
-import HTTPSEnforcer from '../utils/httpsEnforcer';
 
 const GoogleSignIn = () => {
   const navigate = useNavigate();
-  const googleButtonRef = useRef(null);
   const [error, setError] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);
-
-  useEffect(() => {
-    // Load Google Identity Services script
-    const script = document.createElement('script');
-    script.src = 'https://accounts.google.com/gsi/client';
-    script.async = true;
-    script.defer = true;
-    script.onload = initializeGoogleSignIn;
-    document.head.appendChild(script);
-
-    return () => {
-      // Cleanup script on unmount
-      const existingScript = document.querySelector('script[src="https://accounts.google.com/gsi/client"]');
-      if (existingScript) {
-        document.head.removeChild(existingScript);
-      }
-    };
-  }, []);
-
-  const initializeGoogleSignIn = () => {
-    if (window.google && googleButtonRef.current) {
-      const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || 'your-google-client-id';
-      
-      // Debug logging for environment variables
-      console.log('=== Google Sign-In Debug Info ===');
-      console.log('REACT_APP_GOOGLE_CLIENT_ID:', process.env.REACT_APP_GOOGLE_CLIENT_ID);
-      console.log('Current domain:', window.location.origin);
-      console.log('================================');
-      
-      if (clientId === 'your-google-client-id') {
-        setError('Google Client ID not configured. Please set REACT_APP_GOOGLE_CLIENT_ID in your environment variables.');
-        return;
-      }
-
-      try {
-        window.google.accounts.id.initialize({
-          client_id: clientId,
-          callback: handleGoogleSignIn,
-          auto_select: false,
-          cancel_on_tap_outside: true,
-          // Force redirect flow to avoid COOP issues
-          use_fedcm_for_prompt: false,
-          ux_mode: 'redirect' // Use redirect instead of popup
-        });
-
-        window.google.accounts.id.renderButton(
-          googleButtonRef.current,
-          {
-            theme: 'outline',
-            size: 'large',
-            width: 280,
-            text: 'signin_with',
-            shape: 'rectangular',
-            logo_alignment: 'left',
-            // Force redirect flow
-            type: 'standard'
-          }
-        );
-        
-        console.log('✅ Google Sign-In button rendered successfully with redirect flow');
-      } catch (error) {
-        console.error('❌ Error initializing Google Sign-In:', error);
-        setError('Failed to initialize Google Sign-In. Please check your configuration.');
-      }
-    } else {
-      console.error('❌ Google API not loaded or button ref not available');
-      setError('Google Sign-In service not available. Please refresh the page.');
-    }
-  };
-
-  const handleGoogleSignIn = async (response) => {
-    try {
-      setIsLoading(true);
-      setError(null);
-      
-      console.log('Google Sign-In response:', response);
-      
-      // ENFORCE HTTPS to prevent mixed content errors
-      let secureApiUrl = HTTPSEnforcer.getSecureAPIUrl();
-      
-      // Final validation - ensure HTTPS
-      if (!secureApiUrl.startsWith('https://')) {
-        console.error('🚨 CRITICAL: API URL is not HTTPS, forcing HTTPS');
-        secureApiUrl = 'https://prime-properties-production-d021.up.railway.app';
-      }
-      
-      console.log('🔒 GoogleSignIn using HTTPS API URL:', secureApiUrl);
-      
-      // Send the credential to backend
-      const backendResponse = await fetch(`${secureApiUrl}/auth/google`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          credential: response.credential
-        })
-      });
-
-      const data = await backendResponse.json();
-      
-      if (backendResponse.ok) {
-        // Store JWT token
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
-        
-        // Redirect to customer dashboard
-        navigate('/customer/dashboard');
-      } else {
-        console.error('Backend authentication failed:', data);
-        setError(data.error || data.message || 'Authentication failed');
-      }
-    } catch (error) {
-      console.error('Google Sign-In error:', error);
-      setError(error.message || 'Sign-in failed. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const features = [
     {

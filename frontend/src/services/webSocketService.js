@@ -1,5 +1,6 @@
 // WebSocket service for real-time communication
 // Handles connection to Railway backend without :8080 port
+// Only connects when explicitly requested
 
 import HTTPSEnforcer from '../utils/httpsEnforcer';
 
@@ -10,6 +11,22 @@ class WebSocketService {
     this.isConnected = false;
     this.reconnectAttempts = 0;
     this.maxReconnectAttempts = 5;
+    this.autoConnect = false; // Don't auto-connect
+  }
+
+  // Enable auto-connect (call this when WebSocket is actually needed)
+  enableAutoConnect() {
+    this.autoConnect = true;
+    console.log('🔌 WebSocket auto-connect enabled');
+  }
+
+  // Disable auto-connect
+  disableAutoConnect() {
+    this.autoConnect = false;
+    if (this.isConnected) {
+      this.disconnect();
+    }
+    console.log('🔌 WebSocket auto-connect disabled');
   }
 
   // Get WebSocket URL for Railway deployment
@@ -20,6 +37,8 @@ class WebSocketService {
     // Remove any port numbers from the URL (Railway doesn't use :8080)
     const cleanUrl = secureApiUrl.replace(/:\d+/, '');
     const wsUrl = cleanUrl.replace(/^https?:\/\//, '');
+    
+    // For Railway, use the correct WebSocket endpoint without port
     const wssUrl = `wss://${wsUrl}/ws`;
     
     console.log('🔒 WebSocket using HTTPS API URL:', wssUrl);
@@ -28,6 +47,11 @@ class WebSocketService {
 
   // Connect to WebSocket
   connect() {
+    if (!this.autoConnect) {
+      console.log('🔌 WebSocket auto-connect disabled, skipping connection');
+      return;
+    }
+
     try {
       const wsUrl = this.getWebSocketUrl();
       console.log('🔌 Connecting to WebSocket:', wsUrl);
