@@ -138,6 +138,15 @@ public class OAuthController {
             System.out.println("🔍 OAuth callback received");
             System.out.println("🔍 Authentication: " + authentication);
             
+            // Try to get authentication from SecurityContext if not provided
+            if (authentication == null) {
+                System.out.println("🔍 Getting authentication from SecurityContext");
+                org.springframework.security.core.context.SecurityContext context = 
+                    org.springframework.security.core.context.SecurityContextHolder.getContext();
+                authentication = context.getAuthentication();
+                System.out.println("🔍 SecurityContext Authentication: " + authentication);
+            }
+            
             if (authentication != null && authentication.getPrincipal() instanceof OAuth2User) {
                 OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
                 
@@ -173,12 +182,14 @@ public class OAuthController {
                     .build();
             }
             
+            System.out.println("❌ No valid authentication found");
             return ResponseEntity.status(HttpStatus.FOUND)
                 .location(URI.create("https://prime-properties.up.railway.app/login?error=auth_failed"))
                 .build();
                 
         } catch (Exception e) {
             System.err.println("❌ OAuth callback error: " + e.getMessage());
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.FOUND)
                 .location(URI.create("https://prime-properties.up.railway.app/login?error=auth_failed"))
                 .build();
