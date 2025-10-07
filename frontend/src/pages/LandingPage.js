@@ -1,16 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { Home, Building2, Shield, Zap, Heart, Star, TrendingUp, Users, Award } from 'lucide-react';
+import { Home, Building2, Shield, Zap, Heart, Star, TrendingUp, Users, Award, User, LogOut } from 'lucide-react';
 import { Navbar } from '../components/ui/navbar';
 import { Footer } from '../components/ui/footer';
 import { CardTitle, CardDescription } from '../components/ui/card';
 import { ShimmerButton, ShimmerCard } from '../components/ui/shimmer';
 import { GradientBorder, GradientText } from '../components/ui/gradient';
+import { useAuth } from '../contexts/AuthContext';
 
 const LandingPage = () => {
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], [0, -50]);
+  const { user, isAuthenticated, logout } = useAuth();
 
   const features = [
     {
@@ -124,33 +126,6 @@ const LandingPage = () => {
                 Your premier destination for luxury real estate. Find your dream property or showcase your developments with our cutting-edge platform.
               </motion.p>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.8 }}
-                className="flex flex-col sm:flex-row gap-4 justify-center items-center"
-              >
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <ShimmerButton asChild>
-                    <Link to="/properties" className="text-white font-semibold px-8 py-4 rounded-xl">
-                      Explore Properties
-                    </Link>
-                  </ShimmerButton>
-                </motion.div>
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <ShimmerButton asChild>
-                    <Link to="/login" className="text-white font-semibold px-8 py-4 rounded-xl">
-                      Sign In
-                    </Link>
-                  </ShimmerButton>
-                </motion.div>
-              </motion.div>
             </motion.div>
           </motion.div>
         </section>
@@ -200,7 +175,7 @@ const LandingPage = () => {
                 </GradientBorder>
               </motion.div>
 
-              {/* Developer Section */}
+              {/* User Authentication Section */}
               <motion.div
                 initial={{ opacity: 0, x: 50 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -210,34 +185,91 @@ const LandingPage = () => {
               >
                 <GradientBorder>
                   <div className="text-center p-8 glass-effect rounded-2xl">
-                    <motion.div
-                      whileHover={{ scale: 1.1, rotate: -5 }}
-                      className="w-20 h-20 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full flex items-center justify-center mx-auto mb-6 animate-float"
-                      style={{ animationDelay: '1s' }}
-                    >
-                      <Building2 className="w-10 h-10 text-white" />
-                    </motion.div>
-                    
-                    <CardTitle className="text-3xl font-bold text-white mb-4">
-                      Exclusive Developer Access
-                    </CardTitle>
-                    
-                    <CardDescription className="text-white/70 mb-8 text-lg">
-                      Easily list new properties, update details, and mark projects as sold using your dedicated dashboard.
-                    </CardDescription>
+                    {isAuthenticated ? (
+                      // User Details Section
+                      <>
+                        <motion.div
+                          whileHover={{ scale: 1.1, rotate: 5 }}
+                          className="w-20 h-20 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-6 animate-float"
+                          style={{ animationDelay: '1s' }}
+                        >
+                          <User className="w-10 h-10 text-white" />
+                        </motion.div>
+                        
+                        <CardTitle className="text-3xl font-bold text-white mb-4">
+                          Welcome Back!
+                        </CardTitle>
+                        
+                        <div className="mb-6">
+                          <div className="text-white/90 text-lg font-semibold mb-2">
+                            {user?.name || user?.username}
+                          </div>
+                          <div className="text-white/70 text-sm mb-3">
+                            {user?.email}
+                          </div>
+                          <div className="inline-flex items-center px-3 py-1 bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 rounded-full text-sm">
+                            <span className="text-purple-300 font-medium">{user?.role}</span>
+                          </div>
+                        </div>
 
-                    <motion.div
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <Link 
-                        to="/login" 
-                        className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold rounded-lg hover:shadow-lg transition-all duration-300"
-                      >
-                        Developer Portal
-                        <Building2 className="w-4 h-4 ml-2" />
-                      </Link>
-                    </motion.div>
+                        <div className="space-y-3">
+                          <motion.div
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                          >
+                            <Link 
+                              to={user?.role === 'DEVELOPER' ? '/developer/dashboard' : '/customer/dashboard'}
+                              className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-lg hover:shadow-lg transition-all duration-300 w-full justify-center"
+                            >
+                              <Building2 className="w-4 h-4 mr-2" />
+                              Go to Dashboard
+                            </Link>
+                          </motion.div>
+                          
+                          <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={logout}
+                            className="inline-flex items-center px-6 py-3 bg-white/10 backdrop-blur-md border border-white/20 text-white/80 font-semibold rounded-lg hover:bg-white/20 transition-all duration-300 w-full justify-center"
+                          >
+                            <LogOut className="w-4 h-4 mr-2" />
+                            Sign Out
+                          </motion.button>
+                        </div>
+                      </>
+                    ) : (
+                      // Sign In Section
+                      <>
+                        <motion.div
+                          whileHover={{ scale: 1.1, rotate: -5 }}
+                          className="w-20 h-20 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full flex items-center justify-center mx-auto mb-6 animate-float"
+                          style={{ animationDelay: '1s' }}
+                        >
+                          <User className="w-10 h-10 text-white" />
+                        </motion.div>
+                        
+                        <CardTitle className="text-3xl font-bold text-white mb-4">
+                          Get Started
+                        </CardTitle>
+                        
+                        <CardDescription className="text-white/70 mb-8 text-lg">
+                          Sign in to access exclusive features, manage your properties, and connect with our community.
+                        </CardDescription>
+
+                        <motion.div
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          <Link 
+                            to="/login" 
+                            className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold rounded-lg hover:shadow-lg transition-all duration-300"
+                          >
+                            <User className="w-4 h-4 mr-2" />
+                            Sign In
+                          </Link>
+                        </motion.div>
+                      </>
+                    )}
                   </div>
                 </GradientBorder>
               </motion.div>
