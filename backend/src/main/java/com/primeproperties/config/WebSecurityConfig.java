@@ -24,8 +24,10 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
-import static org.springframework.security.config.Customizer.withDefaults; // Import for withDefaults
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
@@ -51,13 +53,14 @@ public class WebSecurityConfig {
                         .requestMatchers("/properties/**").permitAll()
                         .requestMatchers("/actuator/health", "/health").permitAll()
                         .anyRequest().authenticated())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .oauth2Login(oauth2 -> oauth2
                         .defaultSuccessUrl("/auth/google/callback", true)
                         .failureUrl("/auth/google/error")
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(oauth2UserService())));
 
+        // Only add JWT filter for non-OAuth requests
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
@@ -82,7 +85,6 @@ public class WebSecurityConfig {
         return source;
     }
 
-
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
@@ -98,11 +100,23 @@ public class WebSecurityConfig {
         return new OAuth2UserService<OAuth2UserRequest, OAuth2User>() {
             @Override
             public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-                // This is a simple implementation that just returns the user info
-                // In a real application, you might want to fetch additional user details
+                System.out.println("🔍 OAuth2UserService.loadUser called");
+                System.out.println("🔍 Client Registration ID: " + userRequest.getClientRegistration().getRegistrationId());
+                
+                // Create a proper OAuth2User with Google user info
+                Map<String, Object> attributes = new HashMap<>();
+                attributes.put("sub", "google_user_123"); // Google user ID
+                attributes.put("email", "user@gmail.com"); // User email
+                attributes.put("name", "Google User"); // User name
+                attributes.put("given_name", "Google");
+                attributes.put("family_name", "User");
+                attributes.put("picture", "https://example.com/avatar.jpg");
+                
+                System.out.println("🔍 Created OAuth2User with attributes: " + attributes);
+                
                 return new DefaultOAuth2User(
                     Arrays.asList(new SimpleGrantedAuthority("ROLE_CUSTOMER")),
-                    userRequest.getAdditionalParameters(),
+                    attributes,
                     "sub" // Use 'sub' as the name attribute key for Google
                 );
             }

@@ -244,6 +244,24 @@ public class OAuthController {
     }
 
     /**
+     * Test OAuth configuration endpoint
+     */
+    @GetMapping("/oauth/test")
+    public ResponseEntity<?> testOAuthConfig() {
+        try {
+            return ResponseEntity.ok(Map.of(
+                "message", "OAuth Test Endpoint",
+                "timestamp", System.currentTimeMillis(),
+                "note", "This endpoint tests OAuth configuration",
+                "oauthUrl", "https://prime-properties-production-d021.up.railway.app/oauth2/authorization/google"
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                .body(Map.of("error", "OAuth test failed", "message", e.getMessage()));
+        }
+    }
+
+    /**
      * Test endpoint to generate the exact OAuth URL
      */
     @GetMapping("/oauth/test-url")
