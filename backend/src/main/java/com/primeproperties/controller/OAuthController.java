@@ -136,15 +136,25 @@ public class OAuthController {
     public ResponseEntity<?> handleGoogleCallback(Authentication authentication, HttpServletRequest request) {
         try {
             System.out.println("=== Google OAuth Callback ===");
+            System.out.println("🔍 Authentication object: " + (authentication != null ? authentication.getClass().getSimpleName() : "null"));
+            System.out.println("🔍 Principal: " + (authentication != null ? authentication.getPrincipal() : "null"));
             
-            if (authentication == null || !(authentication.getPrincipal() instanceof OAuth2User)) {
-                System.out.println("❌ Invalid authentication");
+            if (authentication == null) {
+                System.out.println("❌ Authentication is null");
+                return ResponseEntity.status(HttpStatus.FOUND)
+                    .location(URI.create("https://prime-properties.up.railway.app/login?error=auth_failed"))
+                    .build();
+            }
+            
+            if (!(authentication.getPrincipal() instanceof OAuth2User)) {
+                System.out.println("❌ Principal is not OAuth2User: " + authentication.getPrincipal().getClass().getSimpleName());
                 return ResponseEntity.status(HttpStatus.FOUND)
                     .location(URI.create("https://prime-properties.up.railway.app/login?error=auth_failed"))
                     .build();
             }
 
             OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
+            System.out.println("✅ OAuth2User obtained successfully");
             
             // Extract user information from Google
             String googleId = oauth2User.getAttribute("sub");
@@ -162,10 +172,12 @@ public class OAuthController {
 
             // Check if user already exists
             User user = userRepository.findByGoogleId(googleId).orElse(null);
+            System.out.println("🔍 User lookup by Google ID: " + (user != null ? "Found" : "Not found"));
             
             if (user == null) {
                 // Check if user exists with same email but different provider
                 user = userRepository.findByEmail(email).orElse(null);
+                System.out.println("🔍 User lookup by email: " + (user != null ? "Found" : "Not found"));
                 
                 if (user != null) {
                     // Link Google account to existing user
@@ -193,9 +205,11 @@ public class OAuthController {
             // Generate JWT token
             String jwt = jwtUtils.generateToken(user.getUsername(), user.getRole());
             System.out.println("🎫 JWT token generated for user: " + user.getUsername());
+            System.out.println("🎫 JWT token length: " + jwt.length());
 
             // Redirect to frontend with success and token
             String frontendUrl = "https://prime-properties.up.railway.app/login?success=true&token=" + jwt;
+            System.out.println("🔄 Redirecting to: " + frontendUrl);
             return ResponseEntity.status(HttpStatus.FOUND)
                 .location(URI.create(frontendUrl))
                 .build();

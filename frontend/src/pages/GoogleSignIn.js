@@ -17,6 +17,12 @@ const GoogleSignIn = () => {
     const token = urlParams.get('token');
     const errorParam = urlParams.get('error');
 
+    console.log('🔍 OAuth Callback Debug:');
+    console.log('  Success:', success);
+    console.log('  Token:', token ? `${token.substring(0, 20)}...` : 'null');
+    console.log('  Error:', errorParam);
+    console.log('  Full URL:', window.location.href);
+
     if (success === 'true' && token) {
       // Store the token and redirect to dashboard
       localStorage.setItem('token', token);
