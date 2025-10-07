@@ -148,7 +148,11 @@ const GoogleSignIn = () => {
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={() => window.location.href = '/login'}
+                  onClick={() => {
+                    // Redirect to backend Google OAuth endpoint
+                    const backendUrl = process.env.REACT_APP_API_URL || 'https://prime-properties-production-d021.up.railway.app';
+                    window.location.href = `${backendUrl}/oauth2/authorization/google`;
+                  }}
                   className="w-full flex items-center justify-center space-x-3 px-4 py-3 bg-white text-gray-800 font-semibold rounded-lg hover:bg-gray-100 transition-all duration-300 border border-gray-200"
                 >
                   <svg className="w-5 h-5" viewBox="0 0 24 24">
