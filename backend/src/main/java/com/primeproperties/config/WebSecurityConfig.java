@@ -58,7 +58,15 @@ public class WebSecurityConfig {
                         .defaultSuccessUrl("/auth/google/callback", true)
                         .failureUrl("/auth/google/error")
                         .userInfoEndpoint(userInfo -> userInfo
-                                .userService(oauth2UserService())));
+                                .userService(oauth2UserService()))
+                        .successHandler((request, response, authentication) -> {
+                            System.out.println("✅ OAuth Success Handler called");
+                            System.out.println("🔍 Authentication: " + authentication);
+                            System.out.println("🔍 Principal: " + authentication.getPrincipal());
+                            
+                            // Redirect to our custom callback handler
+                            response.sendRedirect("/auth/google/callback");
+                        }));
 
         // Only add JWT filter for non-OAuth requests
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

@@ -139,6 +139,15 @@ public class OAuthController {
             System.out.println("🔍 Authentication object: " + (authentication != null ? authentication.getClass().getSimpleName() : "null"));
             System.out.println("🔍 Principal: " + (authentication != null ? authentication.getPrincipal() : "null"));
             
+            // Try to get authentication from SecurityContext if not provided
+            if (authentication == null) {
+                System.out.println("🔍 Trying to get authentication from SecurityContext");
+                org.springframework.security.core.context.SecurityContext context = 
+                    org.springframework.security.core.context.SecurityContextHolder.getContext();
+                authentication = context.getAuthentication();
+                System.out.println("🔍 SecurityContext Authentication: " + (authentication != null ? authentication.getClass().getSimpleName() : "null"));
+            }
+            
             if (authentication == null) {
                 System.out.println("❌ Authentication is null");
                 return ResponseEntity.status(HttpStatus.FOUND)
