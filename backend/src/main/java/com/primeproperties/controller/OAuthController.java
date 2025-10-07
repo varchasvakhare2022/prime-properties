@@ -4,11 +4,13 @@ import com.primeproperties.model.User;
 import com.primeproperties.repository.UserRepository;
 import com.primeproperties.util.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.Map;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -131,14 +133,15 @@ public class OAuthController {
      * Handle Google OAuth callback (for server-side OAuth flow)
      */
     @GetMapping("/google/callback")
-    public ResponseEntity<?> handleGoogleCallback(Authentication authentication) {
+    public ResponseEntity<?> handleGoogleCallback(Authentication authentication, HttpServletRequest request) {
         try {
             System.out.println("=== Google OAuth Callback ===");
             
             if (authentication == null || !(authentication.getPrincipal() instanceof OAuth2User)) {
                 System.out.println("❌ Invalid authentication");
-                return ResponseEntity.badRequest()
-                    .body(Map.of("error", "Authentication failed"));
+                return ResponseEntity.status(HttpStatus.FOUND)
+                    .location(URI.create("https://prime-properties.up.railway.app/login?error=auth_failed"))
+                    .build();
             }
 
             OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
@@ -152,8 +155,9 @@ public class OAuthController {
 
             if (googleId == null || email == null || name == null) {
                 System.out.println("❌ Missing required Google user information");
-                return ResponseEntity.badRequest()
-                    .body(Map.of("error", "Missing user information from Google"));
+                return ResponseEntity.status(HttpStatus.FOUND)
+                    .location(URI.create("https://prime-properties.up.railway.app/login?error=missing_info"))
+                    .build();
             }
 
             // Check if user already exists
@@ -190,25 +194,18 @@ public class OAuthController {
             String jwt = jwtUtils.generateToken(user.getUsername(), user.getRole());
             System.out.println("🎫 JWT token generated for user: " + user.getUsername());
 
-            // Return success response with JWT
-            return ResponseEntity.ok(Map.of(
-                "message", "Google authentication successful",
-                "token", jwt,
-                "user", Map.of(
-                    "id", user.getId(),
-                    "username", user.getUsername(),
-                    "name", user.getName(),
-                    "email", user.getEmail(),
-                    "role", user.getRole(),
-                    "provider", user.getProvider()
-                )
-            ));
+            // Redirect to frontend with success and token
+            String frontendUrl = "https://prime-properties.up.railway.app/login?success=true&token=" + jwt;
+            return ResponseEntity.status(HttpStatus.FOUND)
+                .location(URI.create(frontendUrl))
+                .build();
 
         } catch (Exception e) {
             System.err.println("❌ Google OAuth callback error: " + e.getMessage());
             e.printStackTrace();
-            return ResponseEntity.status(401)
-                .body(Map.of("error", "Unauthorized", "message", "Google authentication failed"));
+            return ResponseEntity.status(HttpStatus.FOUND)
+                .location(URI.create("https://prime-properties.up.railway.app/login?error=auth_failed"))
+                .build();
         }
     }
 

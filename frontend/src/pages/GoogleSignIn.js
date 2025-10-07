@@ -10,6 +10,32 @@ const GoogleSignIn = () => {
   const [error, setError] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);
 
+  // Handle OAuth callback parameters
+  React.useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const success = urlParams.get('success');
+    const token = urlParams.get('token');
+    const errorParam = urlParams.get('error');
+
+    if (success === 'true' && token) {
+      // Store the token and redirect to dashboard
+      localStorage.setItem('token', token);
+      navigate('/properties');
+    } else if (errorParam) {
+      // Handle error cases
+      switch (errorParam) {
+        case 'auth_failed':
+          setError('Authentication failed. Please try again.');
+          break;
+        case 'missing_info':
+          setError('Missing user information from Google. Please try again.');
+          break;
+        default:
+          setError('An error occurred during sign-in. Please try again.');
+      }
+    }
+  }, [navigate]);
+
   const features = [
     {
       icon: Shield,
