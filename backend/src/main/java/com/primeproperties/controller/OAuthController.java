@@ -244,14 +244,44 @@ public class OAuthController {
     }
 
     /**
+     * Test endpoint to generate the exact OAuth URL
+     */
+    @GetMapping("/oauth/test-url")
+    public ResponseEntity<?> testOAuthUrl() {
+        try {
+            String baseUrl = "https://prime-properties-production-d021.up.railway.app";
+            String oauthUrl = baseUrl + "/oauth2/authorization/google";
+            
+            return ResponseEntity.ok(Map.of(
+                "message", "OAuth URL Test",
+                "baseUrl", baseUrl,
+                "oauthUrl", oauthUrl,
+                "expectedCallback", baseUrl + "/auth/google/callback",
+                "note", "Use this URL to test OAuth flow"
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                .body(Map.of("error", "URL test failed", "message", e.getMessage()));
+        }
+    }
+
+    /**
      * Debug endpoint to check OAuth configuration
      */
     @GetMapping("/oauth/debug")
     public ResponseEntity<?> debugOAuthConfig() {
         try {
+            // Get OAuth configuration from environment
+            String clientId = System.getenv("GOOGLE_CLIENT_ID");
+            String clientSecret = System.getenv("GOOGLE_CLIENT_SECRET");
+            String callbackUrl = System.getenv("GOOGLE_CALLBACK_URL");
+            
             return ResponseEntity.ok(Map.of(
                 "message", "OAuth Debug Information",
                 "timestamp", System.currentTimeMillis(),
+                "clientId", clientId != null ? clientId.substring(0, Math.min(20, clientId.length())) + "..." : "null",
+                "clientSecret", clientSecret != null ? "***" + clientSecret.substring(Math.max(0, clientSecret.length() - 4)) : "null",
+                "callbackUrl", callbackUrl != null ? callbackUrl : "null",
                 "note", "Check Railway logs for OAuth configuration details"
             ));
         } catch (Exception e) {
