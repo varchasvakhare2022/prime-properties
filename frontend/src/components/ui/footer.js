@@ -200,6 +200,7 @@ export const Footer = () => {
                 <h5 className="text-white font-semibold">Developed with ❤️ by</h5>
                 <p className="text-white/70 text-sm">Varchasva Kumar</p>
                 <p className="text-white/60 text-xs">Full Stack Developer & UI/UX Designer</p>
+                <p className="text-white/50 text-xs mt-1">© Proprietary Software - No Copying Allowed</p>
               </div>
             </div>
             <div className="flex items-center space-x-4">
@@ -241,7 +242,7 @@ export const Footer = () => {
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6">
               <p className="text-white/60 text-sm">
-                © {currentYear} Prime Properties. All rights reserved.
+                © {currentYear} Prime Properties. All rights reserved. Unauthorized copying prohibited.
               </p>
               <div className="flex items-center space-x-2 text-white/60 text-sm">
                 <Shield className="w-4 h-4" />
@@ -250,15 +251,8 @@ export const Footer = () => {
             </div>
             
             <div className="flex flex-wrap justify-center md:justify-end items-center space-x-6 text-sm">
-              <span className="text-white/60">Licensed under</span>
-              <a 
-                href="https://opensource.org/licenses/MIT" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-purple-400 hover:text-purple-300 transition-colors"
-              >
-                MIT License
-              </a>
+              <span className="text-white/60">Proprietary Software</span>
+              <span className="text-purple-400 font-medium">© All Rights Reserved</span>
               <span className="text-white/60">•</span>
               <span className="text-white/60">Built with React & Spring Boot</span>
             </div>
