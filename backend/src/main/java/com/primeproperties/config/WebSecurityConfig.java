@@ -34,11 +34,9 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class WebSecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final SimpleOAuth2SuccessHandler simpleOAuth2SuccessHandler;
 
-    public WebSecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, SimpleOAuth2SuccessHandler simpleOAuth2SuccessHandler) {
+    public WebSecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-        this.simpleOAuth2SuccessHandler = simpleOAuth2SuccessHandler;
     }
 
     @Bean
@@ -58,7 +56,6 @@ public class WebSecurityConfig {
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .oauth2Login(oauth2 -> oauth2
-                        .successHandler(simpleOAuth2SuccessHandler)
                         .failureUrl("https://prime-properties.up.railway.app/login?error=auth_failed")
                         .redirectionEndpoint(redirection -> redirection
                                 .baseUri("/auth/google/callback")));
