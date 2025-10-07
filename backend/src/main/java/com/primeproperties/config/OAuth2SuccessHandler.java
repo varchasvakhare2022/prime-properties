@@ -28,7 +28,8 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, 
                                       Authentication authentication) throws IOException, ServletException {
         
-        System.out.println("✅ OAuth Success Handler called");
+        System.out.println("🚨 OAuth2SuccessHandler.onAuthenticationSuccess called");
+        System.out.println("🔍 Request URI: " + request.getRequestURI());
         System.out.println("🔍 Authentication: " + authentication);
         System.out.println("🔍 Principal: " + authentication.getPrincipal());
         

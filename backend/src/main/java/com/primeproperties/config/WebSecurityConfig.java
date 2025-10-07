@@ -58,9 +58,8 @@ public class WebSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/oauth2/authorization/google")
-                        .defaultSuccessUrl("/auth/google/callback", true)
-                        .failureUrl("/auth/google/error")
                         .successHandler(oAuth2SuccessHandler)
+                        .failureUrl("/auth/google/error")
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(oauth2UserService())));
 

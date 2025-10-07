@@ -129,14 +129,6 @@ public class OAuthController {
         ));
     }
 
-    /**
-     * Handle Google OAuth callback (now handled by OAuth2SuccessHandler)
-     */
-    @GetMapping("/google/callback")
-    public ResponseEntity<?> handleGoogleCallback() {
-        // This endpoint is no longer used - OAuth2SuccessHandler handles the callback
-        return ResponseEntity.ok(Map.of("message", "OAuth callback handled by Spring Security"));
-    }
 
     /**
      * Get Google OAuth login URL
