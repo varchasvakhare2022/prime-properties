@@ -150,8 +150,8 @@ public class WebSecurityConfig {
                         String jwt = jwtUtils.generateToken(user.getUsername(), user.getRole());
                         System.out.println("🎫 Generated JWT token");
                         
-                        // Redirect to frontend
-                        String frontendUrl = "https://prime-properties.up.railway.app/properties?success=true&token=" + jwt;
+                        // Redirect to frontend login page to handle the token
+                        String frontendUrl = "https://prime-properties.up.railway.app/login?success=true&token=" + jwt;
                         getRedirectStrategy().sendRedirect(request, response, frontendUrl);
                     } else {
                         System.out.println("❌ Invalid authentication");
