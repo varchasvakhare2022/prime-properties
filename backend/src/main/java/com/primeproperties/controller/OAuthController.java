@@ -273,6 +273,47 @@ public class OAuthController {
     }
 
     /**
+     * Get current user information from JWT token
+     */
+    @GetMapping("/me")
+    public ResponseEntity<?> getCurrentUser(HttpServletRequest request) {
+        try {
+            String authHeader = request.getHeader("Authorization");
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                return ResponseEntity.status(401)
+                    .body(Map.of("error", "No authorization header"));
+            }
+            
+            String token = authHeader.substring(7);
+            
+            // Extract username from token (simplified for demo)
+            String username = jwtUtils.extractUsername(token);
+            String role = jwtUtils.extractRole(token);
+            
+            // Find user in database
+            User user = userRepository.findByUsername(username).orElse(null);
+            if (user == null) {
+                return ResponseEntity.status(404)
+                    .body(Map.of("error", "User not found"));
+            }
+            
+            return ResponseEntity.ok(Map.of(
+                "id", user.getId(),
+                "username", user.getUsername(),
+                "name", user.getName(),
+                "email", user.getEmail(),
+                "role", user.getRole(),
+                "provider", user.getProvider()
+            ));
+            
+        } catch (Exception e) {
+            System.err.println("❌ Error getting current user: " + e.getMessage());
+            return ResponseEntity.status(401)
+                .body(Map.of("error", "Invalid token"));
+        }
+    }
+
+    /**
      * Health check for OAuth endpoints
      */
     @GetMapping("/oauth/health")

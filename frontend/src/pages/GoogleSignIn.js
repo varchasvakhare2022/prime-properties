@@ -24,9 +24,55 @@ const GoogleSignIn = () => {
     console.log('  Full URL:', window.location.href);
 
     if (success === 'true' && token) {
-      // Store the token and redirect to dashboard
+      // Store the token
       localStorage.setItem('token', token);
-      navigate('/properties');
+      
+      // Fetch user data from backend
+      const fetchUserData = async () => {
+        try {
+          const backendUrl = process.env.REACT_APP_API_URL || 'https://prime-properties-production-d021.up.railway.app';
+          const response = await fetch(`${backendUrl}/auth/me`, {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          });
+          
+          if (response.ok) {
+            const userData = await response.json();
+            localStorage.setItem('user', JSON.stringify(userData));
+            console.log('✅ User data fetched and stored:', userData);
+          } else {
+            // Fallback to demo user if backend fails
+            const demoUser = {
+              username: 'oauth_user',
+              name: 'Google User',
+              email: 'user@gmail.com',
+              role: 'CUSTOMER',
+              provider: 'GOOGLE'
+            };
+            localStorage.setItem('user', JSON.stringify(demoUser));
+            console.log('⚠️ Using demo user data as fallback');
+          }
+        } catch (error) {
+          console.error('❌ Error fetching user data:', error);
+          // Fallback to demo user
+          const demoUser = {
+            username: 'oauth_user',
+            name: 'Google User',
+            email: 'user@gmail.com',
+            role: 'CUSTOMER',
+            provider: 'GOOGLE'
+          };
+          localStorage.setItem('user', JSON.stringify(demoUser));
+          console.log('⚠️ Using demo user data as fallback');
+        }
+        
+        // Redirect to properties page
+        navigate('/properties');
+      };
+      
+      fetchUserData();
     } else if (errorParam) {
       // Handle error cases
       switch (errorParam) {

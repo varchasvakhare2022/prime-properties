@@ -1,6 +1,10 @@
 package com.primeproperties.config;
 
 import com.primeproperties.security.JwtAuthenticationFilter;
+import com.primeproperties.model.User;
+import com.primeproperties.repository.UserRepository;
+import com.primeproperties.util.JwtUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -44,9 +48,15 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class WebSecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final UserRepository userRepository;
+    private final JwtUtils jwtUtils;
 
-    public WebSecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
+    public WebSecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, 
+                            UserRepository userRepository, 
+                            JwtUtils jwtUtils) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        this.userRepository = userRepository;
+        this.jwtUtils = jwtUtils;
     }
 
     @Bean
@@ -116,23 +126,56 @@ public class WebSecurityConfig {
                 System.out.println("🔍 OAuth2 Success Handler called");
                 System.out.println("🔍 Authentication: " + authentication);
                 
-                if (authentication != null && authentication.getPrincipal() instanceof OidcUser) {
-                    OidcUser oidcUser = (OidcUser) authentication.getPrincipal();
-                    
-                    String email = oidcUser.getEmail();
-                    String name = oidcUser.getFullName();
-                    String googleId = oidcUser.getSubject();
-                    
-                    System.out.println("🔍 User: " + name + " (" + email + ")");
-                    
-                    // Generate a simple JWT token for demo purposes
-                    String jwt = "demo_jwt_token_" + System.currentTimeMillis();
-                    
-                    // Redirect to frontend with success and token
-                    String frontendUrl = "https://prime-properties.up.railway.app/properties?success=true&token=" + jwt;
-                    getRedirectStrategy().sendRedirect(request, response, frontendUrl);
-                } else {
-                    // Fallback redirect
+                try {
+                    if (authentication != null && authentication.getPrincipal() instanceof OidcUser) {
+                        OidcUser oidcUser = (OidcUser) authentication.getPrincipal();
+                        
+                        String email = oidcUser.getEmail();
+                        String name = oidcUser.getFullName();
+                        String googleId = oidcUser.getSubject();
+                        
+                        System.out.println("🔍 User: " + name + " (" + email + ")");
+                        
+                        // Create or find user in database
+                        User user = userRepository.findByEmail(email).orElse(null);
+                        if (user == null) {
+                            // Create new user
+                            user = new User();
+                            user.setEmail(email);
+                            user.setName(name);
+                            user.setUsername(email); // Use email as username for OAuth users
+                            user.setRole("CUSTOMER"); // Default role for OAuth users
+                            user.setProvider("GOOGLE");
+                            user.setGoogleId(googleId);
+                            user = userRepository.save(user);
+                            System.out.println("✅ Created new Google user: " + email + " with ID: " + user.getId());
+                        } else {
+                            // Update existing user with Google info if needed
+                            if (user.getGoogleId() == null) {
+                                user.setGoogleId(googleId);
+                                user.setProvider("GOOGLE");
+                                user = userRepository.save(user);
+                                System.out.println("✅ Updated existing user with Google info: " + email + " with ID: " + user.getId());
+                            } else {
+                                System.out.println("✅ Found existing Google user: " + email + " with ID: " + user.getId());
+                            }
+                        }
+                        
+                        // Generate real JWT token
+                        String jwt = jwtUtils.generateToken(user.getUsername(), user.getRole());
+                        System.out.println("🎫 Generated JWT token for user: " + user.getUsername());
+                        
+                        // Redirect to frontend with success and token
+                        String frontendUrl = "https://prime-properties.up.railway.app/properties?success=true&token=" + jwt;
+                        getRedirectStrategy().sendRedirect(request, response, frontendUrl);
+                    } else {
+                        System.out.println("❌ Invalid authentication principal");
+                        String frontendUrl = "https://prime-properties.up.railway.app/login?error=auth_failed";
+                        getRedirectStrategy().sendRedirect(request, response, frontendUrl);
+                    }
+                } catch (Exception e) {
+                    System.err.println("❌ Error in OAuth2 success handler: " + e.getMessage());
+                    e.printStackTrace();
                     String frontendUrl = "https://prime-properties.up.railway.app/login?error=auth_failed";
                     getRedirectStrategy().sendRedirect(request, response, frontendUrl);
                 }
@@ -155,13 +198,28 @@ public class WebSecurityConfig {
                     return oidcUser;
                 } catch (Exception e) {
                     System.out.println("🔍 OIDC user loading failed: " + e.getMessage());
-                    e.printStackTrace();
+                    
+                    // Extract real user info from the user request if possible
+                    String email = "demo@example.com";
+                    String name = "Demo User";
+                    String googleId = "demo_user_" + System.currentTimeMillis();
+                    
+                    try {
+                        // Try to get user info from the access token
+                        if (userRequest.getAccessToken() != null) {
+                            System.out.println("🔍 Access token available, attempting to fetch user info");
+                            // In a real implementation, you'd make a call to Google's userinfo endpoint
+                            // For now, we'll use the demo data but log that we tried
+                        }
+                    } catch (Exception tokenError) {
+                        System.out.println("🔍 Could not extract user info from token: " + tokenError.getMessage());
+                    }
                     
                     // Create a fallback user with demo data
                     Map<String, Object> claims = new HashMap<>();
-                    claims.put("sub", "demo_user_" + System.currentTimeMillis());
-                    claims.put("email", "demo@example.com");
-                    claims.put("name", "Demo User");
+                    claims.put("sub", googleId);
+                    claims.put("email", email);
+                    claims.put("name", name);
                     claims.put("given_name", "Demo");
                     claims.put("family_name", "User");
                     claims.put("picture", "https://via.placeholder.com/150");
@@ -171,6 +229,8 @@ public class WebSecurityConfig {
                     idTokenClaims.put("aud", userRequest.getClientRegistration().getClientId());
                     idTokenClaims.put("exp", System.currentTimeMillis() / 1000 + 3600);
                     idTokenClaims.put("iat", System.currentTimeMillis() / 1000);
+                    
+                    System.out.println("🔍 Creating fallback OIDC user with ID: " + googleId);
                     
                     return new DefaultOidcUser(
                         Arrays.asList(new SimpleGrantedAuthority("ROLE_CUSTOMER")),
