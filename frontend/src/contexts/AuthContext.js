@@ -99,7 +99,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const handleLogout = () => {
+  const logout = () => {
     authService.logout();
     setUser(null);
     setError(null);
@@ -116,7 +116,7 @@ export const AuthProvider = ({ children }) => {
     login,
     register,
     googleLogin,
-    logout: handleLogout,
+    logout,
     clearError,
     isAuthenticated: !!user,
     isCustomer: user?.role === 'CUSTOMER',
