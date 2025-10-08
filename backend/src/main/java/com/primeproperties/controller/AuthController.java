@@ -454,24 +454,4 @@ public class AuthController {
         }
     }
 
-    /**
-     * Get current user profile
-     */
-    @GetMapping("/me")
-    public ResponseEntity<?> getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-
-        User user = userRepository.findByUsername(username)
-            .orElseThrow(() -> new RuntimeException("User not found"));
-
-        Map<String, Object> userInfo = new HashMap<>();
-        userInfo.put("id", user.getId());
-        userInfo.put("username", user.getUsername());
-        userInfo.put("name", user.getName());
-        userInfo.put("email", user.getEmail());
-        userInfo.put("role", user.getRole());
-
-        return ResponseEntity.ok(userInfo);
-    }
 }
