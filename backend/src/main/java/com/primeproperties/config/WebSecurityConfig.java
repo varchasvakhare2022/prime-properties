@@ -4,7 +4,6 @@ import com.primeproperties.security.JwtAuthenticationFilter;
 import com.primeproperties.model.User;
 import com.primeproperties.repository.UserRepository;
 import com.primeproperties.util.JwtUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,15 +14,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
-import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.SecurityFilterChain;
@@ -36,7 +31,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.net.URI;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
@@ -124,7 +118,6 @@ public class WebSecurityConfig {
             @Override
             public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws java.io.IOException {
                 System.out.println("🔍 OAuth2 Success Handler called");
-                System.out.println("🔍 Authentication: " + authentication);
                 
                 try {
                     if (authentication != null && authentication.getPrincipal() instanceof OidcUser) {
@@ -143,39 +136,30 @@ public class WebSecurityConfig {
                             user = new User();
                             user.setEmail(email);
                             user.setName(name);
-                            user.setUsername(email); // Use email as username for OAuth users
-                            user.setRole("CUSTOMER"); // Default role for OAuth users
+                            user.setUsername(email);
+                            user.setRole("CUSTOMER");
                             user.setProvider("GOOGLE");
                             user.setGoogleId(googleId);
                             user = userRepository.save(user);
-                            System.out.println("✅ Created new Google user: " + email + " with ID: " + user.getId());
+                            System.out.println("✅ Created new Google user: " + email);
                         } else {
-                            // Update existing user with Google info if needed
-                            if (user.getGoogleId() == null) {
-                                user.setGoogleId(googleId);
-                                user.setProvider("GOOGLE");
-                                user = userRepository.save(user);
-                                System.out.println("✅ Updated existing user with Google info: " + email + " with ID: " + user.getId());
-                            } else {
-                                System.out.println("✅ Found existing Google user: " + email + " with ID: " + user.getId());
-                            }
+                            System.out.println("✅ Found existing Google user: " + email);
                         }
                         
-                        // Generate real JWT token
+                        // Generate JWT token
                         String jwt = jwtUtils.generateToken(user.getUsername(), user.getRole());
-                        System.out.println("🎫 Generated JWT token for user: " + user.getUsername());
+                        System.out.println("🎫 Generated JWT token");
                         
-                        // Redirect to frontend with success and token
+                        // Redirect to frontend
                         String frontendUrl = "https://prime-properties.up.railway.app/properties?success=true&token=" + jwt;
                         getRedirectStrategy().sendRedirect(request, response, frontendUrl);
                     } else {
-                        System.out.println("❌ Invalid authentication principal");
+                        System.out.println("❌ Invalid authentication");
                         String frontendUrl = "https://prime-properties.up.railway.app/login?error=auth_failed";
                         getRedirectStrategy().sendRedirect(request, response, frontendUrl);
                     }
                 } catch (Exception e) {
-                    System.err.println("❌ Error in OAuth2 success handler: " + e.getMessage());
-                    e.printStackTrace();
+                    System.err.println("❌ OAuth2 error: " + e.getMessage());
                     String frontendUrl = "https://prime-properties.up.railway.app/login?error=auth_failed";
                     getRedirectStrategy().sendRedirect(request, response, frontendUrl);
                 }
@@ -199,27 +183,12 @@ public class WebSecurityConfig {
                 } catch (Exception e) {
                     System.out.println("🔍 OIDC user loading failed: " + e.getMessage());
                     
-                    // Extract real user info from the user request if possible
-                    String email = "demo@example.com";
-                    String name = "Demo User";
-                    String googleId = "demo_user_" + System.currentTimeMillis();
-                    
-                    try {
-                        // Try to get user info from the access token
-                        if (userRequest.getAccessToken() != null) {
-                            System.out.println("🔍 Access token available, attempting to fetch user info");
-                            // In a real implementation, you'd make a call to Google's userinfo endpoint
-                            // For now, we'll use the demo data but log that we tried
-                        }
-                    } catch (Exception tokenError) {
-                        System.out.println("🔍 Could not extract user info from token: " + tokenError.getMessage());
-                    }
-                    
                     // Create a fallback user with demo data
+                    String googleId = "demo_user_" + System.currentTimeMillis();
                     Map<String, Object> claims = new HashMap<>();
                     claims.put("sub", googleId);
-                    claims.put("email", email);
-                    claims.put("name", name);
+                    claims.put("email", "demo@example.com");
+                    claims.put("name", "Demo User");
                     claims.put("given_name", "Demo");
                     claims.put("family_name", "User");
                     claims.put("picture", "https://via.placeholder.com/150");
