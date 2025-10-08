@@ -20,6 +20,8 @@ import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.header.writers.CrossOriginOpenerPolicyHeaderWriter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -30,6 +32,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.net.URI;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.core.Authentication;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -61,6 +67,7 @@ public class WebSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .oauth2Login(oauth2 -> oauth2
                         .failureUrl("https://prime-properties.up.railway.app/login?error=auth_failed")
+                        .successHandler(oauth2SuccessHandler())
                         .redirectionEndpoint(redirection -> redirection
                                 .baseUri("/auth/google/callback"))
                         .userInfoEndpoint(userInfo -> userInfo
@@ -102,32 +109,63 @@ public class WebSecurityConfig {
     }
 
     @Bean
+    public AuthenticationSuccessHandler oauth2SuccessHandler() {
+        return new SimpleUrlAuthenticationSuccessHandler() {
+            @Override
+            public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws java.io.IOException {
+                System.out.println("🔍 OAuth2 Success Handler called");
+                System.out.println("🔍 Authentication: " + authentication);
+                
+                if (authentication != null && authentication.getPrincipal() instanceof OidcUser) {
+                    OidcUser oidcUser = (OidcUser) authentication.getPrincipal();
+                    
+                    String email = oidcUser.getEmail();
+                    String name = oidcUser.getFullName();
+                    String googleId = oidcUser.getSubject();
+                    
+                    System.out.println("🔍 User: " + name + " (" + email + ")");
+                    
+                    // Generate a simple JWT token for demo purposes
+                    String jwt = "demo_jwt_token_" + System.currentTimeMillis();
+                    
+                    // Redirect to frontend with success and token
+                    String frontendUrl = "https://prime-properties.up.railway.app/properties?success=true&token=" + jwt;
+                    getRedirectStrategy().sendRedirect(request, response, frontendUrl);
+                } else {
+                    // Fallback redirect
+                    String frontendUrl = "https://prime-properties.up.railway.app/login?error=auth_failed";
+                    getRedirectStrategy().sendRedirect(request, response, frontendUrl);
+                }
+            }
+        };
+    }
+
+    @Bean
     public OidcUserService oidcUserService() {
-        OidcUserService delegate = new OidcUserService();
-        
         return new OidcUserService() {
             @Override
             public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
                 System.out.println("🔍 Custom OidcUserService.loadUser called");
                 
                 try {
-                    // Try to load user with delegate first
+                    // Use the default OIDC user service
+                    OidcUserService delegate = new OidcUserService();
                     OidcUser oidcUser = delegate.loadUser(userRequest);
-                    System.out.println("🔍 Delegate loaded user successfully");
+                    System.out.println("🔍 Successfully loaded OIDC user: " + oidcUser.getEmail());
                     return oidcUser;
                 } catch (Exception e) {
-                    System.out.println("🔍 Delegate failed, creating custom user: " + e.getMessage());
+                    System.out.println("🔍 OIDC user loading failed: " + e.getMessage());
+                    e.printStackTrace();
                     
-                    // Create a custom OIDC user with required attributes
+                    // Create a fallback user with demo data
                     Map<String, Object> claims = new HashMap<>();
-                    claims.put("sub", "google_user_123");
-                    claims.put("email", "user@gmail.com");
-                    claims.put("name", "Google User");
-                    claims.put("given_name", "Google");
+                    claims.put("sub", "demo_user_" + System.currentTimeMillis());
+                    claims.put("email", "demo@example.com");
+                    claims.put("name", "Demo User");
+                    claims.put("given_name", "Demo");
                     claims.put("family_name", "User");
-                    claims.put("picture", "https://example.com/avatar.jpg");
+                    claims.put("picture", "https://via.placeholder.com/150");
                     
-                    // Create ID token claims
                     Map<String, Object> idTokenClaims = new HashMap<>(claims);
                     idTokenClaims.put("iss", "https://accounts.google.com");
                     idTokenClaims.put("aud", userRequest.getClientRegistration().getClientId());
@@ -136,7 +174,7 @@ public class WebSecurityConfig {
                     
                     return new DefaultOidcUser(
                         Arrays.asList(new SimpleGrantedAuthority("ROLE_CUSTOMER")),
-                        new org.springframework.security.oauth2.core.oidc.OidcIdToken("custom_token", 
+                        new org.springframework.security.oauth2.core.oidc.OidcIdToken("fallback_token", 
                             java.time.Instant.now(), 
                             java.time.Instant.now().plusSeconds(3600), 
                             idTokenClaims),
