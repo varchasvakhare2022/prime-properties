@@ -36,16 +36,23 @@ This document outlines all the fixes applied to resolve the backend and frontend
 - The `railway.json` specified `dockerfilePath: "backend/Dockerfile"` but didn't set the build context
 - This caused Railway to try building from the root directory while the Dockerfile expected to be in the backend directory
 - Maven couldn't find pom.xml and other necessary files
+- Redundant `startCommand` in railway.json conflicted with Dockerfile ENTRYPOINT
+- Hardcoded EXPOSE 8080 didn't work with Railway's dynamic PORT variable
 
 **Solution:**
 - Added `"buildContext": "backend"` to the railway.json
+- Removed duplicate `startCommand` (let Dockerfile handle it)
+- Removed hardcoded EXPOSE port (Railway assigns PORT dynamically)
+- Spring Boot reads PORT from environment via application.properties: `server.port=${PORT:8080}`
 - Now Railway will:
   1. Use the backend folder as the build context
   2. Build using backend/Dockerfile
   3. All relative paths in the Dockerfile will work correctly
+  4. Application will listen on Railway's assigned PORT
 
 **Files Changed:**
-- `railway.json` - Added buildContext property
+- `railway.json` - Added buildContext, removed startCommand
+- `backend/Dockerfile` - Removed hardcoded port exposure
 
 ---
 
