@@ -24,10 +24,10 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres.railway.internal:5432/railway
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/prime_properties
       SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: GFUhNOhXZfuTOgAsqNbpXpIFwnCKqTLz
-      JWT_SECRET: sample_secret_for_testing_abcdef
+      SPRING_DATASOURCE_PASSWORD: password
+      JWT_SECRET: sample_secret_for_testing_abcdef_1234567890
       JWT_EXPIRATION: 86400000
     depends_on:
       - postgres
@@ -41,7 +41,7 @@ services:
       dockerfile: Dockerfile
     container_name: prime-properties-frontend
     ports:
-      - "3000:3000"
+      - "3000:80"
     environment:
       REACT_APP_API_URL: https://prime-properties-production-d021.up.railway.app/
     depends_on:
