@@ -9,9 +9,11 @@ RUN mvn clean package -DskipTests
 FROM openjdk:17-jdk-slim
 WORKDIR /app
 
-# --- THIS IS THE CORRECTED LINE ---
-# It now copies from /app/target/ because the build context is the backend folder itself.
+# Copy the JAR file from build stage
 COPY --from=build /app/target/*.jar app.jar
 
-EXPOSE 8080
+# Railway provides PORT environment variable dynamically
+# Spring Boot will read server.port=${PORT:8080} from application.properties
+# Note: The actual port is determined at runtime by Railway
+
 ENTRYPOINT ["java", "-jar", "app.jar"]
