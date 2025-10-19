@@ -171,8 +171,18 @@ const PropertyFilters = ({ filters, onFilterChange, onApply, onReset, isOpen, on
                 max="100000000"
                 step="1000000"
                 value={filters.budgetMin || 1000000}
-                onChange={(e) => onFilterChange('budgetMin', parseInt(e.target.value))}
-                className="slider-gold"
+                onChange={(e) => {
+                  const newMin = parseInt(e.target.value);
+                  const currentMax = filters.budgetMax || 100000000;
+                  // Ensure min doesn't exceed max
+                  if (newMin <= currentMax) {
+                    onFilterChange('budgetMin', newMin);
+                  } else {
+                    // If trying to set min above max, set both to the same value
+                    onFilterChange('budgetMin', currentMax);
+                  }
+                }}
+                className="slider-gold w-full"
               />
             </div>
 
@@ -185,14 +195,24 @@ const PropertyFilters = ({ filters, onFilterChange, onApply, onReset, isOpen, on
                 max="100000000"
                 step="1000000"
                 value={filters.budgetMax || 100000000}
-                onChange={(e) => onFilterChange('budgetMax', parseInt(e.target.value))}
-                className="slider-gold"
+                onChange={(e) => {
+                  const newMax = parseInt(e.target.value);
+                  const currentMin = filters.budgetMin || 1000000;
+                  // Ensure max doesn't go below min
+                  if (newMax >= currentMin) {
+                    onFilterChange('budgetMax', newMax);
+                  } else {
+                    // If trying to set max below min, set both to the same value
+                    onFilterChange('budgetMax', currentMin);
+                  }
+                }}
+                className="slider-gold w-full"
               />
             </div>
 
-            <div className="flex gap-2 text-xs text-primary/50 font-medium">
+            <div className="flex justify-between text-xs text-primary/50 font-medium">
               <span>₹10L</span>
-              <span className="flex-1 text-center">₹5.5Cr</span>
+              <span>₹5.5Cr</span>
               <span>₹10Cr</span>
             </div>
           </div>
