@@ -30,9 +30,9 @@ const PropertyCardSkeleton = ({ count = 6 }) => {
               </div>
               
               {/* Features */}
-              <div className="flex gap-4">
+              <div className="flex flex-wrap gap-2">
                 {[1, 2, 3].map((i) => (
-                  <div key={i} className="h-10 bg-gradient-to-r from-gray-700/30 to-gray-800/30 rounded w-20 relative overflow-hidden">
+                  <div key={i} className="h-10 bg-gradient-to-r from-gray-700/30 to-gray-800/30 rounded-lg w-20 relative overflow-hidden flex-shrink-0">
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent skew-x-12 -translate-x-full animate-shimmer" />
                   </div>
                 ))}

@@ -113,21 +113,21 @@ const PropertyCard = ({ property, loading = false, index = 0 }) => {
             </div>
 
             {/* Key Features Badges */}
-            <div className="flex items-center gap-3 mb-4 text-sm text-gray-400 group-hover:text-white">
+            <div className="flex flex-wrap items-center gap-2 mb-4 text-sm text-gray-400 group-hover:text-white">
               {bedrooms > 0 && (
-                <div className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-black/50 border border-primary/20 group-hover:border-primary/50 group-hover:bg-black/70 group-hover:shadow-gold-sm transition-all duration-300">
+                <div className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-black/50 border border-primary/20 group-hover:border-primary/50 group-hover:bg-black/70 group-hover:shadow-gold-sm transition-all duration-300 flex-shrink-0">
                   <Bed className="w-4 h-4 text-primary group-hover:drop-shadow-[0_0_6px_rgba(212,175,55,0.8)]" />
                   <span className="font-semibold">{bedrooms}</span>
                 </div>
               )}
               {bathrooms > 0 && (
-                <div className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-black/50 border border-primary/20 group-hover:border-secondary/50 group-hover:bg-black/70 group-hover:shadow-gold-sm transition-all duration-300">
+                <div className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-black/50 border border-primary/20 group-hover:border-secondary/50 group-hover:bg-black/70 group-hover:shadow-gold-sm transition-all duration-300 flex-shrink-0">
                   <Bath className="w-4 h-4 text-secondary group-hover:drop-shadow-[0_0_6px_rgba(196,148,31,0.8)]" />
                   <span className="font-semibold">{bathrooms}</span>
                 </div>
               )}
               {area > 0 && (
-                <div className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-black/50 border border-primary/20 group-hover:border-primary/50 group-hover:bg-black/70 group-hover:shadow-gold-sm transition-all duration-300">
+                <div className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-black/50 border border-primary/20 group-hover:border-primary/50 group-hover:bg-black/70 group-hover:shadow-gold-sm transition-all duration-300 flex-shrink-0">
                   <Maximize className="w-4 h-4 text-primary group-hover:drop-shadow-[0_0_6px_rgba(212,175,55,0.8)]" />
                   <span className="whitespace-nowrap font-semibold">{area} sqft</span>
                 </div>
