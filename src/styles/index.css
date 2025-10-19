@@ -14,10 +14,10 @@ html {
   }
 }
 
-/* Global Black-Gold Luxury Scrollbar */
+/* Simple Black-Gold Scrollbar */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #d4af37 rgba(0, 0, 0, 0.8);
+  scrollbar-color: #d4af37 #000000;
 }
 
 *::-webkit-scrollbar {
@@ -26,27 +26,23 @@ html {
 }
 
 *::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.8);
-  border-radius: 10px;
+  background: #000000;
 }
 
 *::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #d4af37, #c4941f);
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
-  border: 2px solid rgba(0, 0, 0, 0.8);
+  background: #d4af37;
+  border-radius: 0;
 }
 
 *::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #eec856, #d4af37);
-  box-shadow: 0 0 15px rgba(212, 175, 55, 0.8);
+  background: #eec856;
 }
 
 *::-webkit-scrollbar-corner {
-  background: rgba(0, 0, 0, 0.8);
+  background: #000000;
 }
 
-/* Hide scrollbar arrows/buttons - Comprehensive removal */
+/* Hide scrollbar arrows/buttons */
 *::-webkit-scrollbar-button {
   display: none !important;
   width: 0 !important;
@@ -308,31 +304,28 @@ html {
     display: none;
   }
 
-  /* Luxury Gold Scrollbar */
+  /* Simple Gold Scrollbar Utility */
   .scrollbar-gold::-webkit-scrollbar {
     width: 8px;
   }
 
   .scrollbar-gold::-webkit-scrollbar-track {
-    background: rgba(26, 26, 26, 0.5);
-    border-radius: 10px;
+    background: #000000;
   }
 
   .scrollbar-gold::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, #d4af37, #c4941f);
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+    background: #d4af37;
+    border-radius: 0;
   }
 
   .scrollbar-gold::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(180deg, #eec856, #d4af37);
-    box-shadow: 0 0 15px rgba(212, 175, 55, 0.8);
+    background: #eec856;
   }
 
   /* Firefox scrollbar */
   .scrollbar-gold {
     scrollbar-width: thin;
-    scrollbar-color: #d4af37 rgba(26, 26, 26, 0.5);
+    scrollbar-color: #d4af37 #000000;
   }
 
   /* Remove arrows from custom gold scrollbar */
