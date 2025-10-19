@@ -46,11 +46,26 @@ html {
   background: rgba(0, 0, 0, 0.8);
 }
 
-/* Hide scrollbar arrows/buttons */
+/* Hide scrollbar arrows/buttons - Comprehensive removal */
 *::-webkit-scrollbar-button {
-  display: none;
-  width: 0;
-  height: 0;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
+*::-webkit-scrollbar-button:single-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+*::-webkit-scrollbar-button:start:decrement,
+*::-webkit-scrollbar-button:end:increment {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
 }
 
 @layer base {
@@ -318,6 +333,13 @@ html {
   .scrollbar-gold {
     scrollbar-width: thin;
     scrollbar-color: #d4af37 rgba(26, 26, 26, 0.5);
+  }
+
+  /* Remove arrows from custom gold scrollbar */
+  .scrollbar-gold::-webkit-scrollbar-button {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
   }
 
   /* Custom Range Slider Styles */
