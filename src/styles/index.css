@@ -111,7 +111,7 @@ html {
       rgba(212, 175, 55, 0.4),
       transparent
     );
-    animation: shimmer-gold 3s infinite;
+    animation: shimmer-gold 6s ease-in-out infinite;
   }
   
   @keyframes shimmer-gold {
