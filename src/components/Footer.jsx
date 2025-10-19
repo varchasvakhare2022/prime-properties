@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin } from 'lucide-react';
+import { useState } from 'react';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -141,28 +142,41 @@ const Footer = () => {
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.1, type: "spring", stiffness: 200 }}
                     whileHover={{ 
-                      scale: 1.2, 
-                      y: -5,
-                      boxShadow: "0 0 20px rgba(212, 175, 55, 0.6)",
-                      transition: { duration: 0.3 }
+                      scale: 1.25, 
+                      y: -8,
+                      rotate: [0, -10, 10, 0],
+                      transition: { duration: 0.4, ease: [0.43, 0.13, 0.23, 0.96] }
                     }}
                     whileTap={{ scale: 0.9 }}
-                    className="relative w-11 h-11 rounded-lg bg-black/40 border border-primary/20 flex items-center justify-center hover:border-primary/60 transition-all duration-300 group touch-manipulation"
+                    className="relative w-11 h-11 rounded-lg bg-black/40 border border-primary/20 flex items-center justify-center hover:border-primary/60 transition-all duration-300 group touch-manipulation overflow-hidden"
                   >
                     <Icon className="w-5 h-5 text-primary group-hover:text-white transition-colors relative z-10 drop-shadow-[0_0_8px_rgba(212,175,55,0.5)]" />
                     <motion.div
                       className="absolute inset-0 rounded-lg bg-gradient-to-br from-primary to-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                     />
+                    {/* Ripple effect on hover */}
                     <motion.div
                       className="absolute inset-0 rounded-lg"
-                      initial={false}
                       whileHover={{
                         boxShadow: [
                           "0 0 0 0 rgba(212, 175, 55, 0.7)",
-                          "0 0 0 10px rgba(212, 175, 55, 0)",
+                          "0 0 0 15px rgba(212, 175, 55, 0)",
                         ],
                       }}
-                      transition={{ duration: 0.6 }}
+                      transition={{ duration: 0.6, ease: "easeOut" }}
+                    />
+                    {/* Shimmer effect */}
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent rounded-lg"
+                      animate={{
+                        x: ['-100%', '100%'],
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        repeatDelay: 3,
+                        ease: "linear"
+                      }}
                     />
                   </motion.a>
                 );

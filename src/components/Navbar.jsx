@@ -1,11 +1,39 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const buttonRef = useRef(null);
+  
+  // Magnetic effect for Get Started button
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const springConfig = { damping: 20, stiffness: 300 };
+  const springX = useSpring(x, springConfig);
+  const springY = useSpring(y, springConfig);
+  
+  const handleButtonMouseMove = (e) => {
+    if (!buttonRef.current) return;
+    const rect = buttonRef.current.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const distanceX = e.clientX - centerX;
+    const distanceY = e.clientY - centerY;
+    const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+    
+    if (distance < 80) {
+      x.set(distanceX * 0.3);
+      y.set(distanceY * 0.3);
+    }
+  };
+  
+  const handleButtonMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,12 +61,16 @@ const Navbar = () => {
       <Link to={to} onClick={() => setIsMobileMenuOpen(false)}>
         <motion.div
           className="relative px-4 py-2 text-sm font-medium transition-colors duration-200"
-          whileHover={{ scale: 1.05 }}
+          whileHover={{ scale: 1.05, y: -2 }}
           whileTap={{ scale: 0.95 }}
+          transition={{ duration: 0.3, ease: [0.43, 0.13, 0.23, 0.96] }}
         >
-          <span className={active ? 'text-primary font-bold drop-shadow-[0_0_10px_rgba(212,175,55,0.5)]' : 'text-gray-300 hover:text-primary transition-all duration-300'}>
+          <motion.span 
+            className={active ? 'text-primary font-bold drop-shadow-[0_0_10px_rgba(212,175,55,0.5)]' : 'text-gray-300 hover:text-primary transition-all duration-300'}
+            whileHover={!active ? { textShadow: "0 0 8px rgba(212, 175, 55, 0.6)" } : {}}
+          >
             {children}
-          </span>
+          </motion.span>
           {active && (
             <motion.div
               layoutId="navbar-indicator"
@@ -54,8 +86,8 @@ const Navbar = () => {
           {!active && (
             <motion.div
               className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary to-secondary opacity-0"
-              whileHover={{ opacity: 0.7, boxShadow: "0 0 8px rgba(212, 175, 55, 0.5)" }}
-              transition={{ duration: 0.2 }}
+              whileHover={{ opacity: 0.7, scaleX: 1.1, boxShadow: "0 0 8px rgba(212, 175, 55, 0.5)" }}
+              transition={{ duration: 0.3, ease: [0.43, 0.13, 0.23, 0.96] }}
             />
           )}
         </motion.div>
@@ -85,16 +117,32 @@ const Navbar = () => {
               {/* Logo with Luxury Animation */}
               <Link to="/" className="flex items-center space-x-3 group">
                 <motion.div
-                  whileHover={{ rotate: 360, scale: 1.1 }}
-                  transition={{ duration: 0.6 }}
+                  whileHover={{ 
+                    rotate: 360, 
+                    scale: 1.15,
+                    boxShadow: "0 0 30px rgba(212, 175, 55, 0.8)"
+                  }}
+                  transition={{ duration: 0.6, ease: [0.43, 0.13, 0.23, 0.96] }}
                   className="relative"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-gold-md animate-luxury-glow">
-                    <svg
+                  <motion.div 
+                    className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-gold-md"
+                    animate={{
+                      boxShadow: [
+                        '0 4px 20px rgba(212, 175, 55, 0.3)',
+                        '0 4px 25px rgba(212, 175, 55, 0.5)',
+                        '0 4px 20px rgba(212, 175, 55, 0.3)',
+                      ]
+                    }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                  >
+                    <motion.svg
                       className="w-6 h-6 text-black drop-shadow-lg"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
+                      animate={{ scale: [1, 1.05, 1] }}
+                      transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                     >
                       <path
                         strokeLinecap="round"
@@ -102,8 +150,8 @@ const Navbar = () => {
                         strokeWidth={2.5}
                         d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
                       />
-                    </svg>
-                  </div>
+                    </motion.svg>
+                  </motion.div>
                   <motion.div
                     className="absolute inset-0 rounded-lg bg-gradient-to-br from-primary to-secondary blur-xl"
                     animate={{ opacity: [0.3, 0.6, 0.3] }}
@@ -113,7 +161,11 @@ const Navbar = () => {
                 
                 <motion.span
                   className="text-xl font-bold text-gold-shine drop-shadow-[0_0_10px_rgba(212,175,55,0.5)]"
-                  whileHover={{ scale: 1.05 }}
+                  whileHover={{ 
+                    scale: 1.05,
+                    textShadow: "0 0 15px rgba(212, 175, 55, 0.8)"
+                  }}
+                  transition={{ duration: 0.3 }}
                 >
                   Prime Properties
                 </motion.span>
@@ -133,22 +185,38 @@ const Navbar = () => {
                 </NavLink>
               ))}
               
-              {/* CTA Button with Luxury Animation */}
+              {/* CTA Button with Luxury Magnetic Animation */}
               <motion.div
+                ref={buttonRef}
+                onMouseMove={handleButtonMouseMove}
+                onMouseLeave={handleButtonMouseLeave}
+                style={{ x: springX, y: springY }}
                 whileHover={{ 
-                  scale: 1.05,
-                  boxShadow: "0 0 20px rgba(212, 175, 55, 0.6)"
+                  scale: 1.08,
+                  boxShadow: "0 0 25px rgba(212, 175, 55, 0.7)"
                 }}
                 whileTap={{ scale: 0.95 }}
+                transition={{ duration: 0.3, ease: [0.43, 0.13, 0.23, 0.96] }}
                 className="ml-4 rounded-full"
               >
                 <Link
                   to="/properties"
-                  className="relative px-6 py-2.5 rounded-full bg-gradient-to-r from-primary to-secondary text-black font-bold overflow-hidden group shadow-gold-md"
+                  className="relative px-6 py-2.5 rounded-full bg-gradient-to-r from-primary to-secondary text-black font-bold overflow-hidden group shadow-gold-md block"
                 >
                   <span className="relative z-10 drop-shadow-sm">Get Started</span>
                   <motion.div
                     className="absolute inset-0 bg-gradient-to-r from-secondary to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full"
+                  />
+                  <motion.div
+                    className="absolute inset-0 rounded-full"
+                    animate={{
+                      boxShadow: [
+                        '0 0 10px rgba(212, 175, 55, 0) inset',
+                        '0 0 20px rgba(212, 175, 55, 0.3) inset',
+                        '0 0 10px rgba(212, 175, 55, 0) inset',
+                      ]
+                    }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                   />
                 </Link>
               </motion.div>

@@ -1,9 +1,42 @@
-import { motion } from 'framer-motion';
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { MapPin, Bed, Bath, Maximize, ArrowRight } from 'lucide-react';
 import { formatPriceINR } from '../utils/formatPrice';
+import { useRef } from 'react';
 
 const PropertyCard = ({ property, loading = false, index = 0 }) => {
+  const cardRef = useRef(null);
+  
+  // 3D Tilt effect
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  
+  const springConfig = { damping: 25, stiffness: 400 };
+  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [8, -8]), springConfig);
+  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-8, 8]), springConfig);
+  
+  const handleMouseMove = (e) => {
+    if (!cardRef.current) return;
+    
+    const rect = cardRef.current.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    
+    const xPct = mouseX / width - 0.5;
+    const yPct = mouseY / height - 0.5;
+    
+    x.set(xPct);
+    y.set(yPct);
+  };
+  
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+  
   // Loading skeleton
   if (loading) {
     return (
@@ -47,16 +80,26 @@ const PropertyCard = ({ property, loading = false, index = 0 }) => {
 
   return (
     <motion.div
+      ref={cardRef}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05, duration: 0.5 }}
-      whileHover={{ y: -8, transition: { duration: 0.3 } }}
-      className="group relative h-full"
+      whileHover={{ y: -12, scale: 1.02, transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] } }}
+      style={{
+        rotateX,
+        rotateY,
+        transformStyle: 'preserve-3d',
+      }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className="group relative h-full perspective-1000"
     >
       {/* Enhanced Glow Effect with Animation */}
       <motion.div 
         className="absolute -inset-0.5 bg-gradient-to-r from-primary to-secondary rounded-2xl opacity-0 group-hover:opacity-75 blur-xl transition-all duration-500"
+        initial={{ scale: 0.95 }}
         whileHover={{ scale: 1.05 }}
+        transition={{ duration: 0.4 }}
       />
       
       <Link to={`/properties/${property.id}`} className="block h-full">
@@ -151,11 +194,17 @@ const PropertyCard = ({ property, loading = false, index = 0 }) => {
               </div>
               
               <motion.div
-                whileHover={{ x: 5 }}
+                whileHover={{ x: 8, scale: 1.05 }}
+                transition={{ duration: 0.3, ease: [0.43, 0.13, 0.23, 0.96] }}
                 className="flex items-center gap-2 text-primary font-bold group-hover:drop-shadow-[0_0_10px_rgba(212,175,55,0.8)] transition-all duration-300"
               >
                 <span className="text-sm">View Details</span>
-                <ArrowRight className="w-4 h-4" />
+                <motion.div
+                  animate={{ x: [0, 4, 0] }}
+                  transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <ArrowRight className="w-4 h-4" />
+                </motion.div>
               </motion.div>
             </div>
 
