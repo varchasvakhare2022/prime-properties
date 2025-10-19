@@ -1,0 +1,36 @@
+export const indianStates = [
+  'All States',
+  'Andhra Pradesh',
+  'Karnataka',
+  'Kerala',
+  'Tamil Nadu',
+  'Telangana',
+  'Goa',
+  'Gujarat',
+  'Maharashtra',
+  'Rajasthan',
+  'Delhi',
+  'Haryana',
+  'Punjab',
+  'Uttar Pradesh',
+  'West Bengal',
+];
+
+export const citiesByState = {
+  'All States': [],
+  'Andhra Pradesh': ['Visakhapatnam', 'Vijayawada', 'Guntur', 'Tirupati'],
+  'Karnataka': ['Bangalore', 'Mysore', 'Mangalore', 'Hubli'],
+  'Kerala': ['Kochi', 'Thiruvananthapuram', 'Kozhikode', 'Thrissur'],
+  'Tamil Nadu': ['Chennai', 'Coimbatore', 'Madurai', 'Salem'],
+  'Telangana': ['Hyderabad', 'Warangal', 'Nizamabad', 'Karimnagar'],
+  'Goa': ['Panaji', 'Margao', 'Vasco da Gama', 'Mapusa'],
+  'Gujarat': ['Ahmedabad', 'Surat', 'Vadodara', 'Rajkot'],
+  'Maharashtra': ['Mumbai', 'Pune', 'Nagpur', 'Nashik', 'Thane'],
+  'Rajasthan': ['Jaipur', 'Jodhpur', 'Udaipur', 'Kota'],
+  'Delhi': ['New Delhi', 'Delhi Cantonment', 'Dwarka', 'Rohini'],
+  'Haryana': ['Gurgaon', 'Faridabad', 'Panipat', 'Ambala'],
+  'Punjab': ['Chandigarh', 'Ludhiana', 'Amritsar', 'Jalandhar'],
+  'Uttar Pradesh': ['Lucknow', 'Kanpur', 'Ghaziabad', 'Agra', 'Noida'],
+  'West Bengal': ['Kolkata', 'Howrah', 'Durgapur', 'Siliguri'],
+};
+

@@ -1,0 +1,245 @@
+[
+  {
+    "id": "PROP001",
+    "title": "Luxury Beachfront Villa in North Goa",
+    "description": "Stunning 4-bedroom beachfront villa with modern architecture and panoramic sea views. Features include infinity pool, private beach access, and landscaped gardens. Perfect for luxury living or vacation rental investment. Located in the prestigious North Goa area with easy access to beaches, restaurants, and nightlife.",
+    "price": 85000000,
+    "location": {
+      "city": "Panaji",
+      "state": "Goa",
+      "address": "Beach Road, Candolim, North Goa, Goa 403515"
+    },
+    "features": {
+      "bedrooms": 4,
+      "bathrooms": 4,
+      "area": 3500,
+      "propertyType": "Villa"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800",
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800",
+      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800"
+    ],
+    "amenities": ["Swimming Pool", "Private Beach Access", "Garden", "Security System", "Parking", "Sea View", "Gym", "BBQ Area"],
+    "postedDate": "2025-10-15",
+    "featured": true
+  },
+  {
+    "id": "PROP002",
+    "title": "Premium 3BHK Apartment in Bandra West",
+    "description": "Spacious 3BHK apartment in the heart of Mumbai's Bandra West. Modern interiors with Italian marble flooring, modular kitchen, and premium fixtures. Located in a well-maintained society with excellent connectivity to highways and railway station. Close to malls, schools, and hospitals.",
+    "price": 65000000,
+    "location": {
+      "city": "Mumbai",
+      "state": "Maharashtra",
+      "address": "Linking Road, Bandra West, Mumbai, Maharashtra 400050"
+    },
+    "features": {
+      "bedrooms": 3,
+      "bathrooms": 3,
+      "area": 1800,
+      "propertyType": "Apartment"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800",
+      "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800",
+      "https://images.unsplash.com/photo-1600210492493-0946911123ea?w=800"
+    ],
+    "amenities": ["Gym", "Swimming Pool", "Clubhouse", "24x7 Security", "Power Backup", "Covered Parking", "Lift", "Kids Play Area"],
+    "postedDate": "2025-10-12"
+  },
+  {
+    "id": "PROP003",
+    "title": "Modern 4BHK Villa in Whitefield",
+    "description": "Contemporary designed villa in Bangalore's IT hub Whitefield. Features smart home automation, solar panels, and rainwater harvesting. Vastu-compliant construction with premium finishes. Ideal for IT professionals seeking modern amenities with sustainable living.",
+    "price": 45000000,
+    "location": {
+      "city": "Bangalore",
+      "state": "Karnataka",
+      "address": "ITPL Road, Whitefield, Bangalore, Karnataka 560066"
+    },
+    "features": {
+      "bedrooms": 4,
+      "bathrooms": 4,
+      "area": 3200,
+      "propertyType": "Villa"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800",
+      "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=800",
+      "https://images.unsplash.com/photo-1600573472550-8090b5e0745e?w=800"
+    ],
+    "amenities": ["Smart Home", "Solar Panels", "Garden", "Covered Parking", "Security", "Servant Quarter", "Study Room", "Terrace Garden"],
+    "postedDate": "2025-10-10",
+    "featured": true
+  },
+  {
+    "id": "PROP004",
+    "title": "Residential Plot in Baner",
+    "description": "Premium residential plot in rapidly developing Baner area of Pune. Clear title, RERA approved, and ready for construction. Excellent location with 40 feet road frontage. Surrounded by villas and gated communities. All utilities available including water, electricity, and drainage connections.",
+    "price": 18000000,
+    "location": {
+      "city": "Pune",
+      "state": "Maharashtra",
+      "address": "Sus Road, Baner, Pune, Maharashtra 411045"
+    },
+    "features": {
+      "bedrooms": 0,
+      "bathrooms": 0,
+      "area": 2400,
+      "propertyType": "Plot"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800",
+      "https://images.unsplash.com/photo-1464146072230-91cabc968266?w=800",
+      "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800"
+    ],
+    "amenities": ["RERA Approved", "Clear Title", "Road Frontage", "Water Connection", "Electricity Connection", "Gated Community Nearby"],
+    "postedDate": "2025-10-08"
+  },
+  {
+    "id": "PROP005",
+    "title": "Premium Commercial Office Space in Connaught Place",
+    "description": "Grade-A commercial office space in Delhi's prime business district. Fully furnished with modern workstations, conference rooms, and reception area. Central AC, high-speed elevators, and 24x7 power backup. Perfect for corporate offices, startups, or co-working spaces.",
+    "price": 95000000,
+    "location": {
+      "city": "New Delhi",
+      "state": "Delhi",
+      "address": "Barakhamba Road, Connaught Place, New Delhi, Delhi 110001"
+    },
+    "features": {
+      "bedrooms": 0,
+      "bathrooms": 4,
+      "area": 4500,
+      "propertyType": "Commercial"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800",
+      "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=800",
+      "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800"
+    ],
+    "amenities": ["Furnished", "Centralized AC", "High Speed Elevators", "Power Backup", "Security", "Parking", "Conference Rooms", "Pantry"],
+    "postedDate": "2025-10-14"
+  },
+  {
+    "id": "PROP006",
+    "title": "Spacious 4BHK Independent House in Anna Nagar",
+    "description": "Well-maintained independent house in Chennai's upscale Anna Nagar locality. Traditional South Indian architecture with modern amenities. Large courtyard, car porch, and separate servant quarter. Ideal for large families seeking peaceful living in the heart of the city.",
+    "price": 35000000,
+    "location": {
+      "city": "Chennai",
+      "state": "Tamil Nadu",
+      "address": "2nd Main Road, Anna Nagar West, Chennai, Tamil Nadu 600040"
+    },
+    "features": {
+      "bedrooms": 4,
+      "bathrooms": 3,
+      "area": 2800,
+      "propertyType": "House"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=800",
+      "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=800",
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800"
+    ],
+    "amenities": ["Car Porch", "Garden", "Servant Quarter", "Bore Well", "Solar Water Heater", "Compound Wall", "Covered Parking"],
+    "postedDate": "2025-10-11"
+  },
+  {
+    "id": "PROP007",
+    "title": "Luxury 3BHK Apartment in Gachibowli",
+    "description": "Brand new luxury apartment in Hyderabad's IT corridor Gachibowli. Premium amenities including infinity pool, spa, and sports facilities. Smart home features with app-based controls. Vastu-compliant design with excellent natural lighting and ventilation. Close to HITEC City and major IT parks.",
+    "price": 28000000,
+    "location": {
+      "city": "Hyderabad",
+      "state": "Telangana",
+      "address": "Financial District, Gachibowli, Hyderabad, Telangana 500032"
+    },
+    "features": {
+      "bedrooms": 3,
+      "bathrooms": 3,
+      "area": 2200,
+      "propertyType": "Apartment"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800",
+      "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=800",
+      "https://images.unsplash.com/photo-1600607687644-aac4c3eac7f4?w=800"
+    ],
+    "amenities": ["Infinity Pool", "Gym", "Spa", "Clubhouse", "Indoor Games", "Jogging Track", "Smart Home", "24x7 Security", "Parking"],
+    "postedDate": "2025-10-09",
+    "featured": true
+  },
+  {
+    "id": "PROP008",
+    "title": "Heritage Style Villa in Jaipur",
+    "description": "Beautiful heritage-style villa inspired by Rajasthani architecture. Features traditional jharokhas, carved pillars, and courtyards. Modern amenities seamlessly integrated with classic design. Located in peaceful residential area with easy access to tourist attractions and city center.",
+    "price": 42000000,
+    "location": {
+      "city": "Jaipur",
+      "state": "Rajasthan",
+      "address": "Civil Lines, Jaipur, Rajasthan 302006"
+    },
+    "features": {
+      "bedrooms": 5,
+      "bathrooms": 4,
+      "area": 4000,
+      "propertyType": "Villa"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800",
+      "https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=800",
+      "https://images.unsplash.com/photo-1600573472591-ee6b68d14c68?w=800"
+    ],
+    "amenities": ["Courtyard", "Garden", "Traditional Architecture", "Modern Kitchen", "Parking", "Security", "Servant Quarters", "Terrace"],
+    "postedDate": "2025-10-07"
+  },
+  {
+    "id": "PROP009",
+    "title": "Exclusive Penthouse in South Kolkata",
+    "description": "Luxurious penthouse offering 360-degree city views in South Kolkata's premium locality. Private terrace garden, imported fixtures, and designer interiors. Building equipped with world-class amenities including concierge service. Walking distance to restaurants, shopping centers, and metro station.",
+    "price": 52000000,
+    "location": {
+      "city": "Kolkata",
+      "state": "West Bengal",
+      "address": "Ballygunge Circular Road, Kolkata, West Bengal 700019"
+    },
+    "features": {
+      "bedrooms": 4,
+      "bathrooms": 4,
+      "area": 3800,
+      "propertyType": "Apartment"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800",
+      "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800",
+      "https://images.unsplash.com/photo-1600607687644-c7171b42498b?w=800"
+    ],
+    "amenities": ["Private Terrace", "City View", "Concierge Service", "Gym", "Swimming Pool", "Clubhouse", "Parking", "High Speed Elevators"],
+    "postedDate": "2025-10-13"
+  },
+  {
+    "id": "PROP010",
+    "title": "Serene Farmhouse with Vineyard in Nashik",
+    "description": "Expansive farmhouse property with operational vineyard in Nashik wine country. Includes main house, guest cottages, and farm buildings. Organic farming setup with drip irrigation. Perfect for weekend getaways or wine production business. Peaceful countryside location with beautiful landscapes.",
+    "price": 32000000,
+    "location": {
+      "city": "Nashik",
+      "state": "Maharashtra",
+      "address": "Gangapur Road, Nashik, Maharashtra 422005"
+    },
+    "features": {
+      "bedrooms": 5,
+      "bathrooms": 5,
+      "area": 8000,
+      "propertyType": "Villa"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800",
+      "https://images.unsplash.com/photo-1600047509358-9dc75507daeb?w=800",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800"
+    ],
+    "amenities": ["Vineyard", "Guest Cottages", "Farm Buildings", "Organic Farming", "Bore Well", "Solar Panels", "Garden", "Parking", "Peaceful Location"],
+    "postedDate": "2025-10-05"
+  }
+]
