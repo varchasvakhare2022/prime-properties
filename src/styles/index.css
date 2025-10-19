@@ -54,8 +54,13 @@ html {
 }
 
 @layer base {
+  html {
+    @apply overflow-x-hidden;
+  }
+  
   body {
-    @apply bg-dark-bg text-white;
+    @apply bg-dark-bg text-white overflow-x-hidden;
+    max-width: 100vw;
   }
 }
 

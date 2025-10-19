@@ -68,13 +68,17 @@ const Navbar = () => {
       <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 animate-gold-shimmer ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled
             ? 'bg-dark-bg/80 backdrop-blur-xl shadow-gold-md border-b border-primary/10'
             : 'bg-transparent'
         }`}
       >
-        <div className="container-custom">
+        {/* Gold Shimmer Effect Overlay */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-full animate-gold-shimmer" />
+        </div>
+        <div className="container-custom relative z-10">
           <div className="flex items-center justify-between h-20">
             {/* Left Side - Logo, Brand, Home */}
             <div className="flex items-center space-x-8">
