@@ -15,7 +15,9 @@ const Properties = () => {
   const [sortBy, setSortBy] = useState('newest');
   const [showFilters, setShowFilters] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [filters, setFilters] = useState({
+  
+  // Default filter values
+  const defaultFilters = {
     state: 'All States',
     city: 'All Cities',
     budgetMin: 1000000,
@@ -25,7 +27,13 @@ const Properties = () => {
     bathrooms: 'all',
     areaMin: '',
     areaMax: '',
-  });
+  };
+  
+  // Actual filters used for filtering (only updates on Apply)
+  const [filters, setFilters] = useState(defaultFilters);
+  
+  // Temporary filters that user is modifying
+  const [tempFilters, setTempFilters] = useState(defaultFilters);
 
   // Filter and search properties
   const filteredProperties = useMemo(() => {
@@ -138,28 +146,23 @@ const Properties = () => {
   }, [debouncedSearchQuery, filters, sortBy]); // Use debounced search query
 
   const handleFilterChange = (filterName, value) => {
-    setFilters(prev => ({
+    // Update temporary filters only (doesn't trigger re-filter)
+    setTempFilters(prev => ({
       ...prev,
       [filterName]: value,
     }));
   };
 
   const handleApplyFilters = () => {
+    // Apply temporary filters to actual filters
+    setFilters(tempFilters);
     setShowFilters(false);
   };
 
   const handleResetFilters = () => {
-    setFilters({
-      state: 'All States',
-      city: 'All Cities',
-      budgetMin: 1000000,
-      budgetMax: 100000000,
-      propertyTypes: [],
-      bedrooms: 'all',
-      bathrooms: 'all',
-      areaMin: '',
-      areaMax: '',
-    });
+    // Reset both actual and temporary filters
+    setFilters(defaultFilters);
+    setTempFilters(defaultFilters);
     setSearchQuery('');
   };
 
@@ -272,12 +275,16 @@ const Properties = () => {
           <div className="flex flex-col lg:flex-row gap-8">
             {/* Advanced Filters Component */}
             <PropertyFilters
-              filters={filters}
+              filters={tempFilters}
               onFilterChange={handleFilterChange}
               onApply={handleApplyFilters}
               onReset={handleResetFilters}
               isOpen={showFilters}
-              onClose={() => setShowFilters(false)}
+              onClose={() => {
+                // Revert temporary filters to actual filters when closing without applying
+                setTempFilters(filters);
+                setShowFilters(false);
+              }}
             />
 
             {/* Property Grid */}
@@ -287,7 +294,11 @@ const Properties = () => {
                   Found <span className="text-white font-semibold">{filteredProperties.length}</span> properties
                 </p>
                 <button
-                  onClick={() => setShowFilters(true)}
+                  onClick={() => {
+                    // Sync temporary filters with actual filters when opening
+                    setTempFilters(filters);
+                    setShowFilters(true);
+                  }}
                   className="lg:hidden px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white flex items-center gap-2 hover:bg-white/10 transition-colors"
                 >
                   <SlidersHorizontal className="w-4 h-4" />
