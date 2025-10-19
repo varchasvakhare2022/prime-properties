@@ -148,7 +148,7 @@ const Navbar = () => {
                 >
                   <span className="relative z-10 drop-shadow-sm">Get Started</span>
                   <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-secondary to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    className="absolute inset-0 bg-gradient-to-r from-secondary to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full"
                   />
                 </Link>
               </motion.div>
