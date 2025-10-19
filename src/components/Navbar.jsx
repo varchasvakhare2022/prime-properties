@@ -118,11 +118,10 @@ const Navbar = () => {
               <Link to="/" className="flex items-center space-x-3 group">
                 <motion.div
                   whileHover={{ 
-                    rotate: 360, 
-                    scale: 1.15,
-                    boxShadow: "0 0 30px rgba(212, 175, 55, 0.8)"
+                    scale: 1.08,
+                    y: -2,
                   }}
-                  transition={{ duration: 0.6, ease: [0.43, 0.13, 0.23, 0.96] }}
+                  transition={{ duration: 0.4, ease: [0.43, 0.13, 0.23, 0.96] }}
                   className="relative"
                 >
                   <motion.div 
@@ -135,14 +134,20 @@ const Navbar = () => {
                       ]
                     }}
                     transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                    whileHover={{
+                      boxShadow: '0 6px 30px rgba(212, 175, 55, 0.7)',
+                    }}
                   >
                     <motion.svg
                       className="w-6 h-6 text-black drop-shadow-lg"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
-                      animate={{ scale: [1, 1.05, 1] }}
-                      transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                      whileHover={{ 
+                        scale: 1.1,
+                        rotate: [0, -3, 3, 0],
+                      }}
+                      transition={{ duration: 0.5, ease: [0.43, 0.13, 0.23, 0.96] }}
                     >
                       <path
                         strokeLinecap="round"
@@ -153,16 +158,16 @@ const Navbar = () => {
                     </motion.svg>
                   </motion.div>
                   <motion.div
-                    className="absolute inset-0 rounded-lg bg-gradient-to-br from-primary to-secondary blur-xl"
-                    animate={{ opacity: [0.3, 0.6, 0.3] }}
-                    transition={{ duration: 3, repeat: Infinity }}
+                    className="absolute inset-0 rounded-lg bg-gradient-to-br from-primary to-secondary blur-xl opacity-30"
+                    whileHover={{ opacity: 0.6, scale: 1.1 }}
+                    transition={{ duration: 0.4 }}
                   />
                 </motion.div>
                 
                 <motion.span
                   className="text-xl font-bold text-gold-shine drop-shadow-[0_0_10px_rgba(212,175,55,0.5)]"
                   whileHover={{ 
-                    scale: 1.05,
+                    scale: 1.03,
                     textShadow: "0 0 15px rgba(212, 175, 55, 0.8)"
                   }}
                   transition={{ duration: 0.3 }}
