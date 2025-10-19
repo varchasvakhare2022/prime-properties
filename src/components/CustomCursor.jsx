@@ -8,28 +8,24 @@ const CustomCursor = ({ section = 'default' }) => {
   useEffect(() => {
     const handleMouseMove = (e) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-
-    const handleMouseEnter = (e) => {
-      if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || e.target.closest('a') || e.target.closest('button')) {
-        setIsHovering(true);
-      }
-    };
-
-    const handleMouseLeave = (e) => {
-      if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || e.target.closest('a') || e.target.closest('button')) {
-        setIsHovering(false);
-      }
+      
+      // Check if hovering over interactive elements
+      const target = e.target;
+      const isInteractive = 
+        target.tagName === 'A' || 
+        target.tagName === 'BUTTON' || 
+        target.closest('a') || 
+        target.closest('button') ||
+        target.getAttribute('role') === 'button' ||
+        window.getComputedStyle(target).cursor === 'pointer';
+      
+      setIsHovering(isInteractive);
     };
 
     window.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseenter', handleMouseEnter, true);
-    document.addEventListener('mouseleave', handleMouseLeave, true);
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseenter', handleMouseEnter, true);
-      document.removeEventListener('mouseleave', handleMouseLeave, true);
     };
   }, []);
 
@@ -90,10 +86,10 @@ const CustomCursor = ({ section = 'default' }) => {
   const style = getCursorStyle();
 
   return (
-    <>
+    <div className="custom-cursor-container fixed inset-0 pointer-events-none z-[9999]">
       {/* Main Cursor */}
       <motion.div
-        className="custom-cursor fixed pointer-events-none z-[9999] mix-blend-screen"
+        className="custom-cursor absolute pointer-events-none mix-blend-screen"
         animate={{
           x: mousePosition.x - style.size / 2,
           y: mousePosition.y - style.size / 2,
@@ -116,7 +112,7 @@ const CustomCursor = ({ section = 'default' }) => {
 
       {/* Inner Dot */}
       <motion.div
-        className="fixed pointer-events-none z-[10000]"
+        className="absolute pointer-events-none"
         animate={{
           x: mousePosition.x - 3,
           y: mousePosition.y - 3,
@@ -139,7 +135,7 @@ const CustomCursor = ({ section = 'default' }) => {
       {/* Outer Ring - Animated */}
       {style.animation !== 'none' && (
         <motion.div
-          className={`fixed pointer-events-none z-[9998] ${
+          className={`absolute pointer-events-none ${
             style.animation === 'pulse' ? 'animate-pulse' :
             style.animation === 'rotate' ? 'animate-spin' :
             style.animation === 'glow' ? 'animate-luxury-glow' :
@@ -163,7 +159,7 @@ const CustomCursor = ({ section = 'default' }) => {
           }}
         />
       )}
-    </>
+    </div>
   );
 };
 
