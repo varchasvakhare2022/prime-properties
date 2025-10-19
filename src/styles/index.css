@@ -14,54 +14,32 @@ html {
   }
 }
 
-/* Simple Black-Gold Scrollbar */
+/* Hide Scrollbar Completely */
 * {
-  scrollbar-width: thin;
-  scrollbar-color: #d4af37 #000000;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
 }
 
 *::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  display: none; /* Chrome, Safari, Opera */
+  width: 0;
+  height: 0;
 }
 
 *::-webkit-scrollbar-track {
-  background: #000000;
+  display: none;
 }
 
 *::-webkit-scrollbar-thumb {
-  background: #d4af37;
-  border-radius: 0;
-}
-
-*::-webkit-scrollbar-thumb:hover {
-  background: #eec856;
+  display: none;
 }
 
 *::-webkit-scrollbar-corner {
-  background: #000000;
+  display: none;
 }
 
-/* Hide scrollbar arrows/buttons */
 *::-webkit-scrollbar-button {
   display: none !important;
-  width: 0 !important;
-  height: 0 !important;
-  background: transparent !important;
-}
-
-*::-webkit-scrollbar-button:single-button {
-  display: none !important;
-  width: 0 !important;
-  height: 0 !important;
-}
-
-*::-webkit-scrollbar-button:start:decrement,
-*::-webkit-scrollbar-button:end:increment {
-  display: none !important;
-  width: 0 !important;
-  height: 0 !important;
-  background: transparent !important;
 }
 
 @layer base {
@@ -317,35 +295,15 @@ html {
     display: none;
   }
 
-  /* Simple Gold Scrollbar Utility */
+  /* Hide Gold Scrollbar Utility */
   .scrollbar-gold::-webkit-scrollbar {
-    width: 8px;
+    display: none;
+    width: 0;
   }
 
-  .scrollbar-gold::-webkit-scrollbar-track {
-    background: #000000;
-  }
-
-  .scrollbar-gold::-webkit-scrollbar-thumb {
-    background: #d4af37;
-    border-radius: 0;
-  }
-
-  .scrollbar-gold::-webkit-scrollbar-thumb:hover {
-    background: #eec856;
-  }
-
-  /* Firefox scrollbar */
   .scrollbar-gold {
-    scrollbar-width: thin;
-    scrollbar-color: #d4af37 #000000;
-  }
-
-  /* Remove arrows from custom gold scrollbar */
-  .scrollbar-gold::-webkit-scrollbar-button {
-    display: none !important;
-    width: 0 !important;
-    height: 0 !important;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
 
   /* Custom Range Slider Styles */
