@@ -376,7 +376,7 @@ const PropertyFilters = ({ filters, onFilterChange, onApply, onReset, isOpen, on
       {/* Desktop Sidebar */}
       <aside className="hidden lg:block lg:w-80 flex-shrink-0">
         <div className="sticky top-24 backdrop-blur-xl bg-black/60 border border-primary/20 rounded-3xl shadow-gold-md flex flex-col max-h-[calc(100vh-120px)]">
-          <div className="p-6 overflow-y-auto scrollbar-gold flex-1">
+          <div className="p-6 overflow-y-auto scrollbar-hide flex-1">
             {filterContent}
           </div>
         </div>
@@ -400,7 +400,7 @@ const PropertyFilters = ({ filters, onFilterChange, onApply, onReset, isOpen, on
               onClick={(e) => e.stopPropagation()}
               className="absolute left-0 top-0 bottom-0 w-80 bg-black/95 backdrop-blur-xl border-r border-primary/20 shadow-gold-lg flex flex-col"
             >
-              <div className="p-6 overflow-y-auto scrollbar-gold flex-1">
+              <div className="p-6 overflow-y-auto scrollbar-hide flex-1">
                 {filterContent}
               </div>
             </motion.div>
