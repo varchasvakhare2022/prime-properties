@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin } from 'lucide-react';
 import { useState } from 'react';
+import Logo from './Logo';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -39,33 +40,28 @@ const Footer = () => {
             className="lg:col-span-2"
           >
             <Link to="/" className="flex items-center space-x-3 mb-6 group">
-              <motion.div 
-                className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-gold-lg relative"
-                whileHover={{ rotate: 360, scale: 1.1 }}
-                transition={{ duration: 0.6 }}
+              <motion.div
+                whileHover={{ 
+                  scale: 1.08,
+                  y: -2,
+                }}
+                transition={{ duration: 0.4, ease: [0.43, 0.13, 0.23, 0.96] }}
+                className="relative"
               >
-                <svg
-                  className="w-7 h-7 text-black drop-shadow-lg relative z-10"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-                  />
-                </svg>
+                <Logo size="lg" animate={true} />
                 <motion.div
-                  className="absolute inset-0 rounded-lg bg-gradient-to-br from-primary to-secondary blur-xl opacity-50"
-                  animate={{ opacity: [0.3, 0.6, 0.3] }}
-                  transition={{ duration: 3, repeat: Infinity }}
+                  className="absolute inset-0 rounded-lg bg-gradient-to-br from-primary to-secondary blur-xl opacity-30"
+                  whileHover={{ opacity: 0.6, scale: 1.1 }}
+                  transition={{ duration: 0.4 }}
                 />
               </motion.div>
               <motion.span 
                 className="text-2xl font-bold text-gold-shine drop-shadow-[0_0_10px_rgba(212,175,55,0.5)]"
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ 
+                  scale: 1.03,
+                  textShadow: "0 0 15px rgba(212, 175, 55, 0.8)"
+                }}
+                transition={{ duration: 0.3 }}
               >
                 Prime Properties
               </motion.span>

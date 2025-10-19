@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import Logo from './Logo';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -124,39 +125,7 @@ const Navbar = () => {
                   transition={{ duration: 0.4, ease: [0.43, 0.13, 0.23, 0.96] }}
                   className="relative"
                 >
-                  <motion.div 
-                    className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-gold-md"
-                    animate={{
-                      boxShadow: [
-                        '0 4px 20px rgba(212, 175, 55, 0.3)',
-                        '0 4px 25px rgba(212, 175, 55, 0.5)',
-                        '0 4px 20px rgba(212, 175, 55, 0.3)',
-                      ]
-                    }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                    whileHover={{
-                      boxShadow: '0 6px 30px rgba(212, 175, 55, 0.7)',
-                    }}
-                  >
-                    <motion.svg
-                      className="w-6 h-6 text-black drop-shadow-lg"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      whileHover={{ 
-                        scale: 1.1,
-                        rotate: [0, -3, 3, 0],
-                      }}
-                      transition={{ duration: 0.5, ease: [0.43, 0.13, 0.23, 0.96] }}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2.5}
-                        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-                      />
-                    </motion.svg>
-                  </motion.div>
+                  <Logo size="md" animate={true} />
                   <motion.div
                     className="absolute inset-0 rounded-lg bg-gradient-to-br from-primary to-secondary blur-xl opacity-30"
                     whileHover={{ opacity: 0.6, scale: 1.1 }}
