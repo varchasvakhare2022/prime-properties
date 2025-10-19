@@ -77,15 +77,15 @@ const Footer = () => {
             
             {/* Contact Info */}
             <div className="space-y-3">
-              <a href="#" className="flex items-center gap-3 text-gray-400 hover:text-primary transition-colors inline-flex">
+              <a href="#" className="flex items-center gap-3 text-gray-400 hover:text-primary transition-colors w-fit">
                 <MapPin className="w-5 h-5 flex-shrink-0" />
                 <span className="text-sm md:text-base">123 Prime Street, Beverly Hills, CA 90210</span>
               </a>
-              <a href="tel:+15551234567" className="flex items-center gap-3 text-gray-400 hover:text-primary transition-colors inline-flex">
+              <a href="tel:+15551234567" className="flex items-center gap-3 text-gray-400 hover:text-primary transition-colors w-fit">
                 <Phone className="w-5 h-5 flex-shrink-0" />
                 <span className="text-sm md:text-base">+1 (555) 123-4567</span>
               </a>
-              <a href="mailto:info@primeproperties.com" className="flex items-center gap-3 text-gray-400 hover:text-primary transition-colors inline-flex">
+              <a href="mailto:info@primeproperties.com" className="flex items-center gap-3 text-gray-400 hover:text-primary transition-colors w-fit">
                 <Mail className="w-5 h-5 flex-shrink-0" />
                 <span className="text-sm md:text-base">info@primeproperties.com</span>
               </a>
@@ -105,7 +105,7 @@ const Footer = () => {
                 <li key={link.path}>
                   <Link
                     to={link.path}
-                    className="text-gray-400 hover:text-primary transition-colors duration-200 inline-flex items-center gap-2 group"
+                    className="text-gray-400 hover:text-primary transition-colors duration-200 flex items-center gap-2 group w-fit"
                   >
                     <span className="w-0 group-hover:w-2 h-0.5 bg-primary transition-all duration-200" />
                     {link.name}
@@ -187,15 +187,15 @@ const Footer = () => {
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              className="flex gap-6 text-sm"
+              className="flex flex-wrap gap-6 text-sm"
             >
-              <a href="#" className="text-gray-400 hover:text-primary transition-colors inline-block">
+              <a href="#" className="text-gray-400 hover:text-primary transition-colors">
                 Privacy Policy
               </a>
-              <a href="#" className="text-gray-400 hover:text-primary transition-colors inline-block">
+              <a href="#" className="text-gray-400 hover:text-primary transition-colors">
                 Terms of Service
               </a>
-              <a href="#" className="text-gray-400 hover:text-primary transition-colors inline-block">
+              <a href="#" className="text-gray-400 hover:text-primary transition-colors">
                 Cookie Policy
               </a>
             </motion.div>
