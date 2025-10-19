@@ -42,18 +42,12 @@ const Footer = () => {
             <Link to="/" className="flex items-center space-x-3 mb-6 group">
               <motion.div
                 whileHover={{ 
-                  scale: 1.08,
-                  y: -2,
+                  scale: 1.05,
+                  y: -1,
                 }}
-                transition={{ duration: 0.4, ease: [0.43, 0.13, 0.23, 0.96] }}
-                className="relative"
+                transition={{ duration: 0.3, ease: [0.43, 0.13, 0.23, 0.96] }}
               >
-                <Logo size="lg" animate={true} />
-                <motion.div
-                  className="absolute inset-0 rounded-lg bg-gradient-to-br from-primary to-secondary blur-xl opacity-30"
-                  whileHover={{ opacity: 0.6, scale: 1.1 }}
-                  transition={{ duration: 0.4 }}
-                />
+                <Logo size="lg" animate={false} />
               </motion.div>
               <motion.span 
                 className="text-2xl font-bold text-gold-shine drop-shadow-[0_0_10px_rgba(212,175,55,0.5)]"

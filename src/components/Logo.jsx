@@ -15,84 +15,52 @@ const Logo = ({ size = 'md', animate = true, className = '' }) => {
   const currentSize = sizes[size];
 
   const LogoContent = () => (
-    <div className={`${currentSize.container} ${className} relative rounded-lg bg-gradient-to-br from-primary via-[#e0b952] to-secondary flex items-center justify-center shadow-[0_8px_32px_rgba(212,175,55,0.4)] overflow-hidden border border-[#ffd700]/20`}>
-      {/* Enhanced Background Pattern */}
-      <div className="absolute inset-0 opacity-15">
+    <div className={`${currentSize.container} ${className} relative rounded-lg bg-gradient-to-br from-[#d4af37] to-[#b8941f] flex items-center justify-center shadow-[0_2px_8px_rgba(0,0,0,0.3)] overflow-hidden border border-[#f4d58d]/30`}>
+      {/* Subtle texture overlay */}
+      <div className="absolute inset-0 opacity-5">
         <div 
           className="absolute inset-0"
           style={{
-            backgroundImage: `
-              repeating-linear-gradient(45deg, #ffd700 0px, #ffd700 1px, transparent 1px, transparent 15px),
-              repeating-linear-gradient(-45deg, #ffd700 0px, #ffd700 1px, transparent 1px, transparent 15px)
-            `,
+            backgroundImage: `repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 4px)`,
           }}
         />
       </div>
 
-      {/* Center Glow */}
-      <div className="absolute inset-0 bg-gradient-radial from-white/10 via-transparent to-transparent" />
-
-      {/* Luxury House Icon */}
+      {/* House Icon */}
       <svg
         className={`${currentSize.icon} relative z-10`}
         viewBox="0 0 256 256"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        {/* Gradients */}
-        <defs>
-          <linearGradient id="darkGold" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" style={{ stopColor: '#1a1a1a', stopOpacity: 1 }} />
-            <stop offset="50%" style={{ stopColor: '#0a0a0a', stopOpacity: 1 }} />
-            <stop offset="100%" style={{ stopColor: '#000000', stopOpacity: 1 }} />
-          </linearGradient>
-          <linearGradient id="goldAccent" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style={{ stopColor: '#1a1a1a', stopOpacity: 0.9 }} />
-            <stop offset="100%" style={{ stopColor: '#0a0a0a', stopOpacity: 1 }} />
-          </linearGradient>
-          <filter id="glow">
-            <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-            <feMerge>
-              <feMergeNode in="coloredBlur"/>
-              <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-          </filter>
-        </defs>
+        {/* Simple solid colors for professional look */}
+        <defs></defs>
         
         <g transform="translate(128, 128)">
           {/* Roof */}
           <path 
             d="M -60 -20 L 0 -70 L 60 -20 L 50 -20 L 50 -10 L -50 -10 L -50 -20 Z" 
-            fill="url(#darkGold)" 
+            fill="#1a1a1a" 
             stroke="#000000" 
-            strokeWidth="4"
+            strokeWidth="3"
             strokeLinejoin="round"
-          />
-          
-          {/* Roof highlight line */}
-          <line 
-            x1="-40" y1="-35" x2="40" y2="-35" 
-            stroke="#000000" 
-            strokeWidth="2.5" 
-            opacity="0.5"
-            strokeLinecap="round"
           />
           
           {/* Main House Body */}
           <rect 
             x="-50" y="-10" width="100" height="70" 
-            fill="url(#goldAccent)" 
+            fill="#1a1a1a" 
             stroke="#000000" 
-            strokeWidth="4"
-            rx="3"
+            strokeWidth="3"
+            rx="2"
           />
           
           {/* Door */}
           <rect 
             x="-15" y="20" width="30" height="40" 
-            fill="url(#darkGold)"
+            fill="#0a0a0a"
             stroke="#000000"
-            strokeWidth="3"
+            strokeWidth="2.5"
             rx="2"
           />
           
@@ -100,18 +68,18 @@ const Logo = ({ size = 'md', animate = true, className = '' }) => {
           <rect 
             x="-12" y="23" width="24" height="16" 
             fill="none" 
-            stroke="#000000" 
-            strokeWidth="2"
+            stroke="#1a1a1a" 
+            strokeWidth="1.5"
             rx="1"
-            opacity="0.5"
+            opacity="0.6"
           />
           <rect 
             x="-12" y="42" width="24" height="15" 
             fill="none" 
-            stroke="#000000" 
-            strokeWidth="2"
+            stroke="#1a1a1a" 
+            strokeWidth="1.5"
             rx="1"
-            opacity="0.5"
+            opacity="0.6"
           />
           
           {/* Windows - Left */}
@@ -119,8 +87,8 @@ const Logo = ({ size = 'md', animate = true, className = '' }) => {
             x="-42" y="5" width="20" height="20" 
             fill="#000000"
             stroke="#000000" 
-            strokeWidth="3"
-            rx="2"
+            strokeWidth="2.5"
+            rx="1"
           />
           
           {/* Windows - Right */}
@@ -128,34 +96,34 @@ const Logo = ({ size = 'md', animate = true, className = '' }) => {
             x="22" y="5" width="20" height="20" 
             fill="#000000"
             stroke="#000000" 
-            strokeWidth="3"
-            rx="2"
+            strokeWidth="2.5"
+            rx="1"
           />
           
           {/* Window cross bars - Left */}
-          <line x1="-32" y1="5" x2="-32" y2="25" stroke="#1a1a1a" strokeWidth="2.5"/>
-          <line x1="-42" y1="15" x2="-22" y2="15" stroke="#1a1a1a" strokeWidth="2.5"/>
+          <line x1="-32" y1="5" x2="-32" y2="25" stroke="#2a2a2a" strokeWidth="2"/>
+          <line x1="-42" y1="15" x2="-22" y2="15" stroke="#2a2a2a" strokeWidth="2"/>
           
           {/* Window cross bars - Right */}
-          <line x1="32" y1="5" x2="32" y2="25" stroke="#1a1a1a" strokeWidth="2.5"/>
-          <line x1="22" y1="15" x2="42" y2="15" stroke="#1a1a1a" strokeWidth="2.5"/>
+          <line x1="32" y1="5" x2="32" y2="25" stroke="#2a2a2a" strokeWidth="2"/>
+          <line x1="22" y1="15" x2="42" y2="15" stroke="#2a2a2a" strokeWidth="2"/>
           
           {/* Door handle */}
-          <circle cx="8" cy="42" r="2.5" fill="#000000" stroke="#000000" strokeWidth="1"/>
+          <circle cx="8" cy="42" r="2" fill="#000000"/>
           
           {/* Chimney */}
           <rect 
             x="30" y="-45" width="12" height="30" 
-            fill="url(#goldAccent)" 
+            fill="#1a1a1a" 
             stroke="#000000" 
-            strokeWidth="3"
+            strokeWidth="2.5"
             rx="1"
           />
           
           {/* Chimney cap */}
           <rect 
             x="27" y="-47" width="18" height="5" 
-            fill="url(#darkGold)" 
+            fill="#0a0a0a" 
             stroke="#000000" 
             strokeWidth="2"
             rx="1"
@@ -163,51 +131,18 @@ const Logo = ({ size = 'md', animate = true, className = '' }) => {
           
           {/* Crown on roof peak */}
           <circle 
-            cx="0" cy="-70" r="7" 
-            fill="url(#darkGold)" 
+            cx="0" cy="-70" r="6" 
+            fill="#0a0a0a" 
             stroke="#000000" 
-            strokeWidth="3"
-          />
-          
-          {/* Crown center */}
-          <circle 
-            cx="0" cy="-70" r="3" 
-            fill="#000000" 
-            opacity="0.6"
+            strokeWidth="2.5"
           />
         </g>
       </svg>
 
-      {/* Pulsing glow effect */}
-      {animate && (
-        <motion.div
-          className="absolute inset-0 rounded-lg bg-gradient-to-br from-primary/20 to-secondary/20"
-          animate={{
-            opacity: [0.3, 0.6, 0.3],
-          }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-        />
-      )}
     </div>
   );
 
-  if (animate) {
-    return (
-      <motion.div
-        animate={{
-          filter: [
-            'drop-shadow(0 2px 8px rgba(212, 175, 55, 0.4)) drop-shadow(0 0 2px rgba(255, 215, 0, 0.3))',
-            'drop-shadow(0 4px 12px rgba(212, 175, 55, 0.6)) drop-shadow(0 0 4px rgba(255, 215, 0, 0.5))',
-            'drop-shadow(0 2px 8px rgba(212, 175, 55, 0.4)) drop-shadow(0 0 2px rgba(255, 215, 0, 0.3))',
-          ]
-        }}
-        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <LogoContent />
-      </motion.div>
-    );
-  }
-
+  // No excessive animations - keep it professional
   return <LogoContent />;
 };
 

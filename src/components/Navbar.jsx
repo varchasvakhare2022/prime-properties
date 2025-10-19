@@ -115,22 +115,16 @@ const Navbar = () => {
           <div className="flex items-center justify-between h-20">
             {/* Left Side - Logo, Brand, Home */}
             <div className="flex items-center space-x-8">
-              {/* Logo with Luxury Animation */}
+              {/* Professional Logo */}
               <Link to="/" className="flex items-center space-x-3 group">
                 <motion.div
                   whileHover={{ 
-                    scale: 1.08,
-                    y: -2,
+                    scale: 1.05,
+                    y: -1,
                   }}
-                  transition={{ duration: 0.4, ease: [0.43, 0.13, 0.23, 0.96] }}
-                  className="relative"
+                  transition={{ duration: 0.3, ease: [0.43, 0.13, 0.23, 0.96] }}
                 >
-                  <Logo size="md" animate={true} />
-                  <motion.div
-                    className="absolute inset-0 rounded-lg bg-gradient-to-br from-primary to-secondary blur-xl opacity-30"
-                    whileHover={{ opacity: 0.6, scale: 1.1 }}
-                    transition={{ duration: 0.4 }}
-                  />
+                  <Logo size="md" animate={false} />
                 </motion.div>
                 
                 <motion.span
