@@ -68,7 +68,7 @@ const Navbar = () => {
       <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 animate-gold-shimmer ${
           isScrolled
             ? 'bg-dark-bg/80 backdrop-blur-xl shadow-gold-md border-b border-primary/10'
             : 'bg-transparent'
@@ -140,7 +140,7 @@ const Navbar = () => {
               >
                 <Link
                   to="/properties"
-                  className="relative px-6 py-2.5 rounded-full bg-gradient-to-r from-primary to-secondary text-black font-bold overflow-hidden group shadow-gold-md animate-gold-shimmer"
+                  className="relative px-6 py-2.5 rounded-full bg-gradient-to-r from-primary to-secondary text-black font-bold overflow-hidden group shadow-gold-md"
                 >
                   <span className="relative z-10 drop-shadow-sm">Get Started</span>
                   <motion.div
@@ -229,7 +229,7 @@ const Navbar = () => {
                   <Link
                     to="/properties"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="block w-full px-6 py-4 rounded-full bg-gradient-to-r from-primary to-secondary text-black font-bold text-center touch-manipulation shadow-gold-md animate-gold-shimmer"
+                    className="block w-full px-6 py-4 rounded-full bg-gradient-to-r from-primary to-secondary text-black font-bold text-center touch-manipulation shadow-gold-md"
                   >
                     Get Started
                   </Link>
