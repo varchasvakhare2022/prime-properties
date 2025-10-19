@@ -36,13 +36,13 @@ const Navbar = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          <span className={active ? 'text-white' : 'text-gray-300 hover:text-white'}>
+          <span className={active ? 'text-primary font-bold drop-shadow-[0_0_10px_rgba(212,175,55,0.5)]' : 'text-gray-300 hover:text-primary transition-all duration-300'}>
             {children}
           </span>
           {active && (
             <motion.div
               layoutId="navbar-indicator"
-              className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary to-secondary"
+              className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary via-gold-300 to-secondary shadow-gold-sm"
               initial={false}
               transition={{
                 type: "spring",
@@ -54,7 +54,7 @@ const Navbar = () => {
           {!active && (
             <motion.div
               className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary to-secondary opacity-0"
-              whileHover={{ opacity: 0.5 }}
+              whileHover={{ opacity: 0.7, boxShadow: "0 0 8px rgba(212, 175, 55, 0.5)" }}
               transition={{ duration: 0.2 }}
             />
           )}
@@ -70,7 +70,7 @@ const Navbar = () => {
         animate={{ y: 0 }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled
-            ? 'bg-dark-bg/70 backdrop-blur-xl shadow-lg shadow-primary/5 border-b border-white/5'
+            ? 'bg-dark-bg/80 backdrop-blur-xl shadow-gold-md border-b border-primary/10'
             : 'bg-transparent'
         }`}
       >
@@ -78,16 +78,16 @@ const Navbar = () => {
           <div className="flex items-center justify-between h-20">
             {/* Left Side - Logo, Brand, Home */}
             <div className="flex items-center space-x-8">
-              {/* Logo */}
+              {/* Logo with Luxury Animation */}
               <Link to="/" className="flex items-center space-x-3 group">
                 <motion.div
                   whileHover={{ rotate: 360, scale: 1.1 }}
                   transition={{ duration: 0.6 }}
                   className="relative"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg shadow-primary/30">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-gold-md animate-luxury-glow">
                     <svg
-                      className="w-6 h-6 text-white"
+                      className="w-6 h-6 text-black drop-shadow-lg"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -95,20 +95,20 @@ const Navbar = () => {
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        strokeWidth={2}
+                        strokeWidth={2.5}
                         d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
                       />
                     </svg>
                   </div>
                   <motion.div
-                    className="absolute inset-0 rounded-lg bg-gradient-to-br from-primary to-secondary opacity-0 blur-xl"
-                    whileHover={{ opacity: 0.6 }}
-                    transition={{ duration: 0.3 }}
+                    className="absolute inset-0 rounded-lg bg-gradient-to-br from-primary to-secondary blur-xl"
+                    animate={{ opacity: [0.3, 0.6, 0.3] }}
+                    transition={{ duration: 3, repeat: Infinity }}
                   />
                 </motion.div>
                 
                 <motion.span
-                  className="text-xl font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent"
+                  className="text-xl font-bold text-gold-shine drop-shadow-[0_0_10px_rgba(212,175,55,0.5)]"
                   whileHover={{ scale: 1.05 }}
                 >
                   Prime Properties
@@ -129,17 +129,20 @@ const Navbar = () => {
                 </NavLink>
               ))}
               
-              {/* CTA Button */}
+              {/* CTA Button with Luxury Animation */}
               <motion.div
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ 
+                  scale: 1.05,
+                  boxShadow: "0 0 20px rgba(212, 175, 55, 0.6)"
+                }}
                 whileTap={{ scale: 0.95 }}
                 className="ml-4"
               >
                 <Link
                   to="/properties"
-                  className="relative px-6 py-2.5 rounded-full bg-gradient-to-r from-primary to-secondary text-white font-semibold overflow-hidden group"
+                  className="relative px-6 py-2.5 rounded-full bg-gradient-to-r from-primary to-secondary text-black font-bold overflow-hidden group shadow-gold-md animate-gold-shimmer"
                 >
-                  <span className="relative z-10">Get Started</span>
+                  <span className="relative z-10 drop-shadow-sm">Get Started</span>
                   <motion.div
                     className="absolute inset-0 bg-gradient-to-r from-secondary to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                   />
@@ -226,7 +229,7 @@ const Navbar = () => {
                   <Link
                     to="/properties"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="block w-full px-6 py-4 rounded-full bg-gradient-to-r from-primary to-secondary text-white font-semibold text-center touch-manipulation"
+                    className="block w-full px-6 py-4 rounded-full bg-gradient-to-r from-primary to-secondary text-black font-bold text-center touch-manipulation shadow-gold-md animate-gold-shimmer"
                   >
                     Get Started
                   </Link>

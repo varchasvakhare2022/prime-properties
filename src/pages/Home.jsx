@@ -104,25 +104,30 @@ const Home = () => {
               {/* Gold Glow Border Effect */}
               <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-primary via-secondary to-primary opacity-10 blur-xl -z-10" />
               
-              {/* Luxury Badge */}
+              {/* Luxury Badge with Glow */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.3, duration: 0.5 }}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-primary/10 to-secondary/10 border border-primary/40 mb-8 backdrop-blur-sm"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-primary/10 to-secondary/10 border border-primary/40 mb-8 backdrop-blur-sm animate-luxury-glow"
               >
-                <Award className="w-4 h-4 text-primary" />
+                <motion.div
+                  animate={{ rotate: [0, 360] }}
+                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                >
+                  <Award className="w-4 h-4 text-primary drop-shadow-[0_0_8px_rgba(212,175,55,0.8)]" />
+                </motion.div>
                 <span className="text-sm font-semibold text-primary tracking-wide">Luxury Real Estate</span>
               </motion.div>
 
-              {/* Main Heading */}
+              {/* Main Heading with Luxury Animation */}
               <motion.h1
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5, duration: 0.8 }}
                 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-6 leading-tight"
               >
-                <span className="bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent animate-gradient">
+                <span className="text-gold-shine drop-shadow-[0_0_30px_rgba(212,175,55,0.5)]">
                   Prime Properties
                 </span>
               </motion.h1>
@@ -151,12 +156,20 @@ const Home = () => {
               >
                 <Link to="/properties">
                   <motion.button
-                    whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(212, 175, 55, 0.4)" }}
+                    whileHover={{ 
+                      scale: 1.05, 
+                      boxShadow: "0 0 40px rgba(212, 175, 55, 0.6), 0 0 60px rgba(212, 175, 55, 0.3)" 
+                    }}
                     whileTap={{ scale: 0.95 }}
-                    className="group relative px-6 sm:px-8 py-3 sm:py-4 rounded-xl bg-gradient-to-r from-primary to-secondary text-black font-bold text-base sm:text-lg overflow-hidden shadow-lg shadow-primary/30 min-h-[44px] touch-manipulation w-full sm:w-auto"
+                    className="group relative px-6 sm:px-8 py-3 sm:py-4 rounded-xl bg-gradient-to-r from-primary to-secondary text-black font-bold text-base sm:text-lg overflow-hidden shadow-gold-lg min-h-[44px] touch-manipulation w-full sm:w-auto animate-gold-shimmer"
                   >
                     <span className="relative z-10 flex items-center justify-center gap-2">
-                      <Building2 className="w-5 h-5" />
+                      <motion.div
+                        animate={{ scale: [1, 1.2, 1] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                      >
+                        <Building2 className="w-5 h-5" />
+                      </motion.div>
                       View Properties
                       <motion.span
                         animate={{ x: [0, 5, 0] }}
@@ -171,11 +184,20 @@ const Home = () => {
 
                 <Link to="/contact">
                   <motion.button
-                    whileHover={{ scale: 1.05, borderColor: "rgba(212, 175, 55, 0.6)" }}
+                    whileHover={{ 
+                      scale: 1.05, 
+                      borderColor: "rgba(212, 175, 55, 0.8)",
+                      boxShadow: "0 0 30px rgba(212, 175, 55, 0.4)"
+                    }}
                     whileTap={{ scale: 0.95 }}
-                    className="px-8 py-4 rounded-xl bg-black/30 backdrop-blur-sm border-2 border-primary/30 text-primary font-semibold text-lg hover:bg-primary/10 transition-all duration-300 flex items-center justify-center gap-2"
+                    className="px-8 py-4 rounded-xl bg-black/30 backdrop-blur-sm border-2 border-primary/30 text-primary font-semibold text-lg hover:bg-primary/10 transition-all duration-300 flex items-center justify-center gap-2 group"
                   >
-                    <Key className="w-5 h-5" />
+                    <motion.div
+                      animate={{ rotate: [0, -10, 10, 0] }}
+                      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                    >
+                      <Key className="w-5 h-5 group-hover:drop-shadow-[0_0_8px_rgba(212,175,55,0.8)]" />
+                    </motion.div>
                     Schedule Viewing
                   </motion.button>
                 </Link>
@@ -256,26 +278,28 @@ const Home = () => {
                   {/* Glow Effect on Hover */}
                   <div className={`absolute -inset-0.5 bg-gradient-to-r ${feature.gradient} rounded-2xl opacity-0 group-hover:opacity-100 blur-xl transition-all duration-500`} />
                   
-                  {/* Card */}
-                  <div className="relative h-full backdrop-blur-xl bg-black/40 border border-primary/10 rounded-2xl p-8 hover:border-primary/30 transition-all duration-300">
-                    {/* Icon Container */}
-                    <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                      <Icon className="w-8 h-8 text-white" strokeWidth={2} />
+                  {/* Card with Float Animation */}
+                  <div className="relative h-full backdrop-blur-xl bg-black/40 border border-primary/10 rounded-2xl p-8 hover:border-primary/30 transition-all duration-300 animate-float">
+                    {/* Icon Container with Glow */}
+                    <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center mb-6 shadow-gold-md group-hover:scale-110 group-hover:shadow-gold-lg transition-all duration-300 animate-luxury-glow`}>
+                      <Icon className="w-8 h-8 text-white drop-shadow-lg" strokeWidth={2} />
                     </div>
 
                     {/* Icon Glow */}
                     <div className={`absolute top-8 left-8 w-16 h-16 rounded-xl bg-gradient-to-br ${feature.gradient} blur-2xl opacity-0 group-hover:opacity-60 transition-opacity duration-300`} />
 
                     {/* Content */}
-                    <h3 className="text-2xl font-bold mb-3 text-white group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:bg-clip-text group-hover:from-primary group-hover:to-secondary transition-all duration-300">
+                    <h3 className="text-2xl font-bold mb-3 text-white group-hover:text-primary transition-all duration-300 drop-shadow-lg">
                       {feature.title}
                     </h3>
                     <p className="text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors duration-300">
                       {feature.description}
                     </p>
 
-                    {/* Bottom Accent Line */}
-                    <div className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${feature.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-2xl`} />
+                    {/* Bottom Accent Line with Shimmer */}
+                    <div className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${feature.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-2xl overflow-hidden`}>
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent animate-gold-shimmer"></div>
+                    </div>
 
                     {/* Corner Decorations */}
                     <div className="absolute top-4 right-4 w-20 h-20 bg-gradient-to-br from-primary/10 to-transparent rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -361,11 +385,15 @@ const Home = () => {
                 whileHover={{ scale: 1.05, y: -5 }}
                 className="relative group"
               >
-                <div className="relative backdrop-blur-xl bg-black/40 border border-primary/10 rounded-2xl p-8 h-full hover:border-primary/40 transition-all duration-300">
-                  <div className="w-14 h-14 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                    <Icon className="w-7 h-7 text-black" strokeWidth={2.5} />
-                  </div>
-                  <h3 className="text-2xl font-semibold mb-4 text-white group-hover:text-primary transition-colors">
+                <div className="relative backdrop-blur-xl bg-black/40 border border-primary/10 rounded-2xl p-8 h-full hover:border-primary/40 transition-all duration-300 group-hover:shadow-gold-md">
+                  <motion.div 
+                    className="w-14 h-14 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center mb-6 shadow-gold-sm animate-luxury-glow"
+                    whileHover={{ scale: 1.2, rotate: 5 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <Icon className="w-7 h-7 text-black drop-shadow-lg" strokeWidth={2.5} />
+                  </motion.div>
+                  <h3 className="text-2xl font-semibold mb-4 text-white group-hover:text-primary transition-colors drop-shadow-md">
                     {feature.title}
                   </h3>
                   <p className="text-gray-400 leading-relaxed">{feature.description}</p>
@@ -417,7 +445,7 @@ const Home = () => {
                         transition={{ delay: 0.2 }}
                       >
                         <h2 className="text-4xl md:text-6xl font-bold mb-4">
-                          <span className="bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
+                          <span className="text-gold-shine drop-shadow-[0_0_20px_rgba(212,175,55,0.5)]">
                             Browse Properties
                           </span>
                         </h2>
@@ -427,15 +455,19 @@ const Home = () => {
                       </motion.div>
                     </div>
 
-                    {/* Animated Arrow */}
+                    {/* Animated Arrow with Luxury Effects */}
                     <motion.div
                       animate={{ x: [0, 10, 0] }}
                       transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                       className="flex-shrink-0"
                     >
-                      <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg shadow-primary/30 group-hover:shadow-primary/50 transition-all duration-300">
-                        <ArrowRight className="w-10 h-10 text-black" strokeWidth={2.5} />
-                      </div>
+                      <motion.div 
+                        className="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-gold-lg group-hover:shadow-gold-glow transition-all duration-300 animate-luxury-glow"
+                        whileHover={{ scale: 1.1, rotate: 90 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <ArrowRight className="w-10 h-10 text-black drop-shadow-lg" strokeWidth={2.5} />
+                      </motion.div>
                     </motion.div>
                   </div>
 
