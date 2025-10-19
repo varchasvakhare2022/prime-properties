@@ -243,6 +243,86 @@ html {
     display: none;
   }
 
+  /* Luxury Gold Scrollbar */
+  .scrollbar-gold::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .scrollbar-gold::-webkit-scrollbar-track {
+    background: rgba(26, 26, 26, 0.5);
+    border-radius: 10px;
+  }
+
+  .scrollbar-gold::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #d4af37, #c4941f);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+  }
+
+  .scrollbar-gold::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #eec856, #d4af37);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.8);
+  }
+
+  /* Firefox scrollbar */
+  .scrollbar-gold {
+    scrollbar-width: thin;
+    scrollbar-color: #d4af37 rgba(26, 26, 26, 0.5);
+  }
+
+  /* Custom Range Slider Styles */
+  input[type="range"].slider-gold {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    background: linear-gradient(to right, #1a1a1a 0%, #2a2a2a 100%);
+    border-radius: 10px;
+    outline: none;
+  }
+
+  input[type="range"].slider-gold::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: linear-gradient(135deg, #d4af37, #c4941f);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.6), 0 2px 8px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+  }
+
+  input[type="range"].slider-gold::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.8), 0 4px 12px rgba(0, 0, 0, 0.4);
+  }
+
+  input[type="range"].slider-gold::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: linear-gradient(135deg, #d4af37, #c4941f);
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.6), 0 2px 8px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+  }
+
+  input[type="range"].slider-gold::-moz-range-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.8), 0 4px 12px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Custom Select Dropdown */
+  select.select-gold {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23d4af37' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 20px;
+    padding-right: 40px;
+  }
+
   @keyframes pulse {
     0%, 100% {
       opacity: 0.2;
