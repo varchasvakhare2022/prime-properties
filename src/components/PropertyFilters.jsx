@@ -326,25 +326,27 @@ const PropertyFilters = ({ filters, onFilterChange, onApply, onReset, isOpen, on
         </FilterSection>
       </div>
 
-      {/* Action Buttons */}
-      <div className="mt-8 space-y-3 sticky bottom-0 bg-gradient-to-t from-dark-surface via-dark-surface to-transparent pt-6 -mx-6 px-6 pb-4">
-        <motion.button
-          whileHover={{ 
-            scale: 1.02,
-            boxShadow: "0 0 30px rgba(212, 175, 55, 0.6)"
-          }}
-          whileTap={{ scale: 0.98 }}
-          onClick={onApply}
-          className="w-full py-4 bg-gradient-to-r from-primary to-secondary rounded-xl text-black font-bold shadow-gold-lg hover:shadow-gold-glow transition-all animate-gold-shimmer"
-        >
-          Apply Filters
-        </motion.button>
-        <button
-          onClick={onReset}
-          className="w-full py-4 bg-black/30 hover:bg-primary/10 border-2 border-primary/30 hover:border-primary/50 rounded-xl text-primary font-bold transition-all duration-300"
-        >
-          Reset Filters
-        </button>
+      {/* Action Buttons - Fixed at Bottom */}
+      <div className="mt-8 pt-6 border-t border-primary/20">
+        <div className="space-y-3">
+          <motion.button
+            whileHover={{ 
+              scale: 1.02,
+              boxShadow: "0 0 30px rgba(212, 175, 55, 0.6)"
+            }}
+            whileTap={{ scale: 0.98 }}
+            onClick={onApply}
+            className="w-full py-4 bg-gradient-to-r from-primary to-secondary rounded-xl text-black font-bold shadow-gold-md hover:shadow-gold-lg transition-all duration-300"
+          >
+            Apply Filters
+          </motion.button>
+          <button
+            onClick={onReset}
+            className="w-full py-4 bg-black/30 hover:bg-primary/10 border-2 border-primary/30 hover:border-primary/50 rounded-xl text-primary font-bold transition-all duration-300"
+          >
+            Reset Filters
+          </button>
+        </div>
       </div>
     </>
   );
@@ -353,8 +355,10 @@ const PropertyFilters = ({ filters, onFilterChange, onApply, onReset, isOpen, on
     <>
       {/* Desktop Sidebar */}
       <aside className="hidden lg:block lg:w-80 flex-shrink-0">
-        <div className="sticky top-24 backdrop-blur-xl bg-black/60 border border-primary/20 rounded-3xl p-6 max-h-[calc(100vh-120px)] overflow-y-auto scrollbar-gold shadow-gold-md">
-          {filterContent}
+        <div className="sticky top-24 backdrop-blur-xl bg-black/60 border border-primary/20 rounded-3xl shadow-gold-md flex flex-col max-h-[calc(100vh-120px)]">
+          <div className="p-6 overflow-y-auto scrollbar-gold flex-1">
+            {filterContent}
+          </div>
         </div>
       </aside>
 
@@ -374,9 +378,11 @@ const PropertyFilters = ({ filters, onFilterChange, onApply, onReset, isOpen, on
               exit={{ x: '-100%' }}
               transition={{ type: 'spring', damping: 25 }}
               onClick={(e) => e.stopPropagation()}
-              className="absolute left-0 top-0 bottom-0 w-80 bg-black/95 backdrop-blur-xl border-r border-primary/20 p-6 overflow-y-auto scrollbar-gold shadow-gold-lg"
+              className="absolute left-0 top-0 bottom-0 w-80 bg-black/95 backdrop-blur-xl border-r border-primary/20 shadow-gold-lg flex flex-col"
             >
-              {filterContent}
+              <div className="p-6 overflow-y-auto scrollbar-gold flex-1">
+                {filterContent}
+              </div>
             </motion.div>
           </motion.div>
         )}
