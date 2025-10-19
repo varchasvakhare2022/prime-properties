@@ -6,6 +6,7 @@ import Footer from './components/Footer';
 import { ToastProvider } from './components/Toast';
 import ErrorBoundary from './components/ErrorBoundary';
 import SuspenseFallback from './components/SuspenseFallback';
+import CustomCursor from './components/CustomCursor';
 
 import './styles/index.css';
 
@@ -97,6 +98,9 @@ function App() {
     <ErrorBoundary>
       <Router>
         <ToastProvider>
+          {/* Global Custom Cursor */}
+          <CustomCursor section="default" />
+          
           <div className="min-h-screen bg-dark-bg text-white flex flex-col">
             <Navbar />
             <main className="flex-grow">

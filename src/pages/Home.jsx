@@ -7,8 +7,6 @@ import ScrollReveal from '../components/ScrollReveal';
 import StaggerContainer, { staggerItemVariants } from '../components/StaggerContainer';
 import CursorTrail from '../components/CursorTrail';
 import CounterAnimation from '../components/CounterAnimation';
-import CustomCursor from '../components/CustomCursor';
-import useSectionDetection from '../hooks/useSectionDetection';
 import { 
   ParticleBackground, 
   GradientOrbs, 
@@ -21,9 +19,6 @@ import {
 const Home = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const heroRef = useRef(null);
-  
-  // Section detection for custom cursor
-  const activeSection = useSectionDetection(['hero', 'trust', 'stats', 'features', 'cta']);
   
   // Parallax effect for hero section
   const { scrollYProgress } = useScroll({
@@ -49,8 +44,6 @@ const Home = () => {
   return (
     <PageTransition>
       <div className="min-h-screen">
-      {/* Custom Cursor */}
-      <CustomCursor section={activeSection} />
       
       {/* Hero Section with Luxury Real Estate Background */}
       <section ref={heroRef} data-section="hero" className="relative h-screen flex items-center justify-center overflow-hidden">
