@@ -140,7 +140,7 @@ const Navbar = () => {
                   boxShadow: "0 0 20px rgba(212, 175, 55, 0.6)"
                 }}
                 whileTap={{ scale: 0.95 }}
-                className="ml-4"
+                className="ml-4 rounded-full"
               >
                 <Link
                   to="/properties"
