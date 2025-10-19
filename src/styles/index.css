@@ -61,6 +61,12 @@ html {
   body {
     @apply bg-dark-bg text-white overflow-x-hidden;
     max-width: 100vw;
+    cursor: none;
+  }
+  
+  /* Hide default cursor on all elements */
+  *, *::before, *::after {
+    cursor: none !important;
   }
 }
 
@@ -421,6 +427,22 @@ html {
 
   .animate-glow-pulse {
     animation: glow-pulse 2s ease-in-out infinite;
+  }
+
+  /* Gold Glow animation for cursor */
+  @keyframes gold-glow {
+    0%, 100% {
+      box-shadow: 0 0 10px rgba(212, 175, 55, 0.4), 0 0 20px rgba(212, 175, 55, 0.2);
+      transform: scale(1);
+    }
+    50% {
+      box-shadow: 0 0 30px rgba(212, 175, 55, 0.8), 0 0 50px rgba(212, 175, 55, 0.4);
+      transform: scale(1.1);
+    }
+  }
+
+  .animate-gold-glow {
+    animation: gold-glow 2s ease-in-out infinite;
   }
 
   /* Shimmer effect for loading */

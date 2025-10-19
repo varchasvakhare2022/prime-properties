@@ -7,10 +7,23 @@ import ScrollReveal from '../components/ScrollReveal';
 import StaggerContainer, { staggerItemVariants } from '../components/StaggerContainer';
 import CursorTrail from '../components/CursorTrail';
 import CounterAnimation from '../components/CounterAnimation';
+import CustomCursor from '../components/CustomCursor';
+import useSectionDetection from '../hooks/useSectionDetection';
+import { 
+  ParticleBackground, 
+  GradientOrbs, 
+  InteractiveGrid, 
+  RippleBackground, 
+  GeometricShapes, 
+  SpotlightEffect 
+} from '../components/InteractiveBackground';
 
 const Home = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const heroRef = useRef(null);
+  
+  // Section detection for custom cursor
+  const activeSection = useSectionDetection(['hero', 'trust', 'stats', 'features', 'cta']);
   
   // Parallax effect for hero section
   const { scrollYProgress } = useScroll({
@@ -36,8 +49,16 @@ const Home = () => {
   return (
     <PageTransition>
       <div className="min-h-screen">
+      {/* Custom Cursor */}
+      <CustomCursor section={activeSection} />
+      
       {/* Hero Section with Luxury Real Estate Background */}
-      <section ref={heroRef} className="relative h-screen flex items-center justify-center overflow-hidden">
+      <section ref={heroRef} data-section="hero" className="relative h-screen flex items-center justify-center overflow-hidden">
+        
+        {/* Interactive Background - Gradient Orbs + Particles */}
+        <GradientOrbs mousePosition={mousePosition} />
+        <ParticleBackground color="#d4af37" count={60} />
+        <SpotlightEffect mousePosition={mousePosition} />
         
         {/* Elegant Background with Subtle Pattern */}
         <motion.div style={{ y, opacity }} className="absolute inset-0 bg-gradient-to-br from-dark-bg via-dark-surface to-dark-bg">
@@ -216,7 +237,11 @@ const Home = () => {
       </section>
 
       {/* Trust Features Section */}
-      <section className="py-24 bg-dark-bg relative overflow-hidden">
+      <section data-section="trust" className="py-24 bg-dark-bg relative overflow-hidden">
+        {/* Interactive Background - Geometric Shapes + Grid */}
+        <GeometricShapes mousePosition={mousePosition} />
+        <InteractiveGrid mousePosition={mousePosition} />
+        
         {/* Background Decoration */}
         <div className="absolute inset-0 opacity-20">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary rounded-full blur-[120px] opacity-15" />
@@ -313,8 +338,12 @@ const Home = () => {
       </section>
 
       {/* Stats Section */}
-      <section className="py-20 bg-dark-surface/50 backdrop-blur-sm border-y border-primary/10">
-        <div className="container-custom">
+      <section data-section="stats" className="py-20 bg-dark-surface/50 backdrop-blur-sm border-y border-primary/10 relative overflow-hidden">
+        {/* Interactive Background - Ripples */}
+        <RippleBackground mousePosition={mousePosition} />
+        <ParticleBackground color="#8b5cf6" count={30} />
+        
+        <div className="container-custom relative z-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
               { value: '500+', label: 'Properties Listed' },
@@ -341,11 +370,15 @@ const Home = () => {
       </section>
 
       {/* Why Choose Prime Properties Section */}
-      <section className="py-20 bg-dark-bg relative overflow-hidden">
+      <section data-section="features" className="py-20 bg-dark-bg relative overflow-hidden">
+        {/* Interactive Background - Gradient Orbs + Particles */}
+        <GradientOrbs mousePosition={mousePosition} />
+        <ParticleBackground color="#d4af37" count={40} />
+        
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-0 right-0 w-96 h-96 bg-primary rounded-full blur-[100px]" />
         </div>
-        <div className="container-custom">
+        <div className="container-custom relative z-10">
           <ScrollReveal>
             <div className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl font-bold mb-4">
@@ -409,8 +442,13 @@ const Home = () => {
       </section>
 
       {/* Browse Properties CTA Section */}
-      <section className="py-20 bg-gradient-to-b from-dark-surface to-dark-bg">
-        <div className="container-custom">
+      <section data-section="cta" className="py-20 bg-gradient-to-b from-dark-surface to-dark-bg relative overflow-hidden">
+        {/* Interactive Background - Spotlight + Grid + Particles */}
+        <SpotlightEffect mousePosition={mousePosition} />
+        <InteractiveGrid mousePosition={mousePosition} />
+        <ParticleBackground color="#d4af37" count={50} />
+        
+        <div className="container-custom relative z-10">
           <ScrollReveal direction="up" className="max-w-4xl mx-auto">
             <Link to="/properties">
               <motion.div
