@@ -7,16 +7,17 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#6366f1',
-        secondary: '#8b5cf6',
+        primary: '#d4af37', // Luxurious gold
+        secondary: '#c4941f', // Rich amber
+        accent: '#8b7355', // Warm bronze
         dark: {
-          bg: '#0f172a',
-          surface: '#1e293b',
-          border: '#334155',
+          bg: '#0a0a0a',
+          surface: '#1a1a1a',
+          border: '#2a2a2a',
         }
       },
       backgroundColor: {
-        'dark-primary': '#0f172a',
+        'dark-primary': '#0a0a0a',
       }
     },
   },
