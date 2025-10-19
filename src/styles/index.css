@@ -467,6 +467,192 @@ html {
     animation: gold-glow 2s ease-in-out infinite;
   }
 
+  /* Premium Slide In from Bottom */
+  @keyframes slide-in-bottom {
+    0% {
+      opacity: 0;
+      transform: translateY(100px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-slide-in-bottom {
+    animation: slide-in-bottom 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  }
+
+  /* Premium Slide In from Left */
+  @keyframes slide-in-left {
+    0% {
+      opacity: 0;
+      transform: translateX(-100px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .animate-slide-in-left {
+    animation: slide-in-left 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  }
+
+  /* Premium Slide In from Right */
+  @keyframes slide-in-right {
+    0% {
+      opacity: 0;
+      transform: translateX(100px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .animate-slide-in-right {
+    animation: slide-in-right 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  }
+
+  /* Luxury Text Reveal */
+  @keyframes text-reveal {
+    0% {
+      opacity: 0;
+      transform: translateY(30px) scale(0.95);
+      filter: blur(5px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      filter: blur(0);
+    }
+  }
+
+  .animate-text-reveal {
+    animation: text-reveal 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  }
+
+  /* Gold Pulse (Enhanced) */
+  @keyframes gold-pulse {
+    0%, 100% {
+      box-shadow: 0 0 10px rgba(212, 175, 55, 0.3),
+                  0 0 20px rgba(212, 175, 55, 0.2),
+                  0 0 30px rgba(212, 175, 55, 0.1);
+      transform: scale(1);
+    }
+    50% {
+      box-shadow: 0 0 25px rgba(212, 175, 55, 0.6),
+                  0 0 50px rgba(212, 175, 55, 0.4),
+                  0 0 75px rgba(212, 175, 55, 0.2);
+      transform: scale(1.02);
+    }
+  }
+
+  .animate-gold-pulse {
+    animation: gold-pulse 3s ease-in-out infinite;
+  }
+
+  /* Luxury Bounce */
+  @keyframes luxury-bounce {
+    0%, 100% {
+      transform: translateY(0);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+      transform: translateY(-15%);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+  }
+
+  .animate-luxury-bounce {
+    animation: luxury-bounce 1.5s infinite;
+  }
+
+  /* Rotate with Glow */
+  @keyframes rotate-glow {
+    0% {
+      transform: rotate(0deg);
+      filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.3));
+    }
+    50% {
+      filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.6));
+    }
+    100% {
+      transform: rotate(360deg);
+      filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.3));
+    }
+  }
+
+  .animate-rotate-glow {
+    animation: rotate-glow 8s linear infinite;
+  }
+
+  /* Breathing Effect */
+  @keyframes breathe {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.05);
+      opacity: 0.8;
+    }
+  }
+
+  .animate-breathe {
+    animation: breathe 4s ease-in-out infinite;
+  }
+
+  /* Slide Up and Fade */
+  @keyframes slide-up-fade {
+    0% {
+      opacity: 0;
+      transform: translateY(50px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-slide-up-fade {
+    animation: slide-up-fade 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  }
+
+  /* Zoom In */
+  @keyframes zoom-in {
+    0% {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .animate-zoom-in {
+    animation: zoom-in 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  }
+
+  /* Gold Wave */
+  @keyframes gold-wave {
+    0% {
+      box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7);
+    }
+    70% {
+      box-shadow: 0 0 0 30px rgba(212, 175, 55, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(212, 175, 55, 0);
+    }
+  }
+
+  .animate-gold-wave {
+    animation: gold-wave 2s infinite;
+  }
+
   /* Shimmer effect for loading */
   @keyframes shimmer {
     0% {

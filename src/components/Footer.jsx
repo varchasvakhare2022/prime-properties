@@ -38,9 +38,13 @@ const Footer = () => {
             className="lg:col-span-2"
           >
             <Link to="/" className="flex items-center space-x-3 mb-6 group">
-              <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg">
+              <motion.div 
+                className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-gold-lg relative"
+                whileHover={{ rotate: 360, scale: 1.1 }}
+                transition={{ duration: 0.6 }}
+              >
                 <svg
-                  className="w-7 h-7 text-white"
+                  className="w-7 h-7 text-black drop-shadow-lg relative z-10"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -52,10 +56,18 @@ const Footer = () => {
                     d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
                   />
                 </svg>
-              </div>
-              <span className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                <motion.div
+                  className="absolute inset-0 rounded-lg bg-gradient-to-br from-primary to-secondary blur-xl opacity-50"
+                  animate={{ opacity: [0.3, 0.6, 0.3] }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                />
+              </motion.div>
+              <motion.span 
+                className="text-2xl font-bold text-gold-shine drop-shadow-[0_0_10px_rgba(212,175,55,0.5)]"
+                whileHover={{ scale: 1.05 }}
+              >
                 Prime Properties
-              </span>
+              </motion.span>
             </Link>
             <p className="text-gray-400 mb-6 leading-relaxed max-w-md text-sm md:text-base">
               Your trusted partner in finding the perfect property. We specialize in luxury 
@@ -124,11 +136,34 @@ const Footer = () => {
                     key={index}
                     href={social.href}
                     aria-label={social.label}
-                    whileHover={{ scale: 1.1, y: -3 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="w-11 h-11 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center hover:bg-gradient-to-br hover:from-primary hover:to-secondary hover:border-transparent transition-all duration-300 group touch-manipulation"
+                    initial={{ opacity: 0, scale: 0 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.1, type: "spring", stiffness: 200 }}
+                    whileHover={{ 
+                      scale: 1.2, 
+                      y: -5,
+                      boxShadow: "0 0 20px rgba(212, 175, 55, 0.6)",
+                      transition: { duration: 0.3 }
+                    }}
+                    whileTap={{ scale: 0.9 }}
+                    className="relative w-11 h-11 rounded-lg bg-black/40 border border-primary/20 flex items-center justify-center hover:border-primary/60 transition-all duration-300 group touch-manipulation"
                   >
-                    <Icon className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" />
+                    <Icon className="w-5 h-5 text-primary group-hover:text-white transition-colors relative z-10 drop-shadow-[0_0_8px_rgba(212,175,55,0.5)]" />
+                    <motion.div
+                      className="absolute inset-0 rounded-lg bg-gradient-to-br from-primary to-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    />
+                    <motion.div
+                      className="absolute inset-0 rounded-lg"
+                      initial={false}
+                      whileHover={{
+                        boxShadow: [
+                          "0 0 0 0 rgba(212, 175, 55, 0.7)",
+                          "0 0 0 10px rgba(212, 175, 55, 0)",
+                        ],
+                      }}
+                      transition={{ duration: 0.6 }}
+                    />
                   </motion.a>
                 );
               })}

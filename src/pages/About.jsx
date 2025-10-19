@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Linkedin } from 'lucide-react';
+import { Linkedin, Award, Target, Users, TrendingUp } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
 import ScrollReveal from '../components/ScrollReveal';
 import StaggerContainer, { staggerItemVariants } from '../components/StaggerContainer';
@@ -147,19 +147,24 @@ const About = () => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              whileHover={{ scale: 1.03, y: -5 }}
-              className="group backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl p-8 hover:border-primary/50 transition-all duration-300"
+              whileHover={{ scale: 1.05, y: -10 }}
+              className="group relative"
             >
-              <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
+              <div className="absolute -inset-1 bg-gradient-to-r from-primary to-blue-600 rounded-2xl opacity-0 group-hover:opacity-75 blur-xl transition-all duration-500" />
+              <div className="relative backdrop-blur-xl bg-black/40 border-2 border-primary/20 rounded-2xl p-8 hover:border-primary/60 transition-all duration-300 h-full animate-slide-in-left">
+                <motion.div 
+                  className="w-16 h-16 rounded-xl bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center mb-6 shadow-gold-lg"
+                  whileHover={{ rotate: 360, scale: 1.2 }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <Target className="w-8 h-8 text-black drop-shadow-lg" strokeWidth={2.5} />
+                </motion.div>
+                <h3 className="text-2xl font-semibold mb-4 text-primary drop-shadow-[0_0_10px_rgba(212,175,55,0.5)]">Our Mission</h3>
+                <p className="text-gray-300 leading-relaxed group-hover:text-white transition-colors">
+                  To deliver unparalleled real estate experiences through integrity, 
+                  innovation, and personalized service that exceeds expectations.
+                </p>
               </div>
-              <h3 className="text-2xl font-semibold mb-4 text-primary">Our Mission</h3>
-              <p className="text-gray-300 leading-relaxed">
-                To deliver unparalleled real estate experiences through integrity, 
-                innovation, and personalized service that exceeds expectations.
-              </p>
             </motion.div>
             
             <motion.div
@@ -167,20 +172,24 @@ const About = () => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              whileHover={{ scale: 1.03, y: -5 }}
-              className="group backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl p-8 hover:border-secondary/50 transition-all duration-300"
+              whileHover={{ scale: 1.05, y: -10 }}
+              className="group relative"
             >
-              <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-secondary to-purple-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                </svg>
+              <div className="absolute -inset-1 bg-gradient-to-r from-secondary to-purple-600 rounded-2xl opacity-0 group-hover:opacity-75 blur-xl transition-all duration-500" />
+              <div className="relative backdrop-blur-xl bg-black/40 border-2 border-secondary/20 rounded-2xl p-8 hover:border-secondary/60 transition-all duration-300 h-full animate-slide-in-right">
+                <motion.div 
+                  className="w-16 h-16 rounded-xl bg-gradient-to-br from-secondary to-purple-600 flex items-center justify-center mb-6 shadow-gold-lg"
+                  whileHover={{ rotate: -360, scale: 1.2 }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <Award className="w-8 h-8 text-black drop-shadow-lg" strokeWidth={2.5} />
+                </motion.div>
+                <h3 className="text-2xl font-semibold mb-4 text-secondary drop-shadow-[0_0_10px_rgba(196,148,31,0.5)]">Our Vision</h3>
+                <p className="text-gray-300 leading-relaxed group-hover:text-white transition-colors">
+                  To be the most trusted name in luxury real estate, recognized globally for 
+                  excellence, innovation, and unwavering client satisfaction.
+                </p>
               </div>
-              <h3 className="text-2xl font-semibold mb-4 text-secondary">Our Vision</h3>
-              <p className="text-gray-300 leading-relaxed">
-                To be the most trusted name in luxury real estate, recognized globally for 
-                excellence, innovation, and unwavering client satisfaction.
-              </p>
             </motion.div>
           </div>
         </div>
