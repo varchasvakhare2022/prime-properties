@@ -60,7 +60,7 @@ const PropertyCard = ({ property, loading = false, index = 0 }) => {
       />
       
       <Link to={`/properties/${property.id}`} className="block h-full">
-        <div className="relative backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/20 transition-all duration-300 h-full flex flex-col">
+        <div className="relative backdrop-blur-xl bg-black/40 border border-primary/20 rounded-2xl overflow-hidden hover:border-primary/60 hover:shadow-gold-xl hover:bg-black/60 transition-all duration-300 h-full flex flex-col">
           {/* Property Image */}
           <div className="relative overflow-hidden h-56">
                   <motion.img
@@ -83,17 +83,17 @@ const PropertyCard = ({ property, loading = false, index = 0 }) => {
               transition={{ delay: 0.2 }}
               className="absolute top-4 right-4 z-10"
             >
-              <span className="inline-block px-4 py-2 rounded-full bg-gradient-to-r from-primary to-secondary text-white text-sm font-semibold shadow-lg backdrop-blur-sm">
+              <span className="inline-block px-4 py-2 rounded-full bg-gradient-to-r from-primary to-secondary text-black text-sm font-bold shadow-gold-lg backdrop-blur-sm">
                 {propertyType}
               </span>
             </motion.div>
 
-            {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            {/* Gradient Overlay - Darker for better text contrast */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
             {/* Featured Badge (Optional) */}
             {property.featured && (
-              <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-yellow-500 text-black text-xs font-bold shadow-lg">
+              <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-gradient-to-r from-primary to-secondary text-black text-xs font-bold shadow-gold-md backdrop-blur-sm animate-luxury-glow">
                 Featured
               </div>
             )}
@@ -102,57 +102,57 @@ const PropertyCard = ({ property, loading = false, index = 0 }) => {
           {/* Card Content */}
           <div className="p-6 flex-1 flex flex-col">
             {/* Title */}
-            <h3 className="text-xl font-bold mb-2 text-white group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:bg-clip-text group-hover:from-primary group-hover:to-secondary transition-all duration-300 line-clamp-1">
+            <h3 className="text-xl font-bold mb-2 text-white group-hover:text-primary group-hover:drop-shadow-[0_0_12px_rgba(212,175,55,0.8)] transition-all duration-300 line-clamp-1">
               {property.title}
             </h3>
 
             {/* Location */}
-            <div className="flex items-center text-gray-400 mb-4">
-              <MapPin className="w-4 h-4 mr-2 flex-shrink-0" />
-              <span className="text-sm line-clamp-1">{locationString}</span>
+            <div className="flex items-center text-gray-400 group-hover:text-gray-300 mb-4 transition-colors duration-300">
+              <MapPin className="w-4 h-4 mr-2 flex-shrink-0 text-primary group-hover:drop-shadow-[0_0_8px_rgba(212,175,55,0.6)]" />
+              <span className="text-sm line-clamp-1 group-hover:drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">{locationString}</span>
             </div>
 
             {/* Key Features Badges */}
-            <div className="flex items-center gap-3 mb-4 text-sm text-gray-400">
+            <div className="flex items-center gap-3 mb-4 text-sm text-gray-400 group-hover:text-white">
               {bedrooms > 0 && (
-                <div className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-dark-bg/50 border border-white/10 group-hover:border-primary/30 transition-colors">
-                  <Bed className="w-4 h-4 text-primary" />
-                  <span>{bedrooms}</span>
+                <div className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-black/50 border border-primary/20 group-hover:border-primary/50 group-hover:bg-black/70 group-hover:shadow-gold-sm transition-all duration-300">
+                  <Bed className="w-4 h-4 text-primary group-hover:drop-shadow-[0_0_6px_rgba(212,175,55,0.8)]" />
+                  <span className="font-semibold">{bedrooms}</span>
                 </div>
               )}
               {bathrooms > 0 && (
-                <div className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-dark-bg/50 border border-white/10 group-hover:border-secondary/30 transition-colors">
-                  <Bath className="w-4 h-4 text-secondary" />
-                  <span>{bathrooms}</span>
+                <div className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-black/50 border border-primary/20 group-hover:border-secondary/50 group-hover:bg-black/70 group-hover:shadow-gold-sm transition-all duration-300">
+                  <Bath className="w-4 h-4 text-secondary group-hover:drop-shadow-[0_0_6px_rgba(196,148,31,0.8)]" />
+                  <span className="font-semibold">{bathrooms}</span>
                 </div>
               )}
               {area > 0 && (
-                <div className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-dark-bg/50 border border-white/10 group-hover:border-primary/30 transition-colors">
-                  <Maximize className="w-4 h-4 text-primary" />
-                  <span className="whitespace-nowrap">{area} sqft</span>
+                <div className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-black/50 border border-primary/20 group-hover:border-primary/50 group-hover:bg-black/70 group-hover:shadow-gold-sm transition-all duration-300">
+                  <Maximize className="w-4 h-4 text-primary group-hover:drop-shadow-[0_0_6px_rgba(212,175,55,0.8)]" />
+                  <span className="whitespace-nowrap font-semibold">{area} sqft</span>
                 </div>
               )}
             </div>
 
             {/* Description (Optional) */}
             {property.description && (
-              <p className="text-gray-400 text-sm mb-4 line-clamp-2 flex-1">
+              <p className="text-gray-400 group-hover:text-gray-300 text-sm mb-4 line-clamp-2 flex-1 transition-colors duration-300 group-hover:drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
                 {property.description}
               </p>
             )}
 
             {/* Price & View Details */}
-            <div className="flex items-center justify-between pt-4 border-t border-white/10 mt-auto">
+            <div className="flex items-center justify-between pt-4 border-t border-primary/10 group-hover:border-primary/30 mt-auto transition-colors duration-300">
               <div>
-                <p className="text-xs text-gray-500 mb-1">Price</p>
-                <span className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                <p className="text-xs text-gray-500 group-hover:text-gray-400 mb-1 transition-colors duration-300">Price</p>
+                <span className="text-2xl font-bold text-primary group-hover:drop-shadow-[0_0_15px_rgba(212,175,55,0.9)] transition-all duration-300">
                   {formatPriceINR(property.price)}
                 </span>
               </div>
               
               <motion.div
                 whileHover={{ x: 5 }}
-                className="flex items-center gap-2 text-secondary font-semibold group-hover:text-primary transition-colors"
+                className="flex items-center gap-2 text-primary font-bold group-hover:drop-shadow-[0_0_10px_rgba(212,175,55,0.8)] transition-all duration-300"
               >
                 <span className="text-sm">View Details</span>
                 <ArrowRight className="w-4 h-4" />
@@ -165,13 +165,13 @@ const PropertyCard = ({ property, loading = false, index = 0 }) => {
                 {property.amenities.slice(0, 2).map((amenity, idx) => (
                   <span
                     key={idx}
-                    className="text-xs px-2 py-1 rounded-md bg-primary/10 text-primary border border-primary/20"
+                    className="text-xs px-2 py-1 rounded-md bg-primary/10 text-primary border border-primary/20 group-hover:bg-primary/20 group-hover:border-primary/40 group-hover:shadow-gold-sm transition-all duration-300 font-medium"
                   >
                     {amenity}
                   </span>
                 ))}
                 {property.amenities.length > 2 && (
-                  <span className="text-xs px-2 py-1 rounded-md bg-white/5 text-gray-400">
+                  <span className="text-xs px-2 py-1 rounded-md bg-black/40 text-gray-400 group-hover:text-gray-300 border border-primary/10 group-hover:border-primary/20 transition-all duration-300">
                     +{property.amenities.length - 2} more
                   </span>
                 )}
