@@ -6,25 +6,31 @@ import { motion } from 'framer-motion';
  */
 const Logo = ({ size = 'md', animate = true, className = '' }) => {
   const sizes = {
-    sm: { container: 'w-8 h-8', icon: 'scale-[0.4]' },
-    md: { container: 'w-10 h-10', icon: 'scale-[0.45]' },
-    lg: { container: 'w-12 h-12', icon: 'scale-[0.5]' },
-    xl: { container: 'w-16 h-16', icon: 'scale-[0.6]' },
+    sm: { container: 'w-8 h-8', icon: 'scale-[0.65]' },
+    md: { container: 'w-10 h-10', icon: 'scale-[0.72]' },
+    lg: { container: 'w-12 h-12', icon: 'scale-[0.8]' },
+    xl: { container: 'w-16 h-16', icon: 'scale-[0.95]' },
   };
 
   const currentSize = sizes[size];
 
   const LogoContent = () => (
-    <div className={`${currentSize.container} ${className} relative rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-gold-lg overflow-hidden`}>
-      {/* Subtle Background Pattern */}
-      <div className="absolute inset-0 opacity-10">
+    <div className={`${currentSize.container} ${className} relative rounded-lg bg-gradient-to-br from-primary via-[#e0b952] to-secondary flex items-center justify-center shadow-[0_8px_32px_rgba(212,175,55,0.4)] overflow-hidden border border-[#ffd700]/20`}>
+      {/* Enhanced Background Pattern */}
+      <div className="absolute inset-0 opacity-15">
         <div 
           className="absolute inset-0"
           style={{
-            backgroundImage: `repeating-linear-gradient(45deg, #d4af37 0px, #d4af37 1px, transparent 1px, transparent 20px)`,
+            backgroundImage: `
+              repeating-linear-gradient(45deg, #ffd700 0px, #ffd700 1px, transparent 1px, transparent 15px),
+              repeating-linear-gradient(-45deg, #ffd700 0px, #ffd700 1px, transparent 1px, transparent 15px)
+            `,
           }}
         />
       </div>
+
+      {/* Center Glow */}
+      <div className="absolute inset-0 bg-gradient-radial from-white/10 via-transparent to-transparent" />
 
       {/* Luxury House Icon */}
       <svg
@@ -35,13 +41,17 @@ const Logo = ({ size = 'md', animate = true, className = '' }) => {
       >
         {/* Gradients */}
         <defs>
-          <linearGradient id="goldShine" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" style={{ stopColor: '#fff4d4', stopOpacity: 0.6 }} />
-            <stop offset="50%" style={{ stopColor: '#1a1a1a', stopOpacity: 1 }} />
+          <linearGradient id="darkGold" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style={{ stopColor: '#1a1a1a', stopOpacity: 1 }} />
+            <stop offset="50%" style={{ stopColor: '#0a0a0a', stopOpacity: 1 }} />
+            <stop offset="100%" style={{ stopColor: '#000000', stopOpacity: 1 }} />
+          </linearGradient>
+          <linearGradient id="goldAccent" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style={{ stopColor: '#1a1a1a', stopOpacity: 0.9 }} />
             <stop offset="100%" style={{ stopColor: '#0a0a0a', stopOpacity: 1 }} />
           </linearGradient>
           <filter id="glow">
-            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+            <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
             <feMerge>
               <feMergeNode in="coloredBlur"/>
               <feMergeNode in="SourceGraphic"/>
@@ -53,36 +63,36 @@ const Logo = ({ size = 'md', animate = true, className = '' }) => {
           {/* Roof */}
           <path 
             d="M -60 -20 L 0 -70 L 60 -20 L 50 -20 L 50 -10 L -50 -10 L -50 -20 Z" 
-            fill="url(#goldShine)" 
-            stroke="#1a1a1a" 
-            strokeWidth="3"
+            fill="url(#darkGold)" 
+            stroke="#000000" 
+            strokeWidth="4"
             strokeLinejoin="round"
           />
           
-          {/* Roof highlight */}
+          {/* Roof highlight line */}
           <line 
-            x1="-40" y1="-40" x2="40" y2="-40" 
-            stroke="#0a0a0a" 
-            strokeWidth="2" 
-            opacity="0.3"
+            x1="-40" y1="-35" x2="40" y2="-35" 
+            stroke="#000000" 
+            strokeWidth="2.5" 
+            opacity="0.5"
             strokeLinecap="round"
           />
           
           {/* Main House Body */}
           <rect 
             x="-50" y="-10" width="100" height="70" 
-            fill="#1a1a1a" 
-            stroke="#0a0a0a" 
-            strokeWidth="3"
-            rx="2"
+            fill="url(#goldAccent)" 
+            stroke="#000000" 
+            strokeWidth="4"
+            rx="3"
           />
           
           {/* Door */}
           <rect 
             x="-15" y="20" width="30" height="40" 
-            fill="url(#goldShine)"
-            stroke="#0a0a0a"
-            strokeWidth="2"
+            fill="url(#darkGold)"
+            stroke="#000000"
+            strokeWidth="3"
             rx="2"
           />
           
@@ -90,80 +100,80 @@ const Logo = ({ size = 'md', animate = true, className = '' }) => {
           <rect 
             x="-12" y="23" width="24" height="16" 
             fill="none" 
-            stroke="#0a0a0a" 
-            strokeWidth="1.5"
+            stroke="#000000" 
+            strokeWidth="2"
             rx="1"
-            opacity="0.3"
+            opacity="0.5"
           />
           <rect 
             x="-12" y="42" width="24" height="15" 
             fill="none" 
-            stroke="#0a0a0a" 
-            strokeWidth="1.5"
+            stroke="#000000" 
+            strokeWidth="2"
             rx="1"
-            opacity="0.3"
+            opacity="0.5"
           />
           
           {/* Windows - Left */}
           <rect 
             x="-42" y="5" width="20" height="20" 
-            fill="#0a0a0a"
-            stroke="#0a0a0a" 
-            strokeWidth="2"
-            rx="1"
+            fill="#000000"
+            stroke="#000000" 
+            strokeWidth="3"
+            rx="2"
           />
           
           {/* Windows - Right */}
           <rect 
             x="22" y="5" width="20" height="20" 
-            fill="#0a0a0a"
-            stroke="#0a0a0a" 
-            strokeWidth="2"
-            rx="1"
+            fill="#000000"
+            stroke="#000000" 
+            strokeWidth="3"
+            rx="2"
           />
           
           {/* Window cross bars - Left */}
-          <line x1="-32" y1="5" x2="-32" y2="25" stroke="#1a1a1a" strokeWidth="2"/>
-          <line x1="-42" y1="15" x2="-22" y2="15" stroke="#1a1a1a" strokeWidth="2"/>
+          <line x1="-32" y1="5" x2="-32" y2="25" stroke="#1a1a1a" strokeWidth="2.5"/>
+          <line x1="-42" y1="15" x2="-22" y2="15" stroke="#1a1a1a" strokeWidth="2.5"/>
           
           {/* Window cross bars - Right */}
-          <line x1="32" y1="5" x2="32" y2="25" stroke="#1a1a1a" strokeWidth="2"/>
-          <line x1="22" y1="15" x2="42" y2="15" stroke="#1a1a1a" strokeWidth="2"/>
+          <line x1="32" y1="5" x2="32" y2="25" stroke="#1a1a1a" strokeWidth="2.5"/>
+          <line x1="22" y1="15" x2="42" y2="15" stroke="#1a1a1a" strokeWidth="2.5"/>
           
           {/* Door handle */}
-          <circle cx="8" cy="42" r="2" fill="#0a0a0a"/>
+          <circle cx="8" cy="42" r="2.5" fill="#000000" stroke="#000000" strokeWidth="1"/>
           
           {/* Chimney */}
           <rect 
             x="30" y="-45" width="12" height="30" 
-            fill="#1a1a1a" 
-            stroke="#0a0a0a" 
-            strokeWidth="2"
+            fill="url(#goldAccent)" 
+            stroke="#000000" 
+            strokeWidth="3"
             rx="1"
           />
           
           {/* Chimney cap */}
           <rect 
-            x="27" y="-47" width="18" height="4" 
-            fill="url(#goldShine)" 
-            stroke="#0a0a0a" 
-            strokeWidth="1.5"
+            x="27" y="-47" width="18" height="5" 
+            fill="url(#darkGold)" 
+            stroke="#000000" 
+            strokeWidth="2"
             rx="1"
           />
           
           {/* Crown on roof peak */}
           <circle 
-            cx="0" cy="-70" r="6" 
-            fill="url(#goldShine)" 
-            stroke="#0a0a0a" 
-            strokeWidth="2"
+            cx="0" cy="-70" r="7" 
+            fill="url(#darkGold)" 
+            stroke="#000000" 
+            strokeWidth="3"
           />
           
-          {/* Crown shine */}
+          {/* Crown center */}
           <circle 
-            cx="-2" cy="-72" r="2.5" 
-            fill="#0a0a0a" 
-            opacity="0.4"
+            cx="0" cy="-70" r="3" 
+            fill="#000000" 
+            opacity="0.6"
           />
         </g>
       </svg>
@@ -186,12 +196,12 @@ const Logo = ({ size = 'md', animate = true, className = '' }) => {
       <motion.div
         animate={{
           filter: [
-            'drop-shadow(0 0 5px rgba(212, 175, 55, 0.3))',
-            'drop-shadow(0 0 8px rgba(212, 175, 55, 0.5))',
-            'drop-shadow(0 0 5px rgba(212, 175, 55, 0.3))',
+            'drop-shadow(0 2px 8px rgba(212, 175, 55, 0.4)) drop-shadow(0 0 2px rgba(255, 215, 0, 0.3))',
+            'drop-shadow(0 4px 12px rgba(212, 175, 55, 0.6)) drop-shadow(0 0 4px rgba(255, 215, 0, 0.5))',
+            'drop-shadow(0 2px 8px rgba(212, 175, 55, 0.4)) drop-shadow(0 0 2px rgba(255, 215, 0, 0.3))',
           ]
         }}
-        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
       >
         <LogoContent />
       </motion.div>
